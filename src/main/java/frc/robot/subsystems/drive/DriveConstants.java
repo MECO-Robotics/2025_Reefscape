@@ -26,12 +26,14 @@ public class DriveConstants {
       new CANBus(DriveMotorConstants.canBusName).isNetworkFD()
               && new CANBus(AzimuthMotorConstants.canBusName).isNetworkFD()
           ? 250.0
-          : 100.0; /* If both Azimuth and Drive use CANFD, sample odometry at 250 Hz, if either loop is not FD, sample odometry at 100 Hz */ 
+          : 100.0; /* If both Azimuth and Drive use CANFD, sample odometry at 250 Hz, if either loop is not FD, sample odometry at 100 Hz */
 
-  public static final double trackWidth = Units.inchesToMeters(19); 
+  public static final double trackWidth = Units.inchesToMeters(19);
   public static final double wheelBase = Units.inchesToMeters(19);
-  public static final double robotWidth = Units.inchesToMeters(31); //This the width of the robot including bumpers
-  public static final double robotLength = Units.inchesToMeters(31); //This is the lenght of the robot including bumpers
+  public static final double robotWidth =
+      Units.inchesToMeters(31); // This the width of the robot including bumpers
+  public static final double robotLength =
+      Units.inchesToMeters(31); // This is the lenght of the robot including bumpers
   public static final double driveBaseRadius = Math.hypot(wheelBase / 2.0, wheelBase / 2.0);
   public static final double driveWheelRadiusMeters = Units.inchesToMeters(2);
   public static final Translation2d[] moduleTranslations =
