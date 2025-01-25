@@ -57,7 +57,7 @@ public class RobotContainer {
         // Real robot, instantiate hardware IO implementations
         drive =
             new Drive(
-                new GyroIOPigeon2(0, "Drive"),
+                new GyroIOPigeon2(13, DriveMotorConstants.canBusName),
                 new Module(
                     new DriveMotorIOTalonFX(
                         "FrontLeftDrive", DriveMotorConstants.FRONT_LEFT_CONFIG),
