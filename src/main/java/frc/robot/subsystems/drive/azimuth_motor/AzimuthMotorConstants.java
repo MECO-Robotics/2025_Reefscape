@@ -5,7 +5,7 @@ import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.position_joint.PositionJointConstants.EncoderType;
 
 public class AzimuthMotorConstants {
-  public static final String canBusName = "Drive";
+  public static final String canBusName = "MECO CANIvore";
 
   public record AzimuthMotorGains(
       double kP,
