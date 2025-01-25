@@ -3,7 +3,7 @@ package frc.robot.subsystems.drive.drive_motor;
 import frc.robot.subsystems.drive.DriveConstants;
 
 public class DriveMotorConstants {
-  public static final String canBusName = "Drive";
+  public static final String canBusName = "MECO CANIvore";
 
   public record DriveMotorGains(
       double kP, double kI, double kD, double kS, double kV, double kA, double kMaxAccel) {}
