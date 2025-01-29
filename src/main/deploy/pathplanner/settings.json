@@ -2,7 +2,10 @@
   "robotWidth": 0.6096,
   "robotLength": 0.6096,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "Center L4 ",
+    "Cycle Anylsis"
+  ],
   "autoFolders": [
     "New Folder"
   ],
