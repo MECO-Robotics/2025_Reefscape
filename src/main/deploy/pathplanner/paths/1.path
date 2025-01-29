@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.915156764325673,
-        "y": 4.028865885422163
+        "x": 1.6164473684210525,
+        "y": 6.786430921052631
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.570529985498632,
-        "y": 3.9205702237970836
+        "x": 2.6171410951549197,
+        "y": 5.886396722314145
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "ground start"
     },
     {
       "anchor": {
-        "x": 5.642228839177648,
-        "y": 3.852604755358257
+        "x": 4.066443923140045,
+        "y": 5.114247645370259
       },
       "prevControl": {
-        "x": 6.7110007725211025,
-        "y": 3.928413978197543
+        "x": 3.498035058616138,
+        "y": 5.531170175239307
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "1"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -177.9712571156432
+    "rotation": -61.764894316128895
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Cycle Anylsis",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -179.66881808317854
+    "rotation": -143.10526821417855
   },
   "useDefaultConstraints": true
 }
