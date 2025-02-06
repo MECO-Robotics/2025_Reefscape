@@ -30,7 +30,7 @@ public class AzimuthMotorConstants {
   public static final AzimuthMotorHardwareConfig FRONT_LEFT_CONFIG =
       new AzimuthMotorHardwareConfig(
           new int[] {1},
-          new boolean[] {true},
+          new boolean[] {false},
           DriveConstants.steerMotorGearRatio,
           40,
           EncoderType.EXTERNAL_CANCODER,
@@ -41,7 +41,7 @@ public class AzimuthMotorConstants {
   public static final AzimuthMotorHardwareConfig FRONT_RIGHT_CONFIG =
       new AzimuthMotorHardwareConfig(
           new int[] {3},
-          new boolean[] {true},
+          new boolean[] {false},
           DriveConstants.steerMotorGearRatio,
           40,
           EncoderType.EXTERNAL_CANCODER,
@@ -52,7 +52,7 @@ public class AzimuthMotorConstants {
   public static final AzimuthMotorHardwareConfig BACK_LEFT_CONFIG =
       new AzimuthMotorHardwareConfig(
           new int[] {7},
-          new boolean[] {true},
+          new boolean[] {false},
           DriveConstants.steerMotorGearRatio,
           40,
           EncoderType.EXTERNAL_CANCODER,
@@ -63,7 +63,7 @@ public class AzimuthMotorConstants {
   public static final AzimuthMotorHardwareConfig BACK_RIGHT_CONFIG =
       new AzimuthMotorHardwareConfig(
           new int[] {5},
-          new boolean[] {true},
+          new boolean[] {false},
           DriveConstants.steerMotorGearRatio,
           40,
           EncoderType.EXTERNAL_CANCODER,
@@ -72,14 +72,14 @@ public class AzimuthMotorConstants {
           canBusName);
 
   public static final AzimuthMotorGains FRONT_LEFT_GAINS =
-      new AzimuthMotorGains(25, 0, 0, 0, 2.5, 0, 5, 5);
+      new AzimuthMotorGains(25, 0, 0, 0.5, 2.5, 0, 5, 5);
 
   public static final AzimuthMotorGains FRONT_RIGHT_GAINS =
-      new AzimuthMotorGains(25, 0, 0, 0, 2.5, 0, 5, 5);
+      new AzimuthMotorGains(25, 0, 0, 0.5, 2.5, 0, 5, 5);
 
   public static final AzimuthMotorGains BACK_LEFT_GAINS =
-      new AzimuthMotorGains(25, 0, 0, 0, 2.5, 0, 5, 5);
+      new AzimuthMotorGains(25, 0, 0, 0.5, 2.5, 0, 5, 5);
 
   public static final AzimuthMotorGains BACK_RIGHT_GAINS =
-      new AzimuthMotorGains(25, 0, 0, 0, 2.5, 0, 5, 5);
+      new AzimuthMotorGains(25, 0, 0, 0.5, 2.5, 0, 5, 5);
 }
