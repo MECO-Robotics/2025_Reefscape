@@ -24,6 +24,9 @@ import frc.robot.subsystems.drive.drive_motor.DriveMotorIOTalonFX;
 import frc.robot.subsystems.drive.gyro.GyroIO;
 import frc.robot.subsystems.drive.gyro.GyroIOPigeon2;
 import frc.robot.subsystems.drive.odometry_threads.PhoenixOdometryThread;
+import frc.robot.subsystems.position_joint.PositionJoint;
+import frc.robot.subsystems.position_joint.PositionJointConstants;
+import frc.robot.subsystems.position_joint.PositionJointIOSparkMax;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO;
@@ -56,7 +59,8 @@ public class RobotContainer {
       case REAL:
         // Real robot, instantiate hardware IO implementations
 
-        // If using REV hardware, set up the Spark Odometry Thread, if using CTRE hardware, set up
+        // If using REV hardware, set up the Spark Odometry Thread, if using CTRE
+        // hardware, set up
         // the Phoenix Odometry Thread, if using a combination of the two, set up both
         drive =
             new Drive(
@@ -89,6 +93,13 @@ public class RobotContainer {
                     AzimuthMotorConstants.BACK_RIGHT_GAINS),
                 PhoenixOdometryThread.getInstance(),
                 null);
+
+        // Coral Intake rotation motor
+        new PositionJoint(
+            new PositionJointIOSparkMax(
+                "CoralRotateMotor", PositionJointConstants.CORAL_INTAKE_RROTATION_CONFIG),
+            PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
+
         vision =
             new Vision(
                 drive::addVisionMeasurement,
