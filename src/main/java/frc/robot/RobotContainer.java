@@ -24,6 +24,9 @@ import frc.robot.subsystems.drive.drive_motor.DriveMotorIOTalonFX;
 import frc.robot.subsystems.drive.gyro.GyroIO;
 import frc.robot.subsystems.drive.gyro.GyroIOPigeon2;
 import frc.robot.subsystems.drive.odometry_threads.PhoenixOdometryThread;
+import frc.robot.subsystems.flywheel.Flywheel;
+import frc.robot.subsystems.flywheel.FlywheelConstants;
+import frc.robot.subsystems.flywheel.FlywheelIOSparkMax;
 import frc.robot.subsystems.position_joint.PositionJoint;
 import frc.robot.subsystems.position_joint.PositionJointConstants;
 import frc.robot.subsystems.position_joint.PositionJointIOSparkMax;
@@ -43,6 +46,8 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
+  private PositionJoint coralRotationMotor;
+  private Flywheel coralRollerMotor;
 
   @SuppressWarnings("unused")
   private final Vision vision;
@@ -95,10 +100,16 @@ public class RobotContainer {
                 null);
 
         // Coral Intake rotation motor
-        new PositionJoint(
-            new PositionJointIOSparkMax(
-                "CoralRotateMotor", PositionJointConstants.CORAL_INTAKE_RROTATION_CONFIG),
-            PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
+        coralRotationMotor =
+            new PositionJoint(
+                new PositionJointIOSparkMax(
+                    "CoralRotateMotor", PositionJointConstants.CORAL_INTAKE_RROTATION_CONFIG),
+                PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
+        coralRollerMotor =
+            new Flywheel(
+                new FlywheelIOSparkMax(
+                    "CoralRollerMotor", FlywheelConstants.CORAL_INTAKE_ROLLERS_CONFG),
+                FlywheelConstants.CORAL_INTAKE_ROLLER_GAINS);
 
         vision =
             new Vision(
@@ -237,8 +248,21 @@ public class RobotContainer {
                             : new Rotation2d())
                         : new Rotation2d())); // zero gyro
 
+    final Runnable setCoralIntakeDown =
+        () -> {
+          coralRotationMotor.setPosition(0);
+          coralRollerMotor.setVelocity(0);
+        };
+    final Runnable setCoralIntakeUp =
+        () -> {
+          coralRotationMotor.setPosition(0);
+          coralRollerMotor.setVelocity(0);
+        };
     // Reset gyro to 0° when B button is pressed
     driverController.b().onTrue(Commands.runOnce(resetGyro, drive).ignoringDisable(true));
+    // Coral Intake
+    driverController.povDown().onTrue(Commands.runOnce(setCoralIntakeDown, coralRotationMotor));
+    driverController.povUp().onTrue(Commands.runOnce(setCoralIntakeUp, coralRotationMotor));
   }
 
   /**

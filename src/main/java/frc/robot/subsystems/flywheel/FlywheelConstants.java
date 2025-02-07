@@ -19,4 +19,10 @@ public class FlywheelConstants {
 
   public static final FlywheelGains EXAMPLE_GAINS =
       new FlywheelGains(0.2, 0.0, 0.0, 0.0, 0.065, 0.0, 1.0, 1.0);
+
+  // Coral Intake
+  public static final FlywheelHardwareConfig CORAL_INTAKE_ROLLERS_CONFG =
+      new FlywheelHardwareConfig(new int[] {}, new boolean[] {}, 0, "");
+  public static final FlywheelGains CORAL_INTAKE_ROLLER_GAINS =
+      new FlywheelGains(0.2, 0.0, 0.0, 0.0, 0.065, 0.0, 1.0, 1.0);
 }
