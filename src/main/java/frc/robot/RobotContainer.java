@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.position_joint.PositionJointPositionCommand;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.Module;
 import frc.robot.subsystems.drive.azimuth_motor.AzimuthMotorConstants;
@@ -248,21 +249,19 @@ public class RobotContainer {
                             : new Rotation2d())
                         : new Rotation2d())); // zero gyro
 
-    final Runnable setCoralIntakeDown =
-        () -> {
-          coralRotationMotor.setPosition(0);
-          coralRollerMotor.setVelocity(0);
-        };
-    final Runnable setCoralIntakeUp =
-        () -> {
-          coralRotationMotor.setPosition(0);
-          coralRollerMotor.setVelocity(0);
-        };
     // Reset gyro to 0° when B button is pressed
     driverController.b().onTrue(Commands.runOnce(resetGyro, drive).ignoringDisable(true));
     // Coral Intake
-    driverController.povDown().onTrue(Commands.runOnce(setCoralIntakeDown, coralRotationMotor));
-    driverController.povUp().onTrue(Commands.runOnce(setCoralIntakeUp, coralRotationMotor));
+    driverController
+        .rightBumper()
+        .whileTrue(
+            new PositionJointPositionCommand(
+                coralRotationMotor, () -> PositionJointConstants.CORAL_ROTATION_POSITIONS.DOWN));
+    driverController
+        .rightBumper()
+        .whileFalse(
+            new PositionJointPositionCommand(
+                coralRotationMotor, () -> PositionJointConstants.CORAL_ROTATION_POSITIONS.UP));
   }
 
   /**
