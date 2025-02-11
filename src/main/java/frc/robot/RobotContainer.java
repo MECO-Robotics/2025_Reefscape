@@ -47,8 +47,10 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  private PositionJoint coralRotationMotor;
-  private Flywheel coralRollerMotor;
+  private PositionJoint rightCoralRotationMotor;
+  private Flywheel rightCoralRollerMotor;
+  private PositionJoint leftCoralRotationMotor;
+  private Flywheel leftCoralRollerMotor;
 
   @SuppressWarnings("unused")
   private final Vision vision;
@@ -101,16 +103,29 @@ public class RobotContainer {
                 null);
 
         // Coral Intake rotation motor
-        coralRotationMotor =
+        rightCoralRotationMotor =
             new PositionJoint(
                 new PositionJointIOSparkMax(
-                    "CoralRotateMotor", PositionJointConstants.RIGHT_CORAL_INTAKE_RROTATION_CONFIG),
+                    "RightCoralRotateMotor",
+                    PositionJointConstants.RIGHT_CORAL_INTAKE_RROTATION_CONFIG),
                 PositionJointConstants.RIGHT_CORAL_INTAKE_ROTATION_GAINS);
-        coralRollerMotor =
+        rightCoralRollerMotor =
             new Flywheel(
                 new FlywheelIOSparkMax(
-                    "CoralRollerMotor", FlywheelConstants.CORAL_INTAKE_ROLLERS_CONFG),
-                FlywheelConstants.CORAL_INTAKE_ROLLER_GAINS);
+                    "RightCoralRollerMotor", FlywheelConstants.RIGHT_CORAL_INTAKE_ROLLERS_CONFG),
+                FlywheelConstants.RIGHT_CORAL_INTAKE_ROLLER_GAINS);
+
+        leftCoralRotationMotor =
+            new PositionJoint(
+                new PositionJointIOSparkMax(
+                    "LeftCoralRotateMotor",
+                    PositionJointConstants.LEFT_CORAL_INTAKE_RROTATION_CONFIG),
+                PositionJointConstants.LEFT_CORAL_INTAKE_ROTATION_GAINS);
+        leftCoralRollerMotor =
+            new Flywheel(
+                new FlywheelIOSparkMax(
+                    "LeftCoralRollerMotor", FlywheelConstants.LEFT_CORAL_INTAKE_ROLLERS_CONFG),
+                FlywheelConstants.LEFT_CORAL_INTAKE_ROLLER_GAINS);
 
         vision =
             new Vision(
@@ -256,12 +271,25 @@ public class RobotContainer {
         .rightBumper()
         .whileTrue(
             new PositionJointPositionCommand(
-                coralRotationMotor, () -> PositionJointConstants.CORAL_ROTATION_POSITIONS.DOWN));
+                rightCoralRotationMotor,
+                () -> PositionJointConstants.CORAL_ROTATION_POSITIONS.DOWN));
     driverController
         .rightBumper()
         .whileFalse(
             new PositionJointPositionCommand(
-                coralRotationMotor, () -> PositionJointConstants.CORAL_ROTATION_POSITIONS.UP));
+                rightCoralRotationMotor, () -> PositionJointConstants.CORAL_ROTATION_POSITIONS.UP));
+
+    driverController
+        .leftBumper()
+        .whileTrue(
+            new PositionJointPositionCommand(
+                leftCoralRotationMotor,
+                () -> PositionJointConstants.CORAL_ROTATION_POSITIONS.DOWN));
+    driverController
+        .leftBumper()
+        .whileFalse(
+            new PositionJointPositionCommand(
+                leftCoralRotationMotor, () -> PositionJointConstants.CORAL_ROTATION_POSITIONS.UP));
   }
 
   /**

@@ -89,7 +89,7 @@ public class PositionJointConstants {
   public static final PositionJointHardwareConfig LEFT_CORAL_INTAKE_RROTATION_CONFIG =
       new PositionJointHardwareConfig(
           new int[] {0},
-          new boolean[] {false},
+          new boolean[] {true},
           15 * 30 / 15 * 2 * Math.PI,
           40,
           GravityType.SINE,
