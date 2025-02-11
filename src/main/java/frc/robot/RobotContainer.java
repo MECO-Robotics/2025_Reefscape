@@ -104,8 +104,8 @@ public class RobotContainer {
         coralRotationMotor =
             new PositionJoint(
                 new PositionJointIOSparkMax(
-                    "CoralRotateMotor", PositionJointConstants.CORAL_INTAKE_RROTATION_CONFIG),
-                PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
+                    "CoralRotateMotor", PositionJointConstants.RIGHT_CORAL_INTAKE_RROTATION_CONFIG),
+                PositionJointConstants.RIGHT_CORAL_INTAKE_ROTATION_GAINS);
         coralRollerMotor =
             new Flywheel(
                 new FlywheelIOSparkMax(
