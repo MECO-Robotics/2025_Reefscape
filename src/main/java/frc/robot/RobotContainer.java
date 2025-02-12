@@ -76,29 +76,29 @@ public class RobotContainer {
                 new Module(
                     new DriveMotorIOTalonFX(
                         "FrontLeftDrive", DriveMotorConstants.FRONT_LEFT_CONFIG),
-                    DriveMotorConstants.FRONT_LEFT_GAINS,
+                    DriveMotorConstants.DRIVE_GAINS,
                     new AzimuthMotorIOTalonFX(
                         "FrontLeftAz", AzimuthMotorConstants.FRONT_LEFT_CONFIG),
-                    AzimuthMotorConstants.FRONT_LEFT_GAINS),
+                    AzimuthMotorConstants.AZMITH_GAINS),
                 new Module(
                     new DriveMotorIOTalonFX(
                         "FrontRightDrive", DriveMotorConstants.FRONT_RIGHT_CONFIG),
-                    DriveMotorConstants.FRONT_RIGHT_GAINS,
+                    DriveMotorConstants.DRIVE_GAINS,
                     new AzimuthMotorIOTalonFX(
                         "FrontRightAz", AzimuthMotorConstants.FRONT_RIGHT_CONFIG),
-                    AzimuthMotorConstants.FRONT_RIGHT_GAINS),
+                    AzimuthMotorConstants.AZMITH_GAINS),
                 new Module(
                     new DriveMotorIOTalonFX("BackLeftDrive", DriveMotorConstants.BACK_LEFT_CONFIG),
-                    DriveMotorConstants.BACK_LEFT_GAINS,
+                    DriveMotorConstants.DRIVE_GAINS,
                     new AzimuthMotorIOTalonFX("BackLeftAz", AzimuthMotorConstants.BACK_LEFT_CONFIG),
-                    AzimuthMotorConstants.BACK_LEFT_GAINS),
+                    AzimuthMotorConstants.AZMITH_GAINS),
                 new Module(
                     new DriveMotorIOTalonFX(
                         "BackRightDrive", DriveMotorConstants.BACK_RIGHT_CONFIG),
-                    DriveMotorConstants.BACK_RIGHT_GAINS,
+                    DriveMotorConstants.DRIVE_GAINS,
                     new AzimuthMotorIOTalonFX(
                         "BackRightAz", AzimuthMotorConstants.BACK_RIGHT_CONFIG),
-                    AzimuthMotorConstants.BACK_RIGHT_GAINS),
+                    AzimuthMotorConstants.AZMITH_GAINS),
                 PhoenixOdometryThread.getInstance(),
                 null);
 
@@ -108,7 +108,7 @@ public class RobotContainer {
                 new PositionJointIOSparkMax(
                     "RightCoralRotateMotor",
                     PositionJointConstants.RIGHT_CORAL_INTAKE_RROTATION_CONFIG),
-                PositionJointConstants.RIGHT_CORAL_INTAKE_ROTATION_GAINS);
+                PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
         rightCoralRollerMotor =
             new Flywheel(
                 new FlywheelIOSparkMax(
@@ -120,7 +120,7 @@ public class RobotContainer {
                 new PositionJointIOSparkMax(
                     "LeftCoralRotateMotor",
                     PositionJointConstants.LEFT_CORAL_INTAKE_RROTATION_CONFIG),
-                PositionJointConstants.LEFT_CORAL_INTAKE_ROTATION_GAINS);
+                PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
         leftCoralRollerMotor =
             new Flywheel(
                 new FlywheelIOSparkMax(
@@ -140,24 +140,24 @@ public class RobotContainer {
                 new GyroIO() {},
                 new Module(
                     new DriveMotorIOSim("FrontLeftDrive", DriveMotorConstants.FRONT_LEFT_CONFIG),
-                    DriveMotorConstants.FRONT_LEFT_GAINS,
+                    DriveMotorConstants.DRIVE_GAINS,
                     new AzimuthMotorIOSim("FrontLeftAz", AzimuthMotorConstants.FRONT_LEFT_CONFIG),
-                    AzimuthMotorConstants.FRONT_LEFT_GAINS),
+                    AzimuthMotorConstants.AZMITH_GAINS),
                 new Module(
                     new DriveMotorIOSim("FrontRightDrive", DriveMotorConstants.FRONT_RIGHT_CONFIG),
-                    DriveMotorConstants.FRONT_RIGHT_GAINS,
+                    DriveMotorConstants.DRIVE_GAINS,
                     new AzimuthMotorIOSim("FrontRightAz", AzimuthMotorConstants.FRONT_RIGHT_CONFIG),
-                    AzimuthMotorConstants.FRONT_RIGHT_GAINS),
+                    AzimuthMotorConstants.AZMITH_GAINS),
                 new Module(
                     new DriveMotorIOSim("BackLeftDrive", DriveMotorConstants.BACK_LEFT_CONFIG),
-                    DriveMotorConstants.BACK_LEFT_GAINS,
+                    DriveMotorConstants.DRIVE_GAINS,
                     new AzimuthMotorIOSim("BackLeftAz", AzimuthMotorConstants.BACK_LEFT_CONFIG),
-                    AzimuthMotorConstants.BACK_LEFT_GAINS),
+                    AzimuthMotorConstants.AZMITH_GAINS),
                 new Module(
                     new DriveMotorIOSim("BackRightDrive", DriveMotorConstants.BACK_RIGHT_CONFIG),
-                    DriveMotorConstants.BACK_RIGHT_GAINS,
+                    DriveMotorConstants.DRIVE_GAINS,
                     new AzimuthMotorIOSim("BackRightAz", AzimuthMotorConstants.BACK_RIGHT_CONFIG),
-                    AzimuthMotorConstants.BACK_RIGHT_GAINS),
+                    AzimuthMotorConstants.AZMITH_GAINS),
                 null,
                 null);
 
@@ -177,24 +177,24 @@ public class RobotContainer {
                 new GyroIO() {},
                 new Module(
                     new DriveMotorIOReplay("FrontLeftDrive"),
-                    DriveMotorConstants.FRONT_LEFT_GAINS,
+                    DriveMotorConstants.DRIVE_GAINS,
                     new AzimuthMotorIOReplay("FrontLeftAz"),
-                    AzimuthMotorConstants.FRONT_LEFT_GAINS),
+                    AzimuthMotorConstants.AZMITH_GAINS),
                 new Module(
                     new DriveMotorIOReplay("FrontRightDrive"),
-                    DriveMotorConstants.FRONT_RIGHT_GAINS,
+                    DriveMotorConstants.DRIVE_GAINS,
                     new AzimuthMotorIOReplay("FrontRightAz"),
-                    AzimuthMotorConstants.FRONT_RIGHT_GAINS),
+                    AzimuthMotorConstants.AZMITH_GAINS),
                 new Module(
                     new DriveMotorIOReplay("BackLeftDrive"),
-                    DriveMotorConstants.BACK_LEFT_GAINS,
+                    DriveMotorConstants.DRIVE_GAINS,
                     new AzimuthMotorIOReplay("BackLeftAz"),
-                    AzimuthMotorConstants.BACK_LEFT_GAINS),
+                    AzimuthMotorConstants.AZMITH_GAINS),
                 new Module(
                     new DriveMotorIOReplay("BackRightDrive"),
-                    DriveMotorConstants.BACK_RIGHT_GAINS,
+                    DriveMotorConstants.DRIVE_GAINS,
                     new AzimuthMotorIOReplay("BackRightAz"),
-                    AzimuthMotorConstants.BACK_RIGHT_GAINS),
+                    AzimuthMotorConstants.AZMITH_GAINS),
                 null,
                 null);
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});

@@ -71,15 +71,6 @@ public class AzimuthMotorConstants {
           Rotation2d.fromRotations(0.30908203125),
           canBusName);
 
-  public static final AzimuthMotorGains FRONT_LEFT_GAINS =
-      new AzimuthMotorGains(25, 0, 0, 0.5, 2.5, 0, 5, 5);
-
-  public static final AzimuthMotorGains FRONT_RIGHT_GAINS =
-      new AzimuthMotorGains(25, 0, 0, 0.5, 2.5, 0, 5, 5);
-
-  public static final AzimuthMotorGains BACK_LEFT_GAINS =
-      new AzimuthMotorGains(25, 0, 0, 0.5, 2.5, 0, 5, 5);
-
-  public static final AzimuthMotorGains BACK_RIGHT_GAINS =
+  public static final AzimuthMotorGains AZMITH_GAINS =
       new AzimuthMotorGains(25, 0, 0, 0.5, 2.5, 0, 5, 5);
 }

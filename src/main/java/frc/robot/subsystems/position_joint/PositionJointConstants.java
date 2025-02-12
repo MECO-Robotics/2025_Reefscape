@@ -63,7 +63,7 @@ public class PositionJointConstants {
           "");
 
   // Coral Intake
-  public static final PositionJointGains RIGHT_CORAL_INTAKE_ROTATION_GAINS =
+  public static final PositionJointGains CORAL_INTAKE_ROTATION_GAINS =
       new PositionJointGains(1.5, 0.0, 0.0, 0.5, 1.0, 2.0, 0.0, 10.0, 20.0, 0.0, Math.PI, 0.2, 0.0);
 
   public static final PositionJointHardwareConfig RIGHT_CORAL_INTAKE_RROTATION_CONFIG =
@@ -78,14 +78,6 @@ public class PositionJointConstants {
           Rotation2d.fromRotations(0.5),
           "");
 
-  public static final class CORAL_ROTATION_POSITIONS {
-    public static final double UP = 0;
-    public static final double DOWN = 0.05;
-  }
-
-  public static final PositionJointGains LEFT_CORAL_INTAKE_ROTATION_GAINS =
-      new PositionJointGains(1.5, 0.0, 0.0, 0.5, 1.0, 2.0, 0.0, 10.0, 20.0, 0.0, Math.PI, 0.2, 0.0);
-
   public static final PositionJointHardwareConfig LEFT_CORAL_INTAKE_RROTATION_CONFIG =
       new PositionJointHardwareConfig(
           new int[] {0},
@@ -97,6 +89,11 @@ public class PositionJointConstants {
           -1,
           Rotation2d.fromRotations(0.5),
           "");
+
+  public static final class CORAL_ROTATION_POSITIONS {
+    public static final double UP = 0;
+    public static final double DOWN = 0.05;
+  }
 
   // Elevator
 
