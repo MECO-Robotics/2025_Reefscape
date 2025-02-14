@@ -27,9 +27,13 @@ import frc.robot.subsystems.drive.gyro.GyroIOPigeon2;
 import frc.robot.subsystems.drive.odometry_threads.PhoenixOdometryThread;
 import frc.robot.subsystems.flywheel.Flywheel;
 import frc.robot.subsystems.flywheel.FlywheelConstants;
+import frc.robot.subsystems.flywheel.FlywheelIOReplay;
+import frc.robot.subsystems.flywheel.FlywheelIOSim;
 import frc.robot.subsystems.flywheel.FlywheelIOSparkMax;
 import frc.robot.subsystems.position_joint.PositionJoint;
 import frc.robot.subsystems.position_joint.PositionJointConstants;
+import frc.robot.subsystems.position_joint.PositionJointIOReplay;
+import frc.robot.subsystems.position_joint.PositionJointIOSim;
 import frc.robot.subsystems.position_joint.PositionJointIOSparkMax;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
@@ -168,6 +172,31 @@ public class RobotContainer {
                     VisionConstants.camera0Name, VisionConstants.robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(
                     VisionConstants.camera1Name, VisionConstants.robotToCamera1, drive::getPose));
+
+        // Coral Intake rotation motor Sim
+        rightCoralRotationMotor =
+            new PositionJoint(
+                new PositionJointIOSim(
+                    "RightCoralRotateMotor",
+                    PositionJointConstants.RIGHT_CORAL_INTAKE_RROTATION_CONFIG),
+                PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
+        rightCoralRollerMotor =
+            new Flywheel(
+                new FlywheelIOSim(
+                    "RightCoralRollerMotor", FlywheelConstants.RIGHT_CORAL_INTAKE_ROLLERS_CONFG),
+                FlywheelConstants.RIGHT_CORAL_INTAKE_ROLLER_GAINS);
+        leftCoralRotationMotor =
+            new PositionJoint(
+                new PositionJointIOSim(
+                    "LeftCoralRotateMotor",
+                    PositionJointConstants.LEFT_CORAL_INTAKE_RROTATION_CONFIG),
+                PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
+        leftCoralRollerMotor =
+            new Flywheel(
+                new FlywheelIOSim(
+                    "LeftCoralRollerMotor", FlywheelConstants.LEFT_CORAL_INTAKE_ROLLERS_CONFG),
+                FlywheelConstants.LEFT_CORAL_INTAKE_ROLLER_GAINS);
+
         break;
 
       default:
@@ -197,6 +226,25 @@ public class RobotContainer {
                     AzimuthMotorConstants.AZMITH_GAINS),
                 null,
                 null);
+
+        // Coral Intake rotation motor Replay
+        rightCoralRotationMotor =
+            new PositionJoint(
+                new PositionJointIOReplay("RightCoralRotateMotor"),
+                PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
+        rightCoralRollerMotor =
+            new Flywheel(
+                new FlywheelIOReplay("RightCoralRollerMotor"),
+                FlywheelConstants.RIGHT_CORAL_INTAKE_ROLLER_GAINS);
+        leftCoralRotationMotor =
+            new PositionJoint(
+                new PositionJointIOReplay("LeftCoralRotateMotor"),
+                PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
+        leftCoralRollerMotor =
+            new Flywheel(
+                new FlywheelIOReplay("LeftCoralRollerMotor"),
+                FlywheelConstants.LEFT_CORAL_INTAKE_ROLLER_GAINS);
+
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         break;
     }
