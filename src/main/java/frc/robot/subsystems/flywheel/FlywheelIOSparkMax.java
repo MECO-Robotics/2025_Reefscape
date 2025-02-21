@@ -38,6 +38,10 @@ public class FlywheelIOSparkMax implements FlywheelIO {
   private double velocitySetpoint = 0.0;
 
   public FlywheelIOSparkMax(String name, FlywheelHardwareConfig config) {
+    this(name, config, true);
+  }
+
+  public FlywheelIOSparkMax(String name, FlywheelHardwareConfig config, boolean isBrushless) {
     this.name = name;
 
     assert config.canIds().length > 0 && (config.canIds().length == config.reversed().length);
@@ -50,14 +54,26 @@ public class FlywheelIOSparkMax implements FlywheelIO {
     motorCurrents = new double[config.canIds().length];
     motorAlerts = new Alert[config.canIds().length];
 
-    motors[0] = new SparkMax(config.canIds()[0], MotorType.kBrushless);
-    leaderConfig =
-        new SparkMaxConfig()
-            .inverted(config.reversed()[0])
-            .apply(
-                new EncoderConfig()
-                    .positionConversionFactor(1.0 / config.gearRatio())
-                    .velocityConversionFactor(1.0 / (60.0 * config.gearRatio())));
+    motors[0] =
+        new SparkMax(config.canIds()[0], isBrushless ? MotorType.kBrushless : MotorType.kBrushed);
+    if (isBrushless) {
+      leaderConfig =
+          new SparkMaxConfig()
+              .apply(
+                  new EncoderConfig()
+                      .positionConversionFactor(1.0 / config.gearRatio())
+                      .velocityConversionFactor(1.0 / (60.0 * config.gearRatio())))
+              .inverted(config.reversed()[0]);
+
+    } else {
+      leaderConfig =
+          new SparkMaxConfig()
+              .apply(
+                  new EncoderConfig()
+                      .positionConversionFactor(1.0 / config.gearRatio())
+                      .velocityConversionFactor(1.0 / (60.0 * config.gearRatio()))
+                      .inverted(config.reversed()[0]));
+    }
 
     motors[0].configure(
         leaderConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
@@ -69,9 +85,10 @@ public class FlywheelIOSparkMax implements FlywheelIO {
             AlertType.kError);
 
     for (int i = 1; i < config.canIds().length; i++) {
-      motors[i] = new SparkMax(config.canIds()[i], MotorType.kBrushless);
+      motors[i] =
+          new SparkMax(config.canIds()[i], isBrushless ? MotorType.kBrushless : MotorType.kBrushed);
       motors[i].configure(
-          new SparkMaxConfig().follow(motors[0]).inverted(config.reversed()[i]),
+          new SparkMaxConfig().follow(motors[0], config.reversed()[i]),
           ResetMode.kNoResetSafeParameters,
           PersistMode.kNoPersistParameters);
 

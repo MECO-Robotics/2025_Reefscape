@@ -62,7 +62,10 @@ public class PositionJointIOSparkMax implements PositionJointIO {
   private double velocitySetpoint = 0.0;
 
   public PositionJointIOSparkMax(
-      String name, PositionJointHardwareConfig config, DoubleSupplier externalFeedforward) {
+      String name,
+      PositionJointHardwareConfig config,
+      DoubleSupplier externalFeedforward,
+      boolean isBrushless) {
     this.name = name;
     hardwareConfig = config;
     this.externalFeedforward = externalFeedforward;
@@ -77,15 +80,29 @@ public class PositionJointIOSparkMax implements PositionJointIO {
     motorCurrents = new double[config.canIds().length];
     motorAlerts = new Alert[config.canIds().length];
 
-    motors[0] = new SparkMax(config.canIds()[0], MotorType.kBrushless);
-    leaderConfig =
-        new SparkMaxConfig()
-            .inverted(config.reversed()[0])
-            .idleMode(IdleMode.kBrake)
-            .apply(
-                new EncoderConfig()
-                    .positionConversionFactor(1.0 / config.gearRatio())
-                    .velocityConversionFactor(1.0 / (60.0 * config.gearRatio())));
+    motors[0] =
+        new SparkMax(config.canIds()[0], isBrushless ? MotorType.kBrushless : MotorType.kBrushed);
+
+    if (isBrushless) {
+      leaderConfig =
+          new SparkMaxConfig()
+              .apply(
+                  new EncoderConfig()
+                      .positionConversionFactor(1.0 / config.gearRatio())
+                      .velocityConversionFactor(1.0 / (60.0 * config.gearRatio())))
+              .inverted(config.reversed()[0])
+              .idleMode(IdleMode.kBrake);
+
+    } else {
+      leaderConfig =
+          new SparkMaxConfig()
+              .apply(
+                  new EncoderConfig()
+                      .positionConversionFactor(1.0 / config.gearRatio())
+                      .velocityConversionFactor(1.0 / (60.0 * config.gearRatio()))
+                      .inverted(config.reversed()[0]))
+              .idleMode(IdleMode.kBrake);
+    }
 
     switch (config.encoderType()) {
       case INTERNAL:
@@ -172,12 +189,10 @@ public class PositionJointIOSparkMax implements PositionJointIO {
             AlertType.kError);
 
     for (int i = 1; i < config.canIds().length; i++) {
-      motors[i] = new SparkMax(config.canIds()[i], MotorType.kBrushless);
+      motors[i] =
+          new SparkMax(config.canIds()[i], isBrushless ? MotorType.kBrushless : MotorType.kBrushed);
       motors[i].configure(
-          new SparkMaxConfig()
-              .follow(motors[0])
-              .inverted(config.reversed()[i])
-              .idleMode(IdleMode.kBrake),
+          new SparkMaxConfig().follow(motors[0], config.reversed()[i]).idleMode(IdleMode.kBrake),
           ResetMode.kNoResetSafeParameters,
           PersistMode.kNoPersistParameters);
 
@@ -202,7 +217,7 @@ public class PositionJointIOSparkMax implements PositionJointIO {
   }
 
   public PositionJointIOSparkMax(String name, PositionJointHardwareConfig config) {
-    this(name, config, () -> 0);
+    this(name, config, () -> 0, true);
   }
 
   @Override
@@ -291,6 +306,13 @@ public class PositionJointIOSparkMax implements PositionJointIO {
         PersistMode.kNoPersistParameters);
 
     System.out.println(name + " gains set to " + gains);
+  }
+
+  @Override
+  public void resetPosition() {
+    for (int i = 0; i < motors.length; i++) {
+      motors[i].getEncoder().setPosition(0.0);
+    }
   }
 
   @Override
