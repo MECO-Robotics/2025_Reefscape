@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.flywheel.FlywheelVoltageCommand;
 import frc.robot.commands.position_joint.PositionJointPositionCommand;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.Module;
@@ -270,26 +271,38 @@ public class RobotContainer {
     driverController
         .rightBumper()
         .whileTrue(
-            new PositionJointPositionCommand(
-                rightCoralRotationMotor,
-                () -> PositionJointConstants.CORAL_ROTATION_POSITIONS.DOWN));
+            Commands.parallel(
+                new PositionJointPositionCommand(
+                    rightCoralRotationMotor,
+                    () -> PositionJointConstants.CORAL_ROTATION_POSITIONS.DOWN),
+                new FlywheelVoltageCommand(rightCoralRollerMotor, () -> 5)));
+
     driverController
         .rightBumper()
         .whileFalse(
-            new PositionJointPositionCommand(
-                rightCoralRotationMotor, () -> PositionJointConstants.CORAL_ROTATION_POSITIONS.UP));
+            Commands.parallel(
+                new PositionJointPositionCommand(
+                    rightCoralRotationMotor,
+                    () -> PositionJointConstants.CORAL_ROTATION_POSITIONS.UP),
+                new FlywheelVoltageCommand(rightCoralRollerMotor, () -> -1)));
 
     driverController
         .leftBumper()
         .whileTrue(
-            new PositionJointPositionCommand(
-                leftCoralRotationMotor,
-                () -> PositionJointConstants.CORAL_ROTATION_POSITIONS.DOWN));
+            Commands.parallel(
+                new PositionJointPositionCommand(
+                    leftCoralRotationMotor,
+                    () -> PositionJointConstants.CORAL_ROTATION_POSITIONS.DOWN),
+                new FlywheelVoltageCommand(leftCoralRollerMotor, () -> 5)));
+
     driverController
         .leftBumper()
         .whileFalse(
-            new PositionJointPositionCommand(
-                leftCoralRotationMotor, () -> PositionJointConstants.CORAL_ROTATION_POSITIONS.UP));
+            Commands.parallel(
+                new PositionJointPositionCommand(
+                    leftCoralRotationMotor,
+                    () -> PositionJointConstants.CORAL_ROTATION_POSITIONS.UP),
+                new FlywheelVoltageCommand(leftCoralRollerMotor, () -> -1)));
   }
 
   /**
