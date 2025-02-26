@@ -4,27 +4,27 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.position_joint.PositionJoint;
+import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Components extends SubsystemBase {
-  private final PositionJoint elevator;
-  private final PositionJoint pivot;
-  private final PositionJoint intakeRight;
-  private final PositionJoint intakeLeft;
+  private final DoubleSupplier elevator;
+  private final DoubleSupplier pivot;
+  private final DoubleSupplier intakeRight;
+  private final DoubleSupplier intakeLeft;
 
   public Components(
-      PositionJoint elevator,
-      PositionJoint pivot,
-      PositionJoint intakeRight,
-      PositionJoint intakeLeft) {
+      DoubleSupplier elevator,
+      DoubleSupplier pivot,
+      DoubleSupplier intakeRight,
+      DoubleSupplier intakeLeft) {
     this.elevator = elevator;
     this.pivot = pivot;
     this.intakeRight = intakeRight;
     this.intakeLeft = intakeLeft;
   }
 
-  public Components(PositionJoint intakeRight, PositionJoint intakeLeft) {
+  public Components(DoubleSupplier intakeRight, DoubleSupplier intakeLeft) {
     this.elevator = null;
     this.pivot = null;
     this.intakeRight = intakeRight;
@@ -57,13 +57,17 @@ public class Components extends SubsystemBase {
 
     // Intake Right
     poses[4] =
-        new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(intakeRight.getPosition(), 0, 0));
+        new Pose3d(
+            new Translation3d(0, 0, 0),
+            new Rotation3d(intakeRight.getAsDouble() * 2 * Math.PI, 0, 0));
     poses[5] = new Pose3d();
     poses[6] = new Pose3d();
 
     // Intake Left
     poses[7] =
-        new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0, intakeLeft.getPosition()));
+        new Pose3d(
+            new Translation3d(0, 0, 0),
+            new Rotation3d(intakeLeft.getAsDouble() * 2 * Math.PI / Math.PI, 0, 0));
     poses[8] = new Pose3d();
     poses[9] = new Pose3d();
 
