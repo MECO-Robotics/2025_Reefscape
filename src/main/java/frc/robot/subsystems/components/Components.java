@@ -46,16 +46,22 @@ public class Components extends SubsystemBase {
         new Pose3d(
             new Translation3d(0, -0.4699 + 0.3048, 0.3184652),
             new Rotation3d(intakeRight.getAsDouble() * 2.0 * Math.PI, 0, 0));
-    poses[5] = new Pose3d();
-    poses[6] = new Pose3d();
+    poses[5] =
+        new Pose3d(
+            new Translation3d(0, -0.55245 + 0.3048, 0.2752725),
+            new Rotation3d(intakeRight.getAsDouble() * 2.0 * Math.PI, 0, 0));
+    poses[6] = new Pose3d(new Translation3d(0, -0.47001475 + 0.3048, 0.59102753), new Rotation3d());
 
     // Intake Left
     poses[7] =
         new Pose3d(
             new Translation3d(0, -0.1397 + 0.3048, 0.3184652),
             new Rotation3d(intakeLeft.getAsDouble() * 2.0 * Math.PI, 0, 0));
-    poses[8] = new Pose3d();
-    poses[9] = new Pose3d();
+    poses[8] =
+        new Pose3d(
+            new Translation3d(0, -0.05715 + 0.3048, 0.2752725),
+            new Rotation3d(intakeLeft.getAsDouble() * 2.0 * Math.PI, 0, 0));
+    poses[9] = new Pose3d(new Translation3d(0, -0.1105782 + 0.3048, 0.59102753), new Rotation3d());
 
     // Update the robot's pose
     Logger.recordOutput("Components", poses);
