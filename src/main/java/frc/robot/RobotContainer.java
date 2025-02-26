@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.flywheel.FlywheelVoltageCommand;
 import frc.robot.commands.position_joint.PositionJointPositionCommand;
+import frc.robot.subsystems.components.Components;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.Module;
 import frc.robot.subsystems.drive.azimuth_motor.AzimuthMotorConstants;
@@ -270,6 +271,7 @@ public class RobotContainer {
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
+    new Components(rightCoralRotationMotor, leftCoralRotationMotor);
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -325,7 +327,6 @@ public class RobotContainer {
                     rightCoralRotationMotor,
                     () -> PositionJointConstants.CORAL_ROTATION_POSITIONS.DOWN),
                 new FlywheelVoltageCommand(rightCoralRollerMotor, () -> 5)));
-
     driverController
         .rightBumper()
         .whileFalse(
