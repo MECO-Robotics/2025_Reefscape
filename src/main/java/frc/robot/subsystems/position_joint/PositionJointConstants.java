@@ -48,7 +48,7 @@ public class PositionJointConstants {
       String canBus) {}
 
   public static final PositionJointGains EXAMPLE_GAINS =
-      new PositionJointGains(0, 0, 0, 0.25, 0.85, 0, 0, 0, 0, -6, 0, 0, 0);
+      new PositionJointGains(1.5, 0.0, 0.0, 0.5, 1.0, 2.0, 0.0, 10.0, 20.0, 0.0, Math.PI, 0.2, 0.0);
 
   public static final PositionJointHardwareConfig EXAMPLE_CONFIG =
       new PositionJointHardwareConfig(
@@ -64,7 +64,7 @@ public class PositionJointConstants {
 
   // Coral Intake
   public static final PositionJointGains CORAL_INTAKE_ROTATION_GAINS =
-      new PositionJointGains(20, 0.0, 0.0, 0.5, 1.0, 2.0, 0.0, 0.5, 0.5, 0.0, Math.PI, 0.2, 0.0);
+      new PositionJointGains(0, 0, 0, 0.25, 0.85, 0, 0, 0, 0, -6, 0, 0, 0);
 
   public static final PositionJointHardwareConfig RIGHT_CORAL_INTAKE_RROTATION_CONFIG =
       new PositionJointHardwareConfig(
