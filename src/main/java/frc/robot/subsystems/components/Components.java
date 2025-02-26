@@ -24,41 +24,27 @@ public class Components extends SubsystemBase {
     this.intakeLeft = intakeLeft;
   }
 
-  public Components(DoubleSupplier intakeRight, DoubleSupplier intakeLeft) {
-    this.elevator = null;
-    this.pivot = null;
-    this.intakeRight = intakeRight;
-    this.intakeLeft = intakeLeft;
-  }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     Pose3d[] poses = new Pose3d[10];
 
     poses[0] = new Pose3d(); // Base parts
+
     // Elevator
-    // poses[0] = new Pose3d(new Translation3d(0, 0, elevator.getPosition() / 2),
-    // new Rotation3d(0, 0, 0));
-    // poses[1] = new Pose3d(new Translation3d(0, 0, elevator.getPosition()), new
-    // Rotation3d(0, 0, 0));
+    poses[1] = new Pose3d(new Translation3d(0, 0, elevator.getAsDouble() / 2), new Rotation3d());
+    poses[2] = new Pose3d(new Translation3d(0, 0, elevator.getAsDouble()), new Rotation3d());
 
     // Pivot
-    // poses[2] = new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0,
-    // pivot.getPosition()));
-
-    /*
-     * TODO: remove below for loop and replace with above code after system
-     * implementation
-     */
-    for (int i = 1; i < 4; i++) {
-      poses[i] = new Pose3d();
-    }
+    poses[3] =
+        new Pose3d(
+            new Translation3d(0.40005 - 0.3048, 0, elevator.getAsDouble() + 0.31116367),
+            new Rotation3d(0, pivot.getAsDouble(), 0));
 
     // Intake Right
     poses[4] =
         new Pose3d(
-            new Translation3d(0, 0, 0),
+            new Translation3d(0, -0.4699 + 0.3048, 0.3184652),
             new Rotation3d(intakeRight.getAsDouble() * 2.0 * Math.PI, 0, 0));
     poses[5] = new Pose3d();
     poses[6] = new Pose3d();
@@ -66,7 +52,7 @@ public class Components extends SubsystemBase {
     // Intake Left
     poses[7] =
         new Pose3d(
-            new Translation3d(0, 0, 0),
+            new Translation3d(0, -0.1397 + 0.3048, 0.3184652),
             new Rotation3d(intakeLeft.getAsDouble() * 2.0 * Math.PI, 0, 0));
     poses[8] = new Pose3d();
     poses[9] = new Pose3d();

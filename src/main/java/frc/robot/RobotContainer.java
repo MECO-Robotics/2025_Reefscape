@@ -42,6 +42,7 @@ import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -274,7 +275,11 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    new Components(rightCoralRotationMotor::getPosition, leftCoralRotationMotor::getPosition);
+    // TODO: Remove "filler" and replace with actual getPosition methods of actual
+    // subsystems
+    DoubleSupplier filler = () -> 0;
+    new Components(
+        filler, filler, rightCoralRotationMotor::getPosition, leftCoralRotationMotor::getPosition);
   }
 
   /**
