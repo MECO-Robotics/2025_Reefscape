@@ -109,7 +109,7 @@ public class RobotContainer {
                 new PositionJointIOSparkMax(
                     "RightCoralRotateMotor",
                     PositionJointConstants.RIGHT_CORAL_INTAKE_RROTATION_CONFIG),
-                PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
+                PositionJointConstants.RIGHT_CORAL_INTAKE_ROTATION_GAINS);
         rightCoralRollerMotor =
             new Flywheel(
                 new FlywheelIOSparkMax(
@@ -121,7 +121,7 @@ public class RobotContainer {
                 new PositionJointIOSparkMax(
                     "LeftCoralRotateMotor",
                     PositionJointConstants.LEFT_CORAL_INTAKE_RROTATION_CONFIG),
-                PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
+                PositionJointConstants.LEFT_CORAL_INTAKE_ROTATION_GAINS);
         leftCoralRollerMotor =
             new Flywheel(
                 new FlywheelIOSparkMax(
