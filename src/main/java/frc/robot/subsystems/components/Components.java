@@ -59,7 +59,7 @@ public class Components extends SubsystemBase {
     poses[4] =
         new Pose3d(
             new Translation3d(0, 0, 0),
-            new Rotation3d(intakeRight.getAsDouble() * 2 * Math.PI, 0, 0));
+            new Rotation3d(intakeRight.getAsDouble() * 2.0 * Math.PI, 0, 0));
     poses[5] = new Pose3d();
     poses[6] = new Pose3d();
 
@@ -67,7 +67,7 @@ public class Components extends SubsystemBase {
     poses[7] =
         new Pose3d(
             new Translation3d(0, 0, 0),
-            new Rotation3d(intakeLeft.getAsDouble() * 2 * Math.PI / Math.PI, 0, 0));
+            new Rotation3d(intakeLeft.getAsDouble() * 2.0 * Math.PI, 0, 0));
     poses[8] = new Pose3d();
     poses[9] = new Pose3d();
 

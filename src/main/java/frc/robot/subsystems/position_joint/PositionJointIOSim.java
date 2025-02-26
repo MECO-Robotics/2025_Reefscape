@@ -50,7 +50,7 @@ public class PositionJointIOSim implements PositionJointIO {
 
     sim =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(gearBox, 0.01, 1.0 / config.gearRatio()), gearBox);
+            LinearSystemId.createDCMotorSystem(gearBox, 0.01, config.gearRatio()), gearBox);
 
     controller = new PIDController(0, 0, 0);
   }
