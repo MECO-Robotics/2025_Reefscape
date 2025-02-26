@@ -56,12 +56,14 @@ public class Components extends SubsystemBase {
     }
 
     // Intake Right
-    poses[4] = new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(intakeRight.getPosition(), 0, 0));
+    poses[4] =
+        new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(intakeRight.getPosition(), 0, 0));
     poses[5] = new Pose3d();
     poses[6] = new Pose3d();
 
     // Intake Left
-    poses[7] = new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0, intakeLeft.getPosition()));
+    poses[7] =
+        new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0, intakeLeft.getPosition()));
     poses[8] = new Pose3d();
     poses[9] = new Pose3d();
 
