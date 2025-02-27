@@ -1,7 +1,6 @@
 package frc.robot.subsystems.position_joint;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.util.mechanical_advantage.LoggedTunableNumber;
 
 public class PositionJointConstants {
   public enum GravityType {
@@ -89,13 +88,6 @@ public class PositionJointConstants {
       -1,
       Rotation2d.fromRotations(0),
       "");
-
-  public static final class CORAL_ROTATION_POSITIONS {
-    private final LoggedTunableNumber UP = new LoggedTunableNumber("CoralIntakeRotation", 0);
-    private final LoggedTunableNumber DOWN = new LoggedTunableNumber("CoralIntakePosition", 0);
-    public static final LoggedTunableNumber UP = 0; // -0.28;
-    public static final LoggedTunableNumber DOWN = -0.25; // -5.85;
-  }
 
   // Elevator
 
