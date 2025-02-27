@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -164,6 +166,13 @@ public class DriveCommands {
 
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
+  }
+
+  public static final Command pathfindToPose(Drive drive, Pose2d targetPose) {
+
+    PathConstraints constraints =
+        new PathConstraints(4, 4, Math.toRadians(360), Math.toRadians(360), 12, false);
+    return AutoBuilder.pathfindToPose(targetPose, constraints, 1.0);
   }
 
   /**
