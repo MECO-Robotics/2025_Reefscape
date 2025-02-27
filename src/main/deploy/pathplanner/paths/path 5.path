@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.6624118203773242,
+        "y": 6.787770230910106
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.3999095354614024,
+        "y": 6.045954035974772
+      },
+      "isLocked": false,
+      "linkedName": "gournd Intake"
+    },
+    {
+      "anchor": {
+        "x": 3.769058498293421,
+        "y": 4.94152596217198
+      },
+      "prevControl": {
+        "x": 3.293200485270649,
+        "y": 5.341645788837557
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "path 5 end"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -59.475435963061365
+  },
+  "reversed": false,
+  "folder": "Blue Auto paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -136.9075653889993
+  },
+  "useDefaultConstraints": true
+}
