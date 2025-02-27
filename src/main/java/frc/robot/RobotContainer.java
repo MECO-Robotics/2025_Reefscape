@@ -8,6 +8,11 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
@@ -58,6 +63,8 @@ public class RobotContainer {
   private Flywheel rightCoralRollerMotor;
   private PositionJoint leftCoralRotationMotor;
   private Flywheel leftCoralRollerMotor;
+
+  private double simElevatorPosition = 0;
 
   @SuppressWarnings("unused")
   private final Vision vision;
@@ -279,7 +286,10 @@ public class RobotContainer {
     // subsystems
     DoubleSupplier filler = () -> 0;
     new Components(
-        filler, filler, rightCoralRotationMotor::getPosition, leftCoralRotationMotor::getPosition);
+        () -> simElevatorPosition,
+        filler,
+        rightCoralRotationMotor::getPosition,
+        leftCoralRotationMotor::getPosition);
   }
 
   /**
@@ -309,6 +319,20 @@ public class RobotContainer {
 
     // Switch to X pattern when X button is pressed
     driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    Pose2d reef = new Pose2d(12.395, 5.137, Rotation2d.fromDegrees(-60));
+    driverController
+        .y()
+        .onTrue(
+            new ParallelCommandGroup(
+                DriveCommands.pathfindToPose(drive, reef).asProxy(),
+                new SequentialCommandGroup(
+                    new WaitUntilCommand(
+                        () ->
+                            drive.getPose().getTranslation().getDistance(reef.getTranslation())
+                                < 0.5),
+                    new InstantCommand(() -> simElevatorPosition = 1),
+                    new WaitCommand(1),
+                    new InstantCommand(() -> simElevatorPosition = 0))));
 
     // // Reset gyro / odometry
     final Runnable resetGyro =
