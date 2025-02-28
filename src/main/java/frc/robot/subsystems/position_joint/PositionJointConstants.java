@@ -1,6 +1,7 @@
 package frc.robot.subsystems.position_joint;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 
 public class PositionJointConstants {
   public enum GravityType {
@@ -31,8 +32,7 @@ public class PositionJointConstants {
       double kMinPosition,
       double kMaxPosition,
       double kTolerance,
-      double kDefaultSetpoint) {
-  }
+      double kDefaultSetpoint) {}
 
   // Position Joint Gear Ratio should be multiplied by Math.PI * 2 for rotation
   // joints to convert
@@ -46,49 +46,34 @@ public class PositionJointConstants {
       EncoderType encoderType,
       int encoderID,
       Rotation2d encoderOffset,
-      String canBus) {
-  }
-
-  public static final PositionJointGains EXAMPLE_GAINS = new PositionJointGains(0, 0, 0, 0.25, 0.85, 0, 0, 0, 0, -6, 0,
-      0, 0);
-
-  public static final PositionJointHardwareConfig EXAMPLE_CONFIG = new PositionJointHardwareConfig(
-      new int[] { 10 },
-      new boolean[] { true },
-      85.33333 * 2 * Math.PI,
-      40,
-      GravityType.COSINE,
-      EncoderType.EXTERNAL_CANCODER,
-      11,
-      Rotation2d.fromRotations(0.5),
-      "");
+      String canBus) {}
 
   // Coral Intake
-  public static final PositionJointGains CORAL_INTAKE_ROTATION_GAINS = new PositionJointGains(20, 0.0, 0.0, 0.5, 1.0,
-      2.0, 0.0, 0.5, 0.5, 0.0, Math.PI, 0.2, 0.0);
+  public static final PositionJointGains CORAL_INTAKE_ROTATION_GAINS =
+      new PositionJointGains(
+          20, 0.0, 0.0, 0.5, 1.0, 2.0, 0.0, 1.0, 4.0, 0.0, Units.degreesToRotations(101), 0.2, 0.0);
 
-  public static final PositionJointHardwareConfig RIGHT_CORAL_INTAKE_RROTATION_CONFIG = new PositionJointHardwareConfig(
-      new int[] { 21 },
-      new boolean[] { false },
-      (3 * 5) * 24 / 16,
-      40,
-      GravityType.SINE,
-      EncoderType.INTERNAL,
-      -1,
-      Rotation2d.fromRotations(0),
-      "");
+  public static final PositionJointHardwareConfig RIGHT_CORAL_INTAKE_RROTATION_CONFIG =
+      new PositionJointHardwareConfig(
+          new int[] {21},
+          new boolean[] {false},
+          (3 * 5) * 24 / 16,
+          40,
+          GravityType.SINE,
+          EncoderType.INTERNAL,
+          -1,
+          Rotation2d.fromRotations(0),
+          "");
 
-  public static final PositionJointHardwareConfig LEFT_CORAL_INTAKE_RROTATION_CONFIG = new PositionJointHardwareConfig(
-      new int[] { 23 },
-      new boolean[] { true },
-      (3 * 5) * 24 / 16,
-      40,
-      GravityType.SINE,
-      EncoderType.INTERNAL,
-      -1,
-      Rotation2d.fromRotations(0),
-      "");
-
-  // Elevator
-
+  public static final PositionJointHardwareConfig LEFT_CORAL_INTAKE_RROTATION_CONFIG =
+      new PositionJointHardwareConfig(
+          new int[] {23},
+          new boolean[] {true},
+          (3 * 5) * 24 / 16,
+          40,
+          GravityType.SINE,
+          EncoderType.INTERNAL,
+          -1,
+          Rotation2d.fromRotations(0),
+          "");
 }

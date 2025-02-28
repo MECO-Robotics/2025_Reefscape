@@ -12,15 +12,15 @@ import org.littletonrobotics.junction.Logger;
 public class Components extends SubsystemBase {
   // private final DoubleSupplier elevator;
   // private final DoubleSupplier pivot;
-  // private final DoubleSupplier intakeRight;
-  // private final DoubleSupplier intakeLeft;
+  private final DoubleSupplier intakeRight;
+  private final DoubleSupplier intakeLeft;
 
   private final LoggedTunableNumber elevator = new LoggedTunableNumber("ElevatorSimPosition", 0);
   private final LoggedTunableNumber pivot = new LoggedTunableNumber("PivotSimPosition", 0);
-  private final LoggedTunableNumber intakeRight =
-      new LoggedTunableNumber("RightIntakeSimPosition", 0);
-  private final LoggedTunableNumber intakeLeft =
-      new LoggedTunableNumber("LeftIntakeSimPosition", 0);
+  // private final LoggedTunableNumber intakeRight =
+  // new LoggedTunableNumber("RightIntakeSimPosition", 0);
+  // private final LoggedTunableNumber intakeLeft =
+  // new LoggedTunableNumber("LeftIntakeSimPosition", 0);
 
   public Components(
       DoubleSupplier elevator,
@@ -29,8 +29,8 @@ public class Components extends SubsystemBase {
       DoubleSupplier intakeLeft) {
     // this.elevator = elevator;
     // this.pivot = pivot;
-    // this.intakeRight = intakeRight;
-    // this.intakeLeft = intakeLeft;
+    this.intakeRight = intakeRight;
+    this.intakeLeft = intakeLeft;
   }
 
   @Override
@@ -54,32 +54,43 @@ public class Components extends SubsystemBase {
     poses[4] =
         new Pose3d(
             new Translation3d(0, -0.4699 + 0.3048, 0.3184652),
-            new Rotation3d(Units.degreesToRadians(intakeRight.getAsDouble()), 0, 0));
+            new Rotation3d(Units.rotationsToRadians(intakeRight.getAsDouble()), 0, 0));
     poses[5] =
         new Pose3d(
             new Translation3d(0, -0.55245 + 0.3048, 0.2752725),
-            new Rotation3d(1.2 * Units.degreesToRadians(intakeRight.getAsDouble()), 0, 0));
+            new Rotation3d(1.2 * Units.rotationsToRadians(intakeRight.getAsDouble()), 0, 0));
     poses[6] =
         new Pose3d(
             new Translation3d(
                 0,
                 -0.47001475
                     + 0.3048
-                    - 0.27256233 * Math.sin(Units.degreesToRadians(intakeRight.getAsDouble())),
-                0.3184652
-                    + 0.27256233 * Math.cos(Units.degreesToRadians(intakeRight.getAsDouble()))),
-            new Rotation3d(0, 0, 0));
+                    - 0.27256233 * Math.sin(Units.rotationsToRadians(intakeRight.getAsDouble())),
+                0.59257878
+                    - 0.27256233
+                    + 0.27256233 * Math.cos(Units.rotationsToRadians(intakeRight.getAsDouble()))),
+            new Rotation3d(0.1 * Units.rotationsToRadians(intakeRight.getAsDouble()), 0, 0));
 
     // Intake Left
     poses[7] =
         new Pose3d(
             new Translation3d(0, -0.1397 + 0.3048, 0.3184652),
-            new Rotation3d(Units.degreesToRadians(intakeLeft.getAsDouble()), 0, 0));
+            new Rotation3d(-Units.rotationsToRadians(intakeLeft.getAsDouble()), 0, 0));
     poses[8] =
         new Pose3d(
             new Translation3d(0, -0.05715 + 0.3048, 0.2752725),
-            new Rotation3d(Units.degreesToRadians(intakeLeft.getAsDouble()), 0, 0));
-    poses[9] = new Pose3d(new Translation3d(0, -0.1105782 + 0.3048, 0.59102753), new Rotation3d());
+            new Rotation3d(-1.2 * Units.rotationsToRadians(intakeLeft.getAsDouble()), 0, 0));
+    poses[9] =
+        new Pose3d(
+            new Translation3d(
+                0,
+                -0.1105782
+                    + 0.3048
+                    + 0.27256233 * Math.sin(Units.rotationsToRadians(intakeLeft.getAsDouble())),
+                0.59102753
+                    - 0.27256233
+                    + 0.27256233 * Math.cos(Units.rotationsToRadians(intakeLeft.getAsDouble()))),
+            new Rotation3d(-0.1 * Units.rotationsToRadians(intakeLeft.getAsDouble()), 0, 0));
 
     // Update the robot's pose
     Logger.recordOutput("Components", poses);
