@@ -57,6 +57,7 @@ public class RobotContainer {
   private Flywheel rightCoralRollerMotor;
   private PositionJoint leftCoralRotationMotor;
   private Flywheel leftCoralRollerMotor;
+  private PositionJoint elevatorMotor;
 
   @SuppressWarnings("unused")
   private final Vision vision;
@@ -133,6 +134,14 @@ public class RobotContainer {
                     "LeftCoralRollerMotor", FlywheelConstants.LEFT_CORAL_INTAKE_ROLLERS_CONFG),
                 FlywheelConstants.LEFT_CORAL_INTAKE_ROLLER_GAINS);
 
+        // Elevator
+        elevatorMotor =
+            new PositionJoint(
+                new PositionJointIOSparkMax(
+                    "ElevatorMotor", PositionJointConstants.ELEVATOR_CONFIG),
+                PositionJointConstants.ELEVATOR_GAINS);
+
+        // Vision
         vision =
             new Vision(
                 drive::addVisionMeasurement,
@@ -199,6 +208,11 @@ public class RobotContainer {
                     "LeftCoralRollerMotor", FlywheelConstants.LEFT_CORAL_INTAKE_ROLLERS_CONFG),
                 FlywheelConstants.LEFT_CORAL_INTAKE_ROLLER_GAINS);
 
+        elevatorMotor =
+            new PositionJoint(
+                new PositionJointIOSim("ElevatorMotor", PositionJointConstants.ELEVATOR_CONFIG),
+                PositionJointConstants.ELEVATOR_GAINS);
+
         break;
 
       default:
@@ -249,6 +263,11 @@ public class RobotContainer {
             new Flywheel(
                 new FlywheelIOReplay("LeftCoralRollerMotor"),
                 FlywheelConstants.LEFT_CORAL_INTAKE_ROLLER_GAINS);
+
+        elevatorMotor =
+            new PositionJoint(
+                new PositionJointIOReplay("ElevatorMotor"), PositionJointConstants.ELEVATOR_GAINS);
+
         break;
     }
 
