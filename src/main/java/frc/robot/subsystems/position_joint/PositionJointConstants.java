@@ -91,4 +91,19 @@ public class PositionJointConstants {
           -1,
           Rotation2d.fromRotations(0),
           "");
+
+  public static final PositionJointGains PIVOT_GAINS =
+      new PositionJointGains(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+  public static final PositionJointHardwareConfig ELBOW_CONFIG =
+      new PositionJointHardwareConfig(
+          new int[] {33},
+          new boolean[] {false},
+          1,
+          40,
+          GravityType.CONSTANT,
+          EncoderType.INTERNAL,
+          -1,
+          Rotation2d.fromRotations(0),
+          "");
 }
