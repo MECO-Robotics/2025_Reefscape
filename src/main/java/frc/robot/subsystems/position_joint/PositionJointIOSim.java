@@ -9,6 +9,8 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.subsystems.position_joint.PositionJointConstants.PositionJointGains;
 import frc.robot.subsystems.position_joint.PositionJointConstants.PositionJointHardwareConfig;
+import frc.robot.util.feedforwards.PositionJointFeedforward;
+import frc.robot.util.feedforwards.TunableElevatorFeedforward;
 
 public class PositionJointIOSim implements PositionJointIO {
   private final String name;
@@ -20,6 +22,7 @@ public class PositionJointIOSim implements PositionJointIO {
   private final DCMotorSim sim;
 
   private final PIDController controller;
+  private final PositionJointFeedforward feedforward;
 
   private final boolean[] motorsConnected;
 
@@ -53,11 +56,19 @@ public class PositionJointIOSim implements PositionJointIO {
             LinearSystemId.createDCMotorSystem(gearBox, 0.01, config.gearRatio()), gearBox);
 
     controller = new PIDController(0, 0, 0);
+
+    feedforward = new TunableElevatorFeedforward(0.0, 0.0, 0.0, 0.0);
   }
 
   @Override
   public void updateInputs(PositionJointIOInputs inputs) {
-    inputVoltage = controller.calculate(sim.getAngularPosition().in(Rotations), positionSetpoint);
+    inputVoltage =
+        controller.calculate(sim.getAngularPosition().in(Rotations), positionSetpoint)
+            + feedforward.calculate(
+                sim.getAngularPositionRotations(),
+                sim.getAngularVelocity().in(RotationsPerSecond),
+                velocitySetpoint,
+                0.02);
     sim.setInputVoltage(inputVoltage);
     sim.update(0.02);
 
@@ -94,6 +105,7 @@ public class PositionJointIOSim implements PositionJointIO {
   @Override
   public void setGains(PositionJointGains gains) {
     controller.setPID(gains.kP(), gains.kI(), gains.kD());
+    feedforward.setGains(gains.kS(), gains.kG(), gains.kV(), gains.kA());
 
     System.out.println(name + " gains set to " + gains);
   }

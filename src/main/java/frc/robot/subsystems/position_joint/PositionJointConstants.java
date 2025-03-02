@@ -102,7 +102,7 @@ public class PositionJointConstants {
           new boolean[] {false},
           1,
           40,
-          GravityType.CONSTANT,
+          GravityType.COSINE,
           EncoderType.INTERNAL,
           -1,
           Rotation2d.fromRotations(0),
