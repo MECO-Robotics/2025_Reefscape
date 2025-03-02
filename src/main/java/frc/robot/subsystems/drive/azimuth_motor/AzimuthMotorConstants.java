@@ -35,7 +35,7 @@ public class AzimuthMotorConstants {
           40,
           EncoderType.EXTERNAL_CANCODER_PRO,
           12,
-          Rotation2d.fromRotations(0.448975),
+          Rotation2d.fromRotations(-0.448975),
           canBusName);
 
   public static final AzimuthMotorHardwareConfig FRONT_RIGHT_CONFIG =
@@ -46,7 +46,7 @@ public class AzimuthMotorConstants {
           40,
           EncoderType.EXTERNAL_CANCODER_PRO,
           11,
-          Rotation2d.fromRotations(0.087646),
+          Rotation2d.fromRotations(-0.091553),
           canBusName);
 
   public static final AzimuthMotorHardwareConfig BACK_LEFT_CONFIG =
@@ -57,7 +57,7 @@ public class AzimuthMotorConstants {
           40,
           EncoderType.EXTERNAL_CANCODER_PRO,
           9,
-          Rotation2d.fromRotations(-0.394287),
+          Rotation2d.fromRotations(0.389648),
           canBusName);
 
   public static final AzimuthMotorHardwareConfig BACK_RIGHT_CONFIG =
@@ -68,7 +68,7 @@ public class AzimuthMotorConstants {
           40,
           EncoderType.EXTERNAL_CANCODER_PRO,
           10,
-          Rotation2d.fromRotations(-0.312012),
+          Rotation2d.fromRotations(0.312744),
           canBusName);
 
   public static final AzimuthMotorGains AZMITH_GAINS =

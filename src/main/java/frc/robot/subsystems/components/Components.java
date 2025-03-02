@@ -10,12 +10,13 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Components extends SubsystemBase {
-  // private final DoubleSupplier elevator;
+  private final DoubleSupplier elevator;
   // private final DoubleSupplier pivot;
   private final DoubleSupplier intakeRight;
   private final DoubleSupplier intakeLeft;
 
-  private final LoggedTunableNumber elevator = new LoggedTunableNumber("ElevatorSimPosition", 0);
+  // private final LoggedTunableNumber elevator = new
+  // LoggedTunableNumber("ElevatorSimPosition", 0);
   private final LoggedTunableNumber pivot = new LoggedTunableNumber("PivotSimPosition", 0);
   // private final LoggedTunableNumber intakeRight =
   // new LoggedTunableNumber("RightIntakeSimPosition", 0);
@@ -27,7 +28,7 @@ public class Components extends SubsystemBase {
       DoubleSupplier pivot,
       DoubleSupplier intakeRight,
       DoubleSupplier intakeLeft) {
-    // this.elevator = elevator;
+    this.elevator = elevator;
     // this.pivot = pivot;
     this.intakeRight = intakeRight;
     this.intakeLeft = intakeLeft;

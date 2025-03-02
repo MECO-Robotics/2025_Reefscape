@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.IntakeCommands;
 import frc.robot.subsystems.components.Components;
 import frc.robot.subsystems.drive.Drive;
@@ -36,6 +37,7 @@ import frc.robot.subsystems.position_joint.PositionJointConstants;
 import frc.robot.subsystems.position_joint.PositionJointIOReplay;
 import frc.robot.subsystems.position_joint.PositionJointIOSim;
 import frc.robot.subsystems.position_joint.PositionJointIOSparkMax;
+import frc.robot.subsystems.position_joint.PositionJointIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO;
@@ -57,6 +59,9 @@ public class RobotContainer {
   private Flywheel rightCoralRollerMotor;
   private PositionJoint leftCoralRotationMotor;
   private Flywheel leftCoralRollerMotor;
+  private PositionJoint elevatorMotor;
+  private PositionJoint elbowMotor;
+  private Flywheel endEffectorMotor;
 
   @SuppressWarnings("unused")
   private final Vision vision;
@@ -133,6 +138,26 @@ public class RobotContainer {
                     "LeftCoralRollerMotor", FlywheelConstants.LEFT_CORAL_INTAKE_ROLLERS_CONFG),
                 FlywheelConstants.LEFT_CORAL_INTAKE_ROLLER_GAINS);
 
+        // Elevator
+        elevatorMotor =
+            new PositionJoint(
+                new PositionJointIOSparkMax(
+                    "ElevatorMotor", PositionJointConstants.ELEVATOR_CONFIG),
+                PositionJointConstants.ELEVATOR_GAINS);
+
+        // Elbow
+        elbowMotor =
+            new PositionJoint(
+                new PositionJointIOTalonFX("ElbowMotor", PositionJointConstants.ELBOW_CONFIG),
+                PositionJointConstants.PIVOT_GAINS);
+
+        // End Effector
+        endEffectorMotor =
+            new Flywheel(
+                new FlywheelIOSparkMax("EndEffectorMotor", FlywheelConstants.END_EFFECTOR_CONFIG),
+                FlywheelConstants.END_EFFECTOR_GAINS);
+
+        // Vision
         vision =
             new Vision(
                 drive::addVisionMeasurement,
@@ -199,6 +224,21 @@ public class RobotContainer {
                     "LeftCoralRollerMotor", FlywheelConstants.LEFT_CORAL_INTAKE_ROLLERS_CONFG),
                 FlywheelConstants.LEFT_CORAL_INTAKE_ROLLER_GAINS);
 
+        elevatorMotor =
+            new PositionJoint(
+                new PositionJointIOSim("ElevatorMotor", PositionJointConstants.ELEVATOR_CONFIG),
+                PositionJointConstants.ELEVATOR_GAINS);
+
+        elbowMotor =
+            new PositionJoint(
+                new PositionJointIOSim("ElbowMotor", PositionJointConstants.ELBOW_CONFIG),
+                PositionJointConstants.PIVOT_GAINS);
+
+        endEffectorMotor =
+            new Flywheel(
+                new FlywheelIOSim("EndEffectorMotor", FlywheelConstants.END_EFFECTOR_CONFIG),
+                FlywheelConstants.END_EFFECTOR_GAINS);
+
         break;
 
       default:
@@ -249,6 +289,19 @@ public class RobotContainer {
             new Flywheel(
                 new FlywheelIOReplay("LeftCoralRollerMotor"),
                 FlywheelConstants.LEFT_CORAL_INTAKE_ROLLER_GAINS);
+
+        elevatorMotor =
+            new PositionJoint(
+                new PositionJointIOReplay("ElevatorMotor"), PositionJointConstants.ELEVATOR_GAINS);
+
+        elbowMotor =
+            new PositionJoint(
+                new PositionJointIOReplay("ElbowMotor"), PositionJointConstants.PIVOT_GAINS);
+
+        endEffectorMotor =
+            new Flywheel(
+                new FlywheelIOReplay("EndEffectorMotor"), FlywheelConstants.END_EFFECTOR_GAINS);
+
         break;
     }
 
@@ -278,7 +331,10 @@ public class RobotContainer {
     // subsystems
     DoubleSupplier filler = () -> 0;
     new Components(
-        filler, filler, rightCoralRotationMotor::getPosition, leftCoralRotationMotor::getPosition);
+        elevatorMotor::getPosition,
+        filler,
+        rightCoralRotationMotor::getPosition,
+        leftCoralRotationMotor::getPosition);
   }
 
   /**
@@ -334,6 +390,10 @@ public class RobotContainer {
         .leftBumper()
         .whileTrue(IntakeCommands.deployIntake(leftCoralRotationMotor, leftCoralRollerMotor))
         .whileFalse(IntakeCommands.stowIntake(leftCoralRotationMotor, leftCoralRollerMotor));
+
+    driverController.povUp().whileTrue(ElevatorCommands.MAX(elevatorMotor));
+
+    driverController.povDown().whileTrue(ElevatorCommands.handOff(elevatorMotor));
   }
 
   /**
