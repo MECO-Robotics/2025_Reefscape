@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.IntakeCommands;
 import frc.robot.subsystems.components.Components;
 import frc.robot.subsystems.drive.Drive;
@@ -389,6 +390,10 @@ public class RobotContainer {
         .leftBumper()
         .whileTrue(IntakeCommands.deployIntake(leftCoralRotationMotor, leftCoralRollerMotor))
         .whileFalse(IntakeCommands.stowIntake(leftCoralRotationMotor, leftCoralRollerMotor));
+
+    driverController.povUp().whileTrue(ElevatorCommands.MAX(elevatorMotor));
+
+    driverController.povDown().whileTrue(ElevatorCommands.handOff(elevatorMotor));
   }
 
   /**

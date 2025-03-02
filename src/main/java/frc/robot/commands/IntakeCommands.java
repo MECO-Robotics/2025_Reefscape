@@ -23,12 +23,12 @@ public class IntakeCommands {
   /** Intake roller preset voltages. */
   public final class ROLLER_VOLTS {
     public static final LoggedTunableNumber INTAKE =
-        new LoggedTunableNumber("CoralIntakeSpeed", -12);
+        new LoggedTunableNumber("CoralIntakeSpeed", -5);
     public static final LoggedTunableNumber STOW = new LoggedTunableNumber("CoralOuttakeSpeed", 1);
   }
 
   /**
-   * Stows the intake by moving the rotation motor to the up position and setting the roller motor
+   * Stows the intake by moving the rotation motor to the up position and set ting the roller motor
    * to stow speed.
    */
   public static Command stowIntake(PositionJoint rotationMotor, Flywheel rollerMotor) {

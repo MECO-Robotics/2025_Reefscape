@@ -11,17 +11,17 @@ public class ElevatorCommands {
 
   /** Intake rotation preset positions. */
   public static final class ELEVATOR_HEIGHT_PRESETS {
-    public static final LoggedTunableNumber ELEVATOR_STOW =
-        new LoggedTunableNumber("ElevatorPosition", 0);
 
     public static final LoggedTunableNumber HANDOFF =
-        new LoggedTunableNumber("ElevatorPosition", 0);
+        new LoggedTunableNumber("ElevatorPosition", 0.0);
 
     public static final LoggedTunableNumber L_ONE = new LoggedTunableNumber("ElevatorPosition", 0);
     public static final LoggedTunableNumber L_TWO = new LoggedTunableNumber("ElevatorPosition", 0);
     public static final LoggedTunableNumber L_THREE =
         new LoggedTunableNumber("ElevatorPosition", 0);
     public static final LoggedTunableNumber L_FOUR = new LoggedTunableNumber("ElevatorPosition", 0);
+    public static final LoggedTunableNumber MAX_POS =
+        new LoggedTunableNumber("ElevatorPosition", 1.27);
   }
 
   public static final class WRIST_PRESETS {
@@ -50,7 +50,8 @@ public class ElevatorCommands {
 
   public static Command stowEleator(PositionJoint elevatorMotor, PositionJoint wristMotor) {
     return Commands.parallel(
-        new PositionJointPositionCommand(elevatorMotor, ELEVATOR_HEIGHT_PRESETS.ELEVATOR_STOW),
+        // new PositionJointPositionCommand(elevatorMotor,
+        // ELEVATOR_HEIGHT_PRESETS.ELEVATOR_STOW),
         new PositionJointPositionCommand(wristMotor, WRIST_PRESETS.WRIST_STOW));
   }
 
@@ -76,5 +77,13 @@ public class ElevatorCommands {
     return Commands.parallel(
         new PositionJointPositionCommand(elevatorMotor, ELEVATOR_HEIGHT_PRESETS.L_FOUR),
         new PositionJointPositionCommand(wristMotor, WRIST_PRESETS.WRIST_L_FOUR));
+  }
+
+  public static Command MAX(PositionJoint elevatormotor) {
+    return new PositionJointPositionCommand(elevatormotor, ELEVATOR_HEIGHT_PRESETS.MAX_POS);
+  }
+
+  public static Command handOff(PositionJoint elevatorMotor) {
+    return new PositionJointPositionCommand(elevatorMotor, ELEVATOR_HEIGHT_PRESETS.HANDOFF);
   }
 }
