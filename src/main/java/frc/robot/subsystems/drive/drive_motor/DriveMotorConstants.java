@@ -5,8 +5,7 @@ import frc.robot.subsystems.drive.DriveConstants;
 public class DriveMotorConstants {
     public static final String canBusName = "MECO CANIvore";
 
-    public record DriveMotorGains(
-            double kP, double kI, double kD, double kS, double kV, double kA, double kMaxAccel) {
+    public record DriveMotorGains(double kP, double kI, double kD, double kS, double kV, double kA) {
     }
 
     public record DriveMotorHardwareConfig(
@@ -25,7 +24,7 @@ public class DriveMotorConstants {
     public static final DriveMotorHardwareConfig BACK_RIGHT_CONFIG = new DriveMotorHardwareConfig(
             new int[] { 6 }, new boolean[] { true }, DriveConstants.driveMotorGearRatio, canBusName);
 
-    public static final DriveMotorGains DRIVE_GAINS = new DriveMotorGains(3, 0, 0, 0.5, 1, 0, 0);
+    public static final DriveMotorGains DRIVE_GAINS = new DriveMotorGains(3, 0, 0, 0.5, 1, 0);
 
-    public static final DriveMotorGains DRIVE_SIM_GAINS = new DriveMotorGains(3, 0, 0, 0, 0, 0, 0);
+    public static final DriveMotorGains DRIVE_GAINS_SIM = new DriveMotorGains(0.1, 0, 0, 0, 0.46, 0);
 }

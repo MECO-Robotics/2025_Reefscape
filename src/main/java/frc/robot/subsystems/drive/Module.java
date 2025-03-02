@@ -11,7 +11,6 @@ import frc.robot.subsystems.drive.drive_motor.DriveMotorConstants.DriveMotorGain
 import frc.robot.subsystems.drive.drive_motor.DriveMotorIO;
 import frc.robot.subsystems.drive.drive_motor.DriveMotorIOInputsAutoLogged;
 import frc.robot.util.OnboardModuleState;
-import frc.robot.util.mechanical_advantage.LoggedTunableNumber;
 import org.littletonrobotics.junction.Logger;
 
 public class Module {
@@ -24,69 +23,22 @@ public class Module {
   private final String driveName;
   private final String azimuthName;
 
-  private final LoggedTunableNumber drivekP;
-  private final LoggedTunableNumber drivekI;
-  private final LoggedTunableNumber drivekD;
-  private final LoggedTunableNumber drivekS;
-  private final LoggedTunableNumber drivekV;
-  private final LoggedTunableNumber drivekA;
-
-  private final LoggedTunableNumber drivekMaxAccel;
-
-  private final LoggedTunableNumber azimuthkP;
-  private final LoggedTunableNumber azimuthkI;
-  private final LoggedTunableNumber azimuthkD;
-  private final LoggedTunableNumber azimuthkS;
-  private final LoggedTunableNumber azimuthkV;
-  private final LoggedTunableNumber azimuthkA;
-
-  private final LoggedTunableNumber azimuthkMaxVelo;
-  private final LoggedTunableNumber azimuthkMaxAccel;
-
   private SwerveModulePosition[] odometryPositions = new SwerveModulePosition[] {};
 
-  public Module(
-      DriveMotorIO driveMotorIO,
-      DriveMotorGains driveGains,
-      AzimuthMotorIO azimuthMotorIO,
-      AzimuthMotorGains azimuthGains) {
+  public Module(DriveMotorIO driveMotorIO, AzimuthMotorIO azimuthMotorIO) {
     driveMotor = driveMotorIO;
     azimuthMotor = azimuthMotorIO;
 
     driveName = driveMotorIO.getName();
     azimuthName = azimuthMotorIO.getName();
-
-    drivekP = new LoggedTunableNumber("Drive/" + driveName + "/Gains/kP", driveGains.kP());
-    drivekI = new LoggedTunableNumber("Drive/" + driveName + "/Gains/kI", driveGains.kI());
-    drivekD = new LoggedTunableNumber("Drive/" + driveName + "/Gains/kD", driveGains.kD());
-    drivekS = new LoggedTunableNumber("Drive/" + driveName + "/Gains/kS", driveGains.kS());
-    drivekV = new LoggedTunableNumber("Drive/" + driveName + "/Gains/kV", driveGains.kV());
-    drivekA = new LoggedTunableNumber("Drive/" + driveName + "/Gains/kA", driveGains.kA());
-
-    drivekMaxAccel =
-        new LoggedTunableNumber("Drive/" + driveName + "/Gains/kMaxAccel", driveGains.kMaxAccel());
-
-    azimuthkP = new LoggedTunableNumber("Drive/" + azimuthName + "/Gains/kP", azimuthGains.kP());
-    azimuthkI = new LoggedTunableNumber("Drive/" + azimuthName + "/Gains/kI", azimuthGains.kI());
-    azimuthkD = new LoggedTunableNumber("Drive/" + azimuthName + "/Gains/kD", azimuthGains.kD());
-    azimuthkS = new LoggedTunableNumber("Drive/" + azimuthName + "/Gains/kS", azimuthGains.kS());
-    azimuthkV = new LoggedTunableNumber("Drive/" + azimuthName + "/Gains/kV", azimuthGains.kV());
-    azimuthkA = new LoggedTunableNumber("Drive/" + azimuthName + "/Gains/kA", azimuthGains.kA());
-
-    azimuthkMaxVelo =
-        new LoggedTunableNumber(
-            "Drive/" + azimuthName + "/Gains/kMaxVelo", azimuthGains.kMaxVelo());
-    azimuthkMaxAccel =
-        new LoggedTunableNumber(
-            "Drive/" + azimuthName + "/Gains/kMaxAccel", azimuthGains.kMaxAccel());
   }
 
   public void periodic() {
     driveMotor.updateInputs(driveInputs);
-    Logger.processInputs(driveName, driveInputs);
+    Logger.processInputs("Drive/" + driveName, driveInputs);
 
     azimuthMotor.updateInputs(azimuthInputs);
-    Logger.processInputs(azimuthName, azimuthInputs);
+    Logger.processInputs("Drive/" + azimuthName, azimuthInputs);
 
     // Calculate positions for odometry
     int sampleCount = driveInputs.odometryTimestamps.length; // All signals are sampled together
@@ -97,45 +49,13 @@ public class Module {
       Rotation2d angle = azimuthInputs.odometryTurnPositions[i];
       odometryPositions[i] = new SwerveModulePosition(positionMeters, angle);
     }
-
-    LoggedTunableNumber.ifChanged(
-        hashCode(),
-        (values) -> {
-          driveMotor.setGains(
-              new DriveMotorGains(
-                  values[0], values[1], values[2], values[3], values[4], values[5], values[6]));
-        },
-        drivekP,
-        drivekI,
-        drivekD,
-        drivekS,
-        drivekV,
-        drivekA,
-        drivekMaxAccel);
-
-    LoggedTunableNumber.ifChanged(
-        hashCode(),
-        (values) -> {
-          azimuthMotor.setGains(
-              new AzimuthMotorGains(
-                  values[0], values[1], values[2], values[3], values[4], values[5], values[6],
-                  values[7]));
-        },
-        azimuthkP,
-        azimuthkI,
-        azimuthkD,
-        azimuthkS,
-        azimuthkV,
-        azimuthkA,
-        azimuthkMaxVelo,
-        azimuthkMaxAccel);
   }
 
   /** Runs the module with the specified setpoint state. Mutates the state to optimize it. */
   public void runSetpoint(SwerveModuleState state, double azimuthVelocityFF) {
     // Optimize velocity setpoint
     state = OnboardModuleState.optimize(state, getAngle());
-    Logger.recordOutput(azimuthName + "/goal", state.angle.getRotations());
+    Logger.recordOutput("Drive/" + azimuthName + "/goal", state.angle.getRotations());
     state.cosineScale(Rotation2d.fromRotations(azimuthInputs.outputPositionRotations));
 
     driveMotor.setVelocity(
@@ -145,7 +65,7 @@ public class Module {
     azimuthMotor.setPosition(state.angle.getRotations(), azimuthVelocityFF);
 
     // if (Math.abs(azimuthSetpoint.position - azimuthGoal.position) > 0.5) {
-    //   azimuthSetpoint = azimuthGoal;
+    // azimuthSetpoint = azimuthGoal;
     // }
   }
 
@@ -206,5 +126,10 @@ public class Module {
   /** Returns the module velocity in rotations/sec (Phoenix native units). */
   public double getFFCharacterizationVelocity() {
     return driveInputs.positionRotations;
+  }
+
+  public void setGains(DriveMotorGains driveGains, AzimuthMotorGains azimuthGains) {
+    driveMotor.setGains(driveGains);
+    azimuthMotor.setGains(azimuthGains);
   }
 }

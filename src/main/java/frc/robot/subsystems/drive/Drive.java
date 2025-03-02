@@ -30,6 +30,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
+import frc.robot.subsystems.drive.azimuth_motor.AzimuthMotorConstants.AzimuthMotorGains;
+import frc.robot.subsystems.drive.drive_motor.DriveMotorConstants.DriveMotorGains;
 import frc.robot.subsystems.drive.gyro.GyroIO;
 import frc.robot.subsystems.drive.gyro.GyroIOInputsAutoLogged;
 import frc.robot.subsystems.drive.odometry_threads.PhoenixOdometryThread;
@@ -79,6 +81,20 @@ public class Drive extends SubsystemBase {
           },
           new double[4]);
 
+  private final LoggedTunableNumber drivekP;
+  private final LoggedTunableNumber drivekI;
+  private final LoggedTunableNumber drivekD;
+  private final LoggedTunableNumber drivekS;
+  private final LoggedTunableNumber drivekV;
+  private final LoggedTunableNumber drivekA;
+
+  private final LoggedTunableNumber azimuthkP;
+  private final LoggedTunableNumber azimuthkI;
+  private final LoggedTunableNumber azimuthkD;
+  private final LoggedTunableNumber azimuthkS;
+  private final LoggedTunableNumber azimuthkV;
+  private final LoggedTunableNumber azimuthkA;
+
   private final LoggedTunableNumber kMaxDriveVelocity;
   private final LoggedTunableNumber kMaxDriveAcceleration;
   private final LoggedTunableNumber kMaxDriveDeceleration;
@@ -90,6 +106,8 @@ public class Drive extends SubsystemBase {
       Module frModuleIO,
       Module blModuleIO,
       Module brModuleIO,
+      DriveMotorGains driveGains,
+      AzimuthMotorGains azimuthGains,
       PhoenixOdometryThread phoenixOdometryThread,
       SparkOdometryThread sparkOdometryThread) {
     this.gyroIO = gyroIO;
@@ -106,10 +124,36 @@ public class Drive extends SubsystemBase {
             DriveConstants.moduleTranslations[2],
             DriveConstants.moduleTranslations[3]);
 
-    kMaxDriveVelocity = new LoggedTunableNumber("Drive/ModuleLimits/kMaxDriveVelocity", 10);
-    kMaxDriveAcceleration = new LoggedTunableNumber("Drive/ModuleLimits/kMaxDriveAcceleration", 10);
-    kMaxDriveDeceleration = new LoggedTunableNumber("Drive/ModuleLimits/kMaxDriveDeceleration", 10);
-    kMaxSteeringVelocity = new LoggedTunableNumber("Drive/ModuleLimits/kMaxSteeringVelocity", 10);
+    drivekP = new LoggedTunableNumber("Drive/DriveMotors/Gains/kP", driveGains.kP());
+    drivekI = new LoggedTunableNumber("Drive/DriveMotors/Gains/kI", driveGains.kI());
+    drivekD = new LoggedTunableNumber("Drive/DriveMotors/Gains/kD", driveGains.kD());
+    drivekS = new LoggedTunableNumber("Drive/DriveMotors/Gains/kS", driveGains.kS());
+    drivekV = new LoggedTunableNumber("Drive/DriveMotors/Gains/kV", driveGains.kV());
+    drivekA = new LoggedTunableNumber("Drive/DriveMotors/Gains/kA", driveGains.kA());
+
+    azimuthkP = new LoggedTunableNumber("Drive/AzimuthMotors/Gains/kP", azimuthGains.kP());
+    azimuthkI = new LoggedTunableNumber("Drive/AzimuthMotors/Gains/kI", azimuthGains.kI());
+    azimuthkD = new LoggedTunableNumber("Drive/AzimuthMotors/Gains/kD", azimuthGains.kD());
+    azimuthkS = new LoggedTunableNumber("Drive/AzimuthMotors/Gains/kS", azimuthGains.kS());
+    azimuthkV = new LoggedTunableNumber("Drive/AzimuthMotors/Gains/kV", azimuthGains.kV());
+    azimuthkA = new LoggedTunableNumber("Drive/AzimuthMotors/Gains/kA", azimuthGains.kA());
+
+    kMaxDriveVelocity =
+        new LoggedTunableNumber(
+            "Drive/ModuleLimits/kMaxDriveVelocityMetersPerSec",
+            currentModuleLimits.maxDriveVelocity());
+    kMaxDriveAcceleration =
+        new LoggedTunableNumber(
+            "Drive/ModuleLimits/kMaxDriveAccelerationMetersPerSecSq",
+            currentModuleLimits.maxDriveAcceleration());
+    kMaxDriveDeceleration =
+        new LoggedTunableNumber(
+            "Drive/ModuleLimits/kMaxDriveDecelerationMetersPerSecSq",
+            currentModuleLimits.maxDriveDeceleration());
+    kMaxSteeringVelocity =
+        new LoggedTunableNumber(
+            "Drive/ModuleLimits/kMaxSteeringVelocityRadPerSec",
+            currentModuleLimits.maxSteeringVelocity());
 
     // Usage reporting for swerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_AdvantageKit);
@@ -139,11 +183,11 @@ public class Drive extends SubsystemBase {
     PathPlannerLogging.setLogActivePathCallback(
         (activePath) -> {
           Logger.recordOutput(
-              "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
+              "Drive/Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
         });
     PathPlannerLogging.setLogTargetPoseCallback(
         (targetPose) -> {
-          Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
+          Logger.recordOutput("Drive/Odometry/TrajectorySetpoint", targetPose);
         });
 
     // Configure SysId
@@ -177,8 +221,8 @@ public class Drive extends SubsystemBase {
 
     // Log empty setpoint states when disabled
     if (DriverStation.isDisabled()) {
-      Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
-      Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
+      Logger.recordOutput("Drive/SwerveStates/Setpoints", new SwerveModuleState[] {});
+      Logger.recordOutput("Drive/SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
     }
 
     // Update odometry
@@ -223,6 +267,30 @@ public class Drive extends SubsystemBase {
     LoggedTunableNumber.ifChanged(
         hashCode(),
         (values) -> {
+          for (int i = 0; i < 4; i++) {
+            modules[i].setGains(
+                new DriveMotorGains(
+                    values[0], values[1], values[2], values[3], values[4], values[5]),
+                new AzimuthMotorGains(
+                    values[6], values[7], values[8], values[9], values[10], values[11]));
+          }
+        },
+        drivekP,
+        drivekI,
+        drivekD,
+        drivekS,
+        drivekV,
+        drivekA,
+        azimuthkP,
+        azimuthkI,
+        azimuthkD,
+        azimuthkS,
+        azimuthkV,
+        azimuthkA);
+
+    LoggedTunableNumber.ifChanged(
+        hashCode(),
+        (values) -> {
           currentModuleLimits = new ModuleLimits(values[0], values[1], values[2], values[3]);
         },
         kMaxDriveVelocity,
@@ -241,10 +309,11 @@ public class Drive extends SubsystemBase {
         setpointGenerator.generateSetpoint(
             currentModuleLimits, currentSetpoint, speeds, new Translation2d(), 0.02);
     // Log unoptimized setpoints and setpoint speeds
-    Logger.recordOutput("SwerveStates/Setpoints", currentSetpoint.moduleStates());
-    Logger.recordOutput("SwerveChassisSpeeds/Setpoints", speeds);
+    Logger.recordOutput("Drive/SwerveStates/Setpoints", currentSetpoint.moduleStates());
+    Logger.recordOutput("Drive/SwerveChassisSpeeds/Setpoints", speeds);
 
-    Logger.recordOutput("SwerveStates/AzimuthVelocityFF", currentSetpoint.azimuthVelocityFF());
+    Logger.recordOutput(
+        "Drive/SwerveStates/AzimuthVelocityFF", currentSetpoint.azimuthVelocityFF());
 
     // Send setpoints to modules
     for (int i = 0; i < 4; i++) {
@@ -253,7 +322,7 @@ public class Drive extends SubsystemBase {
     }
 
     // Log optimized setpoints (runSetpoint mutates each state)
-    Logger.recordOutput("SwerveStates/SetpointsOptimized", currentSetpoint.moduleStates());
+    Logger.recordOutput("Drive/SwerveStates/SetpointsOptimized", currentSetpoint.moduleStates());
   }
 
   /** Runs the drive in a straight line with the specified drive output. */
@@ -294,7 +363,7 @@ public class Drive extends SubsystemBase {
   }
 
   /** Returns the module states (turn angles and drive velocities) for all of the modules. */
-  @AutoLogOutput(key = "SwerveStates/Measured")
+  @AutoLogOutput(key = "Drive/SwerveStates/Measured")
   private SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
     for (int i = 0; i < 4; i++) {
@@ -313,7 +382,7 @@ public class Drive extends SubsystemBase {
   }
 
   /** Returns the measured chassis speeds of the robot. */
-  @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
+  @AutoLogOutput(key = "Drive/SwerveChassisSpeeds/Measured")
   public ChassisSpeeds getChassisSpeeds() {
     return kinematics.toChassisSpeeds(getModuleStates());
   }
@@ -337,7 +406,7 @@ public class Drive extends SubsystemBase {
   }
 
   /** Returns the current odometry pose. */
-  @AutoLogOutput(key = "Odometry/Robot")
+  @AutoLogOutput(key = "Drive/Odometry/Robot")
   public Pose2d getPose() {
     return poseEstimator.getEstimatedPosition();
   }
