@@ -8,7 +8,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ElevatorCommands;
@@ -45,6 +47,7 @@ import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -68,6 +71,15 @@ public class RobotContainer {
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
+
+  private final LoggedNetworkBoolean l1;
+
+  private final LoggedNetworkBoolean l2;
+  ;
+
+  private final LoggedNetworkBoolean l3;
+
+  private final LoggedNetworkBoolean l4;
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -217,12 +229,12 @@ public class RobotContainer {
         elevatorMotor =
             new PositionJoint(
                 new PositionJointIOSim("ElevatorMotor", PositionJointConstants.ELEVATOR_CONFIG),
-                PositionJointConstants.ELEVATOR_GAINS);
+                PositionJointConstants.ELEVATOR_GAINS_SIM);
 
         elbowMotor =
             new PositionJoint(
                 new PositionJointIOSim("ElbowMotor", PositionJointConstants.ELBOW_CONFIG),
-                PositionJointConstants.PIVOT_GAINS);
+                PositionJointConstants.PIVOT_GAINS_SIM);
 
         endEffectorMotor =
             new Flywheel(
@@ -308,6 +320,11 @@ public class RobotContainer {
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
+    l1 = new LoggedNetworkBoolean("/Presets/L1", false);
+    l2 = new LoggedNetworkBoolean("/Presets/L2", false);
+    l3 = new LoggedNetworkBoolean("/Presets/L3", false);
+    l4 = new LoggedNetworkBoolean("/Presets/L4", false);
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -378,6 +395,35 @@ public class RobotContainer {
     driverController.povUp().whileTrue(ElevatorCommands.MAX(elevatorMotor));
 
     driverController.povDown().whileTrue(ElevatorCommands.handOff(elevatorMotor));
+
+    new Trigger(l1::get).onTrue(ElevatorCommands.L_ONE_POSITION(elevatorMotor, elbowMotor));
+
+    new Trigger(l2::get).onTrue(ElevatorCommands.L_TWO_POSITION(elevatorMotor, elbowMotor));
+
+    new Trigger(l3::get).onTrue(ElevatorCommands.L_THREE_POSITION(elevatorMotor, elbowMotor));
+
+    new Trigger(l4::get).onTrue(ElevatorCommands.L_FOUR_POSITION(elevatorMotor, elbowMotor));
+
+    new Trigger(l1::get)
+        .or(new Trigger(l2::get))
+        .or(new Trigger(l3::get))
+        .or(new Trigger(l4::get))
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  l1.set(false);
+                  l2.set(false);
+                  l3.set(false);
+                  l4.set(false);
+
+                  if (elevatorMotor.getCurrentCommand() != null) {
+                    elevatorMotor.getCurrentCommand().cancel();
+                  }
+
+                  if (elbowMotor.getCurrentCommand() != null) {
+                    elbowMotor.getCurrentCommand().cancel();
+                  }
+                }));
   }
 
   /**

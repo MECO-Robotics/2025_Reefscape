@@ -78,7 +78,10 @@ public class PositionJointConstants {
           "");
 
   public static final PositionJointGains ELEVATOR_GAINS =
-      new PositionJointGains(10, 0, 0, 0.25, 0.5, 0.75, 0, 8.0, 8.0, 0, 0, 0, 0);
+      new PositionJointGains(10, 0, 0, 0.25, 0.5, 0.75, 0, 8.0, 8.0, -0.287, 1.014, 0, 0);
+
+  public static final PositionJointGains ELEVATOR_GAINS_SIM =
+      new PositionJointGains(10, 0, 0, 0.25, 0.5, 0.75, 0, 8.0, 8.0, 0, 1.3, 0, 0);
 
   public static final PositionJointHardwareConfig ELEVATOR_CONFIG =
       new PositionJointHardwareConfig(
@@ -94,6 +97,9 @@ public class PositionJointConstants {
   // 31.4 max
   // -8.88 stow
   public static final PositionJointGains PIVOT_GAINS =
+      new PositionJointGains(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+  public static final PositionJointGains PIVOT_GAINS_SIM =
       new PositionJointGains(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
   public static final PositionJointHardwareConfig ELBOW_CONFIG =

@@ -26,7 +26,7 @@ public class DriveMotorConstants {
       new DriveMotorHardwareConfig(
           new int[] {6}, new boolean[] {true}, DriveConstants.driveMotorGearRatio, canBusName);
 
-  public static final DriveMotorGains DRIVE_GAINS = new DriveMotorGains(3, 0, 0, 0.5, 1, 0);
+  public static final DriveMotorGains DRIVE_GAINS = new DriveMotorGains(0.2, 0, 0, 0.5, 0.9, 0);
 
   public static final DriveMotorGains DRIVE_GAINS_SIM = new DriveMotorGains(0.1, 0, 0, 0, 0.46, 0);
 }

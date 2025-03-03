@@ -12,40 +12,29 @@ public class ElevatorCommands {
   /** Intake rotation preset positions. */
   public static final class ELEVATOR_HEIGHT_PRESETS {
 
-    public static final LoggedTunableNumber HANDOFF =
-        new LoggedTunableNumber("ElevatorPosition", 0.0);
+    public static final LoggedTunableNumber HANDOFF = new LoggedTunableNumber("Presets/ElevatorPosition/Handoff", 0.0);
 
-    public static final LoggedTunableNumber L_ONE = new LoggedTunableNumber("ElevatorPosition", 0);
-    public static final LoggedTunableNumber L_TWO = new LoggedTunableNumber("ElevatorPosition", 0);
-    public static final LoggedTunableNumber L_THREE =
-        new LoggedTunableNumber("ElevatorPosition", 0);
-    public static final LoggedTunableNumber L_FOUR = new LoggedTunableNumber("ElevatorPosition", 0);
-    public static final LoggedTunableNumber MAX_POS =
-        new LoggedTunableNumber("ElevatorPosition", 1.27);
+    public static final LoggedTunableNumber L_ONE = new LoggedTunableNumber("Presets/ElevatorPosition/L1", 0.4);
+    public static final LoggedTunableNumber L_TWO = new LoggedTunableNumber("Presets/ElevatorPosition/L2", 0.6);
+    public static final LoggedTunableNumber L_THREE = new LoggedTunableNumber("Presets/ElevatorPosition/L3", 0.8);
+    public static final LoggedTunableNumber L_FOUR = new LoggedTunableNumber("Presets/ElevatorPosition/L4", 01);
+    public static final LoggedTunableNumber MAX_POS = new LoggedTunableNumber("Presets/ElevatorPosition/Max", 1.27);
   }
 
   public static final class WRIST_PRESETS {
-    public static final LoggedTunableNumber WRIST_STOW =
-        new LoggedTunableNumber("WristPosition", 0);
+    public static final LoggedTunableNumber WRIST_STOW = new LoggedTunableNumber("Presets/WristPosition/Stow", 0);
 
-    public static final LoggedTunableNumber WRIST_HANDOFF =
-        new LoggedTunableNumber("WristPosition", 0);
+    public static final LoggedTunableNumber WRIST_HANDOFF = new LoggedTunableNumber("Presets/WristPosition/Handoff", 0);
 
-    public static final LoggedTunableNumber WRIST_L_ONE =
-        new LoggedTunableNumber("WristPosition", 0);
-    public static final LoggedTunableNumber WRIST_L_TWO =
-        new LoggedTunableNumber("WristPosition", 0);
-    public static final LoggedTunableNumber WRIST_L_THREE =
-        new LoggedTunableNumber("WristPosition", 0);
-    public static final LoggedTunableNumber WRIST_L_FOUR =
-        new LoggedTunableNumber("WristPosition", 0);
+    public static final LoggedTunableNumber WRIST_L_ONE = new LoggedTunableNumber("Presets/WristPosition/L1", 0);
+    public static final LoggedTunableNumber WRIST_L_TWO = new LoggedTunableNumber("Presets/WristPosition/L2", 0);
+    public static final LoggedTunableNumber WRIST_L_THREE = new LoggedTunableNumber("Presets/WristPosition/L3", 0);
+    public static final LoggedTunableNumber WRIST_L_FOUR = new LoggedTunableNumber("Presets/WristPosition/L4", 0);
   }
 
   public static final class END_EFFECTOR_PRESETS {
-    public static LoggedTunableNumber END_EFFECTOR_OUTTAKE =
-        new LoggedTunableNumber("EndEffectorVelocity", 0);
-    public static LoggedTunableNumber END_EFFECTOR_INTAKE =
-        new LoggedTunableNumber("EndEffectorVelocity", 0);
+    public static LoggedTunableNumber END_EFFECTOR_OUTTAKE = new LoggedTunableNumber("Presets/EndEffectorVelocity", 0);
+    public static LoggedTunableNumber END_EFFECTOR_INTAKE = new LoggedTunableNumber("Presets/EndEffectorVelocity", 0);
   }
 
   public static Command stowEleator(PositionJoint elevatorMotor, PositionJoint wristMotor) {
