@@ -97,7 +97,7 @@ public class PositionJointConstants {
   // 31.4 max
   // -8.88 stow
   public static final PositionJointGains PIVOT_GAINS =
-      new PositionJointGains(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      new PositionJointGains(0, 0, 0, 0, 0, 0, 0, 0, 0, -2.94, 207.91, 0, 0);
 
   public static final PositionJointGains PIVOT_GAINS_SIM =
       new PositionJointGains(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -105,8 +105,8 @@ public class PositionJointConstants {
   public static final PositionJointHardwareConfig ELBOW_CONFIG =
       new PositionJointHardwareConfig(
           new int[] {33},
-          new boolean[] {false},
-          1,
+          new boolean[] {true},
+          (16.0 / 72.0) * (16.0 / 70.0),
           40,
           GravityType.COSINE,
           EncoderType.INTERNAL,

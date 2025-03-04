@@ -75,7 +75,6 @@ public class RobotContainer {
   private final LoggedNetworkBoolean l1;
 
   private final LoggedNetworkBoolean l2;
-  ;
 
   private final LoggedNetworkBoolean l3;
 
@@ -392,9 +391,17 @@ public class RobotContainer {
         .whileTrue(IntakeCommands.deployIntake(leftCoralRotationMotor, leftCoralRollerMotor))
         .whileFalse(IntakeCommands.stowIntake(leftCoralRotationMotor, leftCoralRollerMotor));
 
+    driverController // a button for testing
+        .a()
+        .onTrue(ElevatorCommands.WRIST_LOW_TEST(elbowMotor));
+
+    driverController // y button for testing
+        .y()
+        .onTrue(ElevatorCommands.WRIST_LOW_TEST(elbowMotor));
+
     driverController.povUp().whileTrue(ElevatorCommands.MAX(elevatorMotor));
 
-    driverController.povDown().whileTrue(ElevatorCommands.handOff(elevatorMotor));
+    driverController.povDown().whileTrue(ElevatorCommands.MIN(elevatorMotor));
 
     new Trigger(l1::get).onTrue(ElevatorCommands.L_ONE_POSITION(elevatorMotor, elbowMotor));
 
