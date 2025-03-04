@@ -1,6 +1,8 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -319,10 +321,28 @@ public class RobotContainer {
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
+    autoChooser.addDefaultOption("test auto", getAutonomousCommand());
+
     l1 = new LoggedNetworkBoolean("/Presets/L1", false);
     l2 = new LoggedNetworkBoolean("/Presets/L2", false);
     l3 = new LoggedNetworkBoolean("/Presets/L3", false);
     l4 = new LoggedNetworkBoolean("/Presets/L4", false);
+
+    NamedCommands.registerCommand(
+        "L4", ElevatorCommands.L_FOUR_POSITION(elevatorMotor, elbowMotor));
+    NamedCommands.registerCommand(
+        "L3", ElevatorCommands.L_THREE_POSITION(elevatorMotor, elbowMotor));
+    NamedCommands.registerCommand("L2", ElevatorCommands.L_TWO_POSITION(elevatorMotor, elbowMotor));
+    NamedCommands.registerCommand("L1", ElevatorCommands.L_ONE_POSITION(elevatorMotor, elbowMotor));
+    NamedCommands.registerCommand("handoff", ElevatorCommands.HANDOFF(elevatorMotor, elbowMotor));
+
+    NamedCommands.registerCommand("max", ElevatorCommands.MAX(elevatorMotor));
+    NamedCommands.registerCommand("min", ElevatorCommands.MIN(elevatorMotor));
+
+    NamedCommands.registerCommand(
+        "lowerIntake", IntakeCommands.deployIntake(leftCoralRotationMotor, leftCoralRollerMotor));
+    NamedCommands.registerCommand(
+        "raiseIntakes", IntakeCommands.stowIntake(leftCoralRotationMotor, leftCoralRollerMotor));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -439,6 +459,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.get();
+    // return autoChooser.get();
+    return new PathPlannerAuto("test auto");
   }
 }

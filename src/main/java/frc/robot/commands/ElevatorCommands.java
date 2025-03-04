@@ -38,7 +38,7 @@ public class ElevatorCommands {
     public static final LoggedTunableNumber WRIST_HANDOFF =
         new LoggedTunableNumber("Presets/WristPosition/Handoff", -2.94);
 
-        //108.05 used for placement rotations/angle (will add later)
+    // 108.05 used for placement rotations/angle (will add later)
     public static final LoggedTunableNumber WRIST_L_ONE =
         new LoggedTunableNumber("Presets/WristPosition/L1", 26.67);
     public static final LoggedTunableNumber WRIST_L_TWO =
