@@ -3,9 +3,15 @@ package frc.robot.subsystems.position_joint;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.position_joint.PositionJointPositionCommand;
+import frc.robot.commands.position_joint.PositionJointVelocityCommand;
 import frc.robot.subsystems.position_joint.PositionJointConstants.PositionJointGains;
 import frc.robot.util.mechanical_advantage.LoggedTunableNumber;
+
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 public class PositionJoint extends SubsystemBase {
@@ -101,9 +107,8 @@ public class PositionJoint extends SubsystemBase {
                   values[11],
                   values[12]));
 
-          goal =
-              new TrapezoidProfile.State(
-                  MathUtil.clamp(values[12], kMinPosition.get(), kMaxPosition.get()), 0);
+          goal = new TrapezoidProfile.State(
+              MathUtil.clamp(values[12], kMinPosition.get(), kMaxPosition.get()), 0);
 
           constraints = new TrapezoidProfile.Constraints(values[7], values[8]);
           profile = new TrapezoidProfile(constraints);
@@ -126,9 +131,8 @@ public class PositionJoint extends SubsystemBase {
   }
 
   public void setPosition(double position) {
-    goal =
-        new TrapezoidProfile.State(
-            MathUtil.clamp(position, kMinPosition.get(), kMaxPosition.get()), 0);
+    goal = new TrapezoidProfile.State(
+        MathUtil.clamp(position, kMinPosition.get(), kMaxPosition.get()), 0);
   }
 
   public void incrementPosition(double deltaPosition) {
@@ -154,5 +158,19 @@ public class PositionJoint extends SubsystemBase {
   public void resetPosition() {
     positionJoint.resetPosition();
     goal.position = 0;
+  }
+
+  /*
+   * Command factory to move to a setpoint
+   */
+  public static Command setPosition(PositionJoint positionJoint, DoubleSupplier position) {
+    return new PositionJointPositionCommand(positionJoint, position);
+  }
+
+  /*
+   * Command factory to set velocity
+   */
+  public static Command setVelocity(PositionJoint positionJoint, DoubleSupplier position) {
+    return new PositionJointVelocityCommand(positionJoint, position);
   }
 }
