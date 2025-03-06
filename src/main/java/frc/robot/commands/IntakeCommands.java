@@ -24,7 +24,8 @@ public class IntakeCommands {
   public final class ROLLER_VOLTS {
     public static final LoggedTunableNumber INTAKE =
         new LoggedTunableNumber("CoralIntakeSpeed", -5);
-    public static final LoggedTunableNumber STOW = new LoggedTunableNumber("CoralOuttakeSpeed", 1);
+    public static final LoggedTunableNumber STOW =
+        new LoggedTunableNumber("CoralOuttakeSpeed", -1.5);
   }
 
   /**

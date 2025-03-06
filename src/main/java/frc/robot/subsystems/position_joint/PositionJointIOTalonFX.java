@@ -113,6 +113,8 @@ public class PositionJointIOTalonFX implements PositionJointIO {
                 .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor));
 
         tryUntilOk(5, () -> motors[0].getConfigurator().apply(leaderConfig));
+
+        motors[0].setPosition(config.encoderOffset().getRotations());
         break;
       case EXTERNAL_CANCODER:
         externalEncoder =

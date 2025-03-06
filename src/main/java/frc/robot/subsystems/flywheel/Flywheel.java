@@ -6,9 +6,7 @@ import frc.robot.commands.flywheel.FlywheelVelocityCommand;
 import frc.robot.subsystems.flywheel.FlywheelConstants.FlywheelGains;
 import frc.robot.util.mechanical_advantage.LinearProfile;
 import frc.robot.util.mechanical_advantage.LoggedTunableNumber;
-
 import java.util.function.DoubleSupplier;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Flywheel extends SubsystemBase {
