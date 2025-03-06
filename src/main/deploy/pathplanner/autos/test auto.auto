@@ -17,113 +17,38 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "max"
+                  "name": "Elevator L4"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.1
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "min"
+                  "name": "Stow"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "path 2"
-          }
-        },
-        {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "max"
+                  "name": "Intake"
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "min"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "path 3"
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "max"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "min"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "path 4"
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "max"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "min"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "path 5"
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "max"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "min"
+                  "pathName": "path 2"
                 }
               }
             ]

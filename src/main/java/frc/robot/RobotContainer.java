@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -50,12 +51,9 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
 
 /**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
@@ -77,7 +75,8 @@ public class RobotContainer {
 
   private final LoggedNetworkBoolean l1;
 
-  private final LoggedNetworkBoolean l2;;
+  private final LoggedNetworkBoolean l2;
+  ;
 
   private final LoggedNetworkBoolean l3;
 
@@ -86,9 +85,7 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     switch (Constants.currentMode) {
       case REAL:
@@ -97,188 +94,210 @@ public class RobotContainer {
         // If using REV hardware, set up the Spark Odometry Thread, if using CTRE
         // hardware, set up
         // the Phoenix Odometry Thread, if using a combination of the two, set up both
-        drive = new Drive(
-            new GyroIOPigeon2(13, DriveMotorConstants.canBusName),
-            new Module(
-                new DriveMotorIOTalonFX(
-                    "FrontLeftDrive", DriveMotorConstants.FRONT_LEFT_CONFIG),
-                new AzimuthMotorIOTalonFX(
-                    "FrontLeftAz", AzimuthMotorConstants.FRONT_LEFT_CONFIG)),
-            new Module(
-                new DriveMotorIOTalonFX(
-                    "FrontRightDrive", DriveMotorConstants.FRONT_RIGHT_CONFIG),
-                new AzimuthMotorIOTalonFX(
-                    "FrontRightAz", AzimuthMotorConstants.FRONT_RIGHT_CONFIG)),
-            new Module(
-                new DriveMotorIOTalonFX("BackLeftDrive", DriveMotorConstants.BACK_LEFT_CONFIG),
-                new AzimuthMotorIOTalonFX(
-                    "BackLeftAz", AzimuthMotorConstants.BACK_LEFT_CONFIG)),
-            new Module(
-                new DriveMotorIOTalonFX(
-                    "BackRightDrive", DriveMotorConstants.BACK_RIGHT_CONFIG),
-                new AzimuthMotorIOTalonFX(
-                    "BackRightAz", AzimuthMotorConstants.BACK_RIGHT_CONFIG)),
-            DriveMotorConstants.DRIVE_GAINS,
-            AzimuthMotorConstants.AZMITH_GAINS,
-            PhoenixOdometryThread.getInstance(),
-            null);
+        drive =
+            new Drive(
+                new GyroIOPigeon2(13, DriveMotorConstants.canBusName),
+                new Module(
+                    new DriveMotorIOTalonFX(
+                        "FrontLeftDrive", DriveMotorConstants.FRONT_LEFT_CONFIG),
+                    new AzimuthMotorIOTalonFX(
+                        "FrontLeftAz", AzimuthMotorConstants.FRONT_LEFT_CONFIG)),
+                new Module(
+                    new DriveMotorIOTalonFX(
+                        "FrontRightDrive", DriveMotorConstants.FRONT_RIGHT_CONFIG),
+                    new AzimuthMotorIOTalonFX(
+                        "FrontRightAz", AzimuthMotorConstants.FRONT_RIGHT_CONFIG)),
+                new Module(
+                    new DriveMotorIOTalonFX("BackLeftDrive", DriveMotorConstants.BACK_LEFT_CONFIG),
+                    new AzimuthMotorIOTalonFX(
+                        "BackLeftAz", AzimuthMotorConstants.BACK_LEFT_CONFIG)),
+                new Module(
+                    new DriveMotorIOTalonFX(
+                        "BackRightDrive", DriveMotorConstants.BACK_RIGHT_CONFIG),
+                    new AzimuthMotorIOTalonFX(
+                        "BackRightAz", AzimuthMotorConstants.BACK_RIGHT_CONFIG)),
+                DriveMotorConstants.DRIVE_GAINS,
+                AzimuthMotorConstants.AZMITH_GAINS,
+                PhoenixOdometryThread.getInstance(),
+                null);
 
         // Coral Intake rotation motor
-        rightCoralRotationMotor = new PositionJoint(
-            new PositionJointIOSparkMax(
-                "RightCoralRotateMotor",
-                PositionJointConstants.RIGHT_CORAL_INTAKE_RROTATION_CONFIG),
-            PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
-        rightCoralRollerMotor = new Flywheel(
-            new FlywheelIOSparkMax(
-                "RightCoralRollerMotor", FlywheelConstants.RIGHT_CORAL_INTAKE_ROLLERS_CONFG),
-            FlywheelConstants.RIGHT_CORAL_INTAKE_ROLLER_GAINS);
+        rightCoralRotationMotor =
+            new PositionJoint(
+                new PositionJointIOSparkMax(
+                    "RightCoralRotateMotor",
+                    PositionJointConstants.RIGHT_CORAL_INTAKE_RROTATION_CONFIG),
+                PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
+        rightCoralRollerMotor =
+            new Flywheel(
+                new FlywheelIOSparkMax(
+                    "RightCoralRollerMotor", FlywheelConstants.RIGHT_CORAL_INTAKE_ROLLERS_CONFG),
+                FlywheelConstants.RIGHT_CORAL_INTAKE_ROLLER_GAINS);
 
-        leftCoralRotationMotor = new PositionJoint(
-            new PositionJointIOSparkMax(
-                "LeftCoralRotateMotor",
-                PositionJointConstants.LEFT_CORAL_INTAKE_RROTATION_CONFIG),
-            PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
-        leftCoralRollerMotor = new Flywheel(
-            new FlywheelIOSparkMax(
-                "LeftCoralRollerMotor", FlywheelConstants.LEFT_CORAL_INTAKE_ROLLERS_CONFG),
-            FlywheelConstants.LEFT_CORAL_INTAKE_ROLLER_GAINS);
+        leftCoralRotationMotor =
+            new PositionJoint(
+                new PositionJointIOSparkMax(
+                    "LeftCoralRotateMotor",
+                    PositionJointConstants.LEFT_CORAL_INTAKE_RROTATION_CONFIG),
+                PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
+        leftCoralRollerMotor =
+            new Flywheel(
+                new FlywheelIOSparkMax(
+                    "LeftCoralRollerMotor", FlywheelConstants.LEFT_CORAL_INTAKE_ROLLERS_CONFG),
+                FlywheelConstants.LEFT_CORAL_INTAKE_ROLLER_GAINS);
 
         // Elevator
-        elevatorMotor = new PositionJoint(
-            new PositionJointIOSparkMax(
-                "ElevatorMotor", PositionJointConstants.ELEVATOR_CONFIG),
-            PositionJointConstants.ELEVATOR_GAINS);
+        elevatorMotor =
+            new PositionJoint(
+                new PositionJointIOSparkMax(
+                    "ElevatorMotor", PositionJointConstants.ELEVATOR_CONFIG),
+                PositionJointConstants.ELEVATOR_GAINS);
 
         // Elbow
-        elbowMotor = new PositionJoint(
-            new PositionJointIOTalonFX("ElbowMotor", PositionJointConstants.ELBOW_CONFIG),
-            PositionJointConstants.PIVOT_GAINS);
+        elbowMotor =
+            new PositionJoint(
+                new PositionJointIOTalonFX("ElbowMotor", PositionJointConstants.ELBOW_CONFIG),
+                PositionJointConstants.PIVOT_GAINS);
 
         // End Effector
-        endEffectorMotor = new Flywheel(
-            new FlywheelIOSparkMax("EndEffectorMotor", FlywheelConstants.END_EFFECTOR_CONFIG),
-            FlywheelConstants.END_EFFECTOR_GAINS);
+        endEffectorMotor =
+            new Flywheel(
+                new FlywheelIOSparkMax("EndEffectorMotor", FlywheelConstants.END_EFFECTOR_CONFIG),
+                FlywheelConstants.END_EFFECTOR_GAINS);
 
         // Vision
-        vision = new Vision(
-            drive::addVisionMeasurement,
-            new VisionIOPhotonVision(
-                VisionConstants.camera0Name, VisionConstants.robotToCamera0));
+        vision =
+            new Vision(
+                drive::addVisionMeasurement,
+                new VisionIOPhotonVision(
+                    VisionConstants.camera0Name, VisionConstants.robotToCamera0));
         break;
 
       case SIM:
-        drive = new Drive(
-            new GyroIO() {
-            },
-            new Module(
-                new DriveMotorIOSim("FrontLeftDrive", DriveMotorConstants.FRONT_LEFT_CONFIG),
-                new AzimuthMotorIOSim("FrontLeftAz", AzimuthMotorConstants.FRONT_LEFT_CONFIG)),
-            new Module(
-                new DriveMotorIOSim("FrontRightDrive", DriveMotorConstants.FRONT_RIGHT_CONFIG),
-                new AzimuthMotorIOSim(
-                    "FrontRightAz", AzimuthMotorConstants.FRONT_RIGHT_CONFIG)),
-            new Module(
-                new DriveMotorIOSim("BackLeftDrive", DriveMotorConstants.BACK_LEFT_CONFIG),
-                new AzimuthMotorIOSim("BackLeftAz", AzimuthMotorConstants.BACK_LEFT_CONFIG)),
-            new Module(
-                new DriveMotorIOSim("BackRightDrive", DriveMotorConstants.BACK_RIGHT_CONFIG),
-                new AzimuthMotorIOSim("BackRightAz", AzimuthMotorConstants.BACK_RIGHT_CONFIG)),
-            DriveMotorConstants.DRIVE_GAINS_SIM,
-            AzimuthMotorConstants.AZMITH_GAINS_SIM,
-            null,
-            null);
+        drive =
+            new Drive(
+                new GyroIO() {},
+                new Module(
+                    new DriveMotorIOSim("FrontLeftDrive", DriveMotorConstants.FRONT_LEFT_CONFIG),
+                    new AzimuthMotorIOSim("FrontLeftAz", AzimuthMotorConstants.FRONT_LEFT_CONFIG)),
+                new Module(
+                    new DriveMotorIOSim("FrontRightDrive", DriveMotorConstants.FRONT_RIGHT_CONFIG),
+                    new AzimuthMotorIOSim(
+                        "FrontRightAz", AzimuthMotorConstants.FRONT_RIGHT_CONFIG)),
+                new Module(
+                    new DriveMotorIOSim("BackLeftDrive", DriveMotorConstants.BACK_LEFT_CONFIG),
+                    new AzimuthMotorIOSim("BackLeftAz", AzimuthMotorConstants.BACK_LEFT_CONFIG)),
+                new Module(
+                    new DriveMotorIOSim("BackRightDrive", DriveMotorConstants.BACK_RIGHT_CONFIG),
+                    new AzimuthMotorIOSim("BackRightAz", AzimuthMotorConstants.BACK_RIGHT_CONFIG)),
+                DriveMotorConstants.DRIVE_GAINS_SIM,
+                AzimuthMotorConstants.AZMITH_GAINS_SIM,
+                null,
+                null);
 
-        vision = new Vision(
-            drive::addVisionMeasurement,
-            new VisionIOPhotonVisionSim(
-                VisionConstants.camera0Name, VisionConstants.robotToCamera0, drive::getPose),
-            new VisionIOPhotonVisionSim(
-                VisionConstants.camera1Name, VisionConstants.robotToCamera1, drive::getPose));
+        vision =
+            new Vision(
+                drive::addVisionMeasurement,
+                new VisionIOPhotonVisionSim(
+                    VisionConstants.camera0Name, VisionConstants.robotToCamera0, drive::getPose),
+                new VisionIOPhotonVisionSim(
+                    VisionConstants.camera1Name, VisionConstants.robotToCamera1, drive::getPose));
 
-        rightCoralRotationMotor = new PositionJoint(
-            new PositionJointIOSim(
-                "RightCoralRotateMotor",
-                PositionJointConstants.RIGHT_CORAL_INTAKE_RROTATION_CONFIG),
-            PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
-        rightCoralRollerMotor = new Flywheel(
-            new FlywheelIOSim(
-                "RightCoralRollerMotor", FlywheelConstants.RIGHT_CORAL_INTAKE_ROLLERS_CONFG),
-            FlywheelConstants.RIGHT_CORAL_INTAKE_ROLLER_GAINS);
+        rightCoralRotationMotor =
+            new PositionJoint(
+                new PositionJointIOSim(
+                    "RightCoralRotateMotor",
+                    PositionJointConstants.RIGHT_CORAL_INTAKE_RROTATION_CONFIG),
+                PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
+        rightCoralRollerMotor =
+            new Flywheel(
+                new FlywheelIOSim(
+                    "RightCoralRollerMotor", FlywheelConstants.RIGHT_CORAL_INTAKE_ROLLERS_CONFG),
+                FlywheelConstants.RIGHT_CORAL_INTAKE_ROLLER_GAINS);
 
-        leftCoralRotationMotor = new PositionJoint(
-            new PositionJointIOSim(
-                "LeftCoralRotateMotor",
-                PositionJointConstants.LEFT_CORAL_INTAKE_RROTATION_CONFIG),
-            PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
-        leftCoralRollerMotor = new Flywheel(
-            new FlywheelIOSim(
-                "LeftCoralRollerMotor", FlywheelConstants.LEFT_CORAL_INTAKE_ROLLERS_CONFG),
-            FlywheelConstants.LEFT_CORAL_INTAKE_ROLLER_GAINS);
+        leftCoralRotationMotor =
+            new PositionJoint(
+                new PositionJointIOSim(
+                    "LeftCoralRotateMotor",
+                    PositionJointConstants.LEFT_CORAL_INTAKE_RROTATION_CONFIG),
+                PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
+        leftCoralRollerMotor =
+            new Flywheel(
+                new FlywheelIOSim(
+                    "LeftCoralRollerMotor", FlywheelConstants.LEFT_CORAL_INTAKE_ROLLERS_CONFG),
+                FlywheelConstants.LEFT_CORAL_INTAKE_ROLLER_GAINS);
 
-        elevatorMotor = new PositionJoint(
-            new PositionJointIOSim("ElevatorMotor", PositionJointConstants.ELEVATOR_CONFIG),
-            PositionJointConstants.ELEVATOR_GAINS_SIM);
+        elevatorMotor =
+            new PositionJoint(
+                new PositionJointIOSim("ElevatorMotor", PositionJointConstants.ELEVATOR_CONFIG),
+                PositionJointConstants.ELEVATOR_GAINS_SIM);
 
-        elbowMotor = new PositionJoint(
-            new PositionJointIOSim("ElbowMotor", PositionJointConstants.ELBOW_CONFIG),
-            PositionJointConstants.PIVOT_GAINS_SIM);
+        elbowMotor =
+            new PositionJoint(
+                new PositionJointIOSim("ElbowMotor", PositionJointConstants.ELBOW_CONFIG),
+                PositionJointConstants.PIVOT_GAINS_SIM);
 
-        endEffectorMotor = new Flywheel(
-            new FlywheelIOSim("EndEffectorMotor", FlywheelConstants.END_EFFECTOR_CONFIG),
-            FlywheelConstants.END_EFFECTOR_GAINS);
+        endEffectorMotor =
+            new Flywheel(
+                new FlywheelIOSim("EndEffectorMotor", FlywheelConstants.END_EFFECTOR_CONFIG),
+                FlywheelConstants.END_EFFECTOR_GAINS);
 
         break;
 
       default:
         // Replayed robot, disable IO implementations
-        drive = new Drive(
-            new GyroIO() {
-            },
-            new Module(
-                new DriveMotorIOReplay("FrontLeftDrive"),
-                new AzimuthMotorIOReplay("FrontLeftAz")),
-            new Module(
-                new DriveMotorIOReplay("FrontRightDrive"),
-                new AzimuthMotorIOReplay("FrontRightAz")),
-            new Module(
-                new DriveMotorIOReplay("BackLeftDrive"),
-                new AzimuthMotorIOReplay("BackLeftAz")),
-            new Module(
-                new DriveMotorIOReplay("BackRightDrive"),
-                new AzimuthMotorIOReplay("BackRightAz")),
-            DriveMotorConstants.DRIVE_GAINS,
-            AzimuthMotorConstants.AZMITH_GAINS,
-            null,
-            null);
-        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {
-        }, new VisionIO() {
-        });
+        drive =
+            new Drive(
+                new GyroIO() {},
+                new Module(
+                    new DriveMotorIOReplay("FrontLeftDrive"),
+                    new AzimuthMotorIOReplay("FrontLeftAz")),
+                new Module(
+                    new DriveMotorIOReplay("FrontRightDrive"),
+                    new AzimuthMotorIOReplay("FrontRightAz")),
+                new Module(
+                    new DriveMotorIOReplay("BackLeftDrive"),
+                    new AzimuthMotorIOReplay("BackLeftAz")),
+                new Module(
+                    new DriveMotorIOReplay("BackRightDrive"),
+                    new AzimuthMotorIOReplay("BackRightAz")),
+                DriveMotorConstants.DRIVE_GAINS,
+                AzimuthMotorConstants.AZMITH_GAINS,
+                null,
+                null);
+        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
 
-        rightCoralRotationMotor = new PositionJoint(
-            new PositionJointIOReplay("RightCoralRotateMotor"),
-            PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
+        rightCoralRotationMotor =
+            new PositionJoint(
+                new PositionJointIOReplay("RightCoralRotateMotor"),
+                PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
 
-        rightCoralRollerMotor = new Flywheel(
-            new FlywheelIOReplay("RightCoralRollerMotor"),
-            FlywheelConstants.RIGHT_CORAL_INTAKE_ROLLER_GAINS);
+        rightCoralRollerMotor =
+            new Flywheel(
+                new FlywheelIOReplay("RightCoralRollerMotor"),
+                FlywheelConstants.RIGHT_CORAL_INTAKE_ROLLER_GAINS);
 
-        leftCoralRotationMotor = new PositionJoint(
-            new PositionJointIOReplay("LeftCoralRotateMotor"),
-            PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
+        leftCoralRotationMotor =
+            new PositionJoint(
+                new PositionJointIOReplay("LeftCoralRotateMotor"),
+                PositionJointConstants.CORAL_INTAKE_ROTATION_GAINS);
 
-        leftCoralRollerMotor = new Flywheel(
-            new FlywheelIOReplay("LeftCoralRollerMotor"),
-            FlywheelConstants.LEFT_CORAL_INTAKE_ROLLER_GAINS);
+        leftCoralRollerMotor =
+            new Flywheel(
+                new FlywheelIOReplay("LeftCoralRollerMotor"),
+                FlywheelConstants.LEFT_CORAL_INTAKE_ROLLER_GAINS);
 
-        elevatorMotor = new PositionJoint(
-            new PositionJointIOReplay("ElevatorMotor"), PositionJointConstants.ELEVATOR_GAINS);
+        elevatorMotor =
+            new PositionJoint(
+                new PositionJointIOReplay("ElevatorMotor"), PositionJointConstants.ELEVATOR_GAINS);
 
-        elbowMotor = new PositionJoint(
-            new PositionJointIOReplay("ElbowMotor"), PositionJointConstants.PIVOT_GAINS);
+        elbowMotor =
+            new PositionJoint(
+                new PositionJointIOReplay("ElbowMotor"), PositionJointConstants.PIVOT_GAINS);
 
-        endEffectorMotor = new Flywheel(
-            new FlywheelIOReplay("EndEffectorMotor"), FlywheelConstants.END_EFFECTOR_GAINS);
+        endEffectorMotor =
+            new Flywheel(
+                new FlywheelIOReplay("EndEffectorMotor"), FlywheelConstants.END_EFFECTOR_GAINS);
 
         break;
     }
@@ -307,6 +326,32 @@ public class RobotContainer {
     l3 = new LoggedNetworkBoolean("/Presets/L3", false);
     l4 = new LoggedNetworkBoolean("/Presets/L4", false);
 
+    NamedCommands.registerCommand(
+        "Intake", IntakeCommands.deployIntake(rightCoralRotationMotor, rightCoralRollerMotor));
+    NamedCommands.registerCommand(
+        "Stow Intake", IntakeCommands.stowIntake(rightCoralRotationMotor, rightCoralRollerMotor));
+
+    NamedCommands.registerCommand(
+        "Elevator L1",
+        ElevatorCommands.setPreset(
+            elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_ONE_CORAL));
+    NamedCommands.registerCommand(
+        "Elevator L2",
+        ElevatorCommands.setPreset(
+            elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_TWO_CORAL));
+    NamedCommands.registerCommand(
+        "Elevator L3",
+        ElevatorCommands.setPreset(
+            elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_THREE_CORAL));
+    NamedCommands.registerCommand(
+        "Elevator L4",
+        ElevatorCommands.setPreset(
+            elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
+    NamedCommands.registerCommand(
+        "Stow",
+        ElevatorCommands.setPreset(
+            elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.STOW));
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -321,11 +366,9 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by
+   * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
-   * it to a {@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
@@ -351,14 +394,16 @@ public class RobotContainer {
     driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // // Reset gyro / odometry
-    final Runnable resetGyro = () -> drive.setPose(
-        new Pose2d(
-            drive.getPose().getTranslation(),
-            DriverStation.getAlliance().isPresent()
-                ? (DriverStation.getAlliance().get() == DriverStation.Alliance.Red
-                    ? new Rotation2d(Math.PI)
-                    : new Rotation2d())
-                : new Rotation2d())); // zero gyro
+    final Runnable resetGyro =
+        () ->
+            drive.setPose(
+                new Pose2d(
+                    drive.getPose().getTranslation(),
+                    DriverStation.getAlliance().isPresent()
+                        ? (DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+                            ? new Rotation2d(Math.PI)
+                            : new Rotation2d())
+                        : new Rotation2d())); // zero gyro
 
     // Reset gyro to 0° when B button is pressed
     driverController.b().onTrue(Commands.runOnce(resetGyro, drive).ignoringDisable(true));
