@@ -33,13 +33,43 @@ public class ElevatorCommands {
 
     public static final CoralPreset L_FOUR_CORAL =
         new CoralPreset("L4", 1.01, Rotation2d.fromRotations(0.16));
+
+    public static final CoralPreset L_THREE_SCORE =
+        new CoralPreset("L3_Score", 0.5, Rotation2d.fromRotations(0.15));
+
+    public static final CoralPreset L_FOUR_SCORE =
+        new CoralPreset("L4_Score", 1.01, Rotation2d.fromRotations(0.16));
+
+    public static final CoralPreset WAIT_FOR_CORAL =
+        new CoralPreset("Wait_For_Coral", 0.5, Rotation2d.fromRotations(-0.25));
   }
+
+  public static final LoggedTunableNumber tinyBitDown =
+      new LoggedTunableNumber("Tiny bit down", 0.1);
 
   public static final Command setPreset(
       PositionJoint elevatorMotor, PositionJoint wristMotor, CoralPreset preset) {
+    // move elevator to L3, move wrist, then down or up depending on where to score
     return new SequentialCommandGroup(
-        new PositionJointPositionCommand(elevatorMotor, () -> preset.getElevatorPos()),
-        new PositionJointPositionCommand(wristMotor, () -> preset.getWristPos().getRotations()));
+        new PositionJointPositionCommand(
+            elevatorMotor, () -> ELEVATOR_HEIGHT_PRESETS.L_THREE_CORAL.getElevatorPos()),
+        new PositionJointPositionCommand(wristMotor, () -> preset.getWristPos().getRotations()),
+        new PositionJointPositionCommand(elevatorMotor, () -> preset.getElevatorPos()));
+  }
+
+  public static final Command scorePreset(PositionJoint elevatorMotor, PositionJoint wristMotor) {
+    // move wrist first, then possibly move to reset for next coral (add soon)
+    return new SequentialCommandGroup(
+        new PositionJointPositionCommand(
+            wristMotor, () -> wristMotor.getDesiredPosition() - tinyBitDown.getAsDouble()));
+  }
+
+  public static final Command scoreReattempt(
+      PositionJoint elevatorMotor, PositionJoint wristMotor) {
+    // move wrist first, then possibly move to reset for next coral (add soon)
+    return new SequentialCommandGroup(
+        new PositionJointPositionCommand(
+            wristMotor, () -> wristMotor.getDesiredPosition() + tinyBitDown.getAsDouble()));
   }
 
   public static final class END_EFFECTOR_PRESETS {

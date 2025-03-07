@@ -74,22 +74,19 @@ public class RobotContainer {
   private final CommandXboxController driverController = new CommandXboxController(0);
 
   private final LoggedNetworkBoolean l1;
+
   private final LoggedNetworkBoolean l2;
+  ;
+
   private final LoggedNetworkBoolean l3;
+
   private final LoggedNetworkBoolean l4;
-  /*
-   * private final LoggedNetworkBoolean A;
-   * private final LoggedNetworkBoolean B;
-   * private final LoggedNetworkBoolean C;
-   * private final LoggedNetworkBoolean D;
-   * private final LoggedNetworkBoolean E;
-   * private final LoggedNetworkBoolean F;
-   * private final LoggedNetworkBoolean G;
-   * private final LoggedNetworkBoolean H;
-   * private final LoggedNetworkBoolean I;
-   * private final LoggedNetworkBoolean J;
-   * private final LoggedNetworkBoolean K;
-   */
+
+  private final LoggedNetworkBoolean HANDOFF;
+
+  private final LoggedNetworkBoolean Score;
+
+  private final LoggedNetworkBoolean Reattempt;
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -334,6 +331,9 @@ public class RobotContainer {
     l2 = new LoggedNetworkBoolean("/Presets/L2", false);
     l3 = new LoggedNetworkBoolean("/Presets/L3", false);
     l4 = new LoggedNetworkBoolean("/Presets/L4", false);
+    HANDOFF = new LoggedNetworkBoolean("/Presets/HANDOFF", false);
+    Score = new LoggedNetworkBoolean("/Score/", false);
+    Reattempt = new LoggedNetworkBoolean("/Reattempt/", false);
 
     NamedCommands.registerCommand(
         "Intake", IntakeCommands.deployIntake(rightCoralRotationMotor, rightCoralRollerMotor));
@@ -417,6 +417,26 @@ public class RobotContainer {
     // Reset gyro to 0° when B button is pressed
     driverController.b().onTrue(Commands.runOnce(resetGyro, drive).ignoringDisable(true));
 
+    driverController
+        .povUp()
+        .onTrue(
+            ElevatorCommands.setPreset(
+                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
+
+    driverController
+        .povDown()
+        .onTrue(
+            ElevatorCommands.setPreset(
+                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.HANDOFF));
+
+    driverController
+        .y()
+        .onTrue(
+            ElevatorCommands.setPreset(
+                elevatorMotor,
+                elbowMotor,
+                ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.WAIT_FOR_CORAL));
+
     // Coral Intake
     driverController // Right bumper to deploy right coral intake
         .rightBumper()
@@ -432,22 +452,38 @@ public class RobotContainer {
         .onTrue(
             ElevatorCommands.setPreset(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_ONE_CORAL));
+
     new Trigger(l2::get)
         .onTrue(
             ElevatorCommands.setPreset(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_TWO_CORAL));
+
     new Trigger(l3::get)
         .onTrue(
             ElevatorCommands.setPreset(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_THREE_CORAL));
+
     new Trigger(l4::get)
         .onTrue(
             ElevatorCommands.setPreset(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
+
+    new Trigger(HANDOFF::get)
+        .onTrue(
+            ElevatorCommands.setPreset(
+                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.HANDOFF));
+
+    new Trigger(Score::get).onTrue(ElevatorCommands.scorePreset(elevatorMotor, elbowMotor));
+
+    new Trigger(Reattempt::get).onTrue(ElevatorCommands.scoreReattempt(elevatorMotor, elbowMotor));
+
     new Trigger(l1::get)
         .or(new Trigger(l2::get))
         .or(new Trigger(l3::get))
         .or(new Trigger(l4::get))
+        .or(new Trigger(HANDOFF::get))
+        .or(new Trigger(Score::get))
+        .or(new Trigger(Reattempt::get))
         .onTrue(
             new InstantCommand(
                 () -> {
@@ -455,6 +491,9 @@ public class RobotContainer {
                   l2.set(false);
                   l3.set(false);
                   l4.set(false);
+                  HANDOFF.set(false);
+                  Score.set(false);
+                  Reattempt.set(false);
 
                   if (elevatorMotor.getCurrentCommand() != null) {
                     elevatorMotor.getCurrentCommand().cancel();
