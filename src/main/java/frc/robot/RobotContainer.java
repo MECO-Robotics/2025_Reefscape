@@ -74,13 +74,22 @@ public class RobotContainer {
   private final CommandXboxController driverController = new CommandXboxController(0);
 
   private final LoggedNetworkBoolean l1;
-
   private final LoggedNetworkBoolean l2;
-  ;
-
   private final LoggedNetworkBoolean l3;
-
   private final LoggedNetworkBoolean l4;
+  /*
+   * private final LoggedNetworkBoolean A;
+   * private final LoggedNetworkBoolean B;
+   * private final LoggedNetworkBoolean C;
+   * private final LoggedNetworkBoolean D;
+   * private final LoggedNetworkBoolean E;
+   * private final LoggedNetworkBoolean F;
+   * private final LoggedNetworkBoolean G;
+   * private final LoggedNetworkBoolean H;
+   * private final LoggedNetworkBoolean I;
+   * private final LoggedNetworkBoolean J;
+   * private final LoggedNetworkBoolean K;
+   */
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
