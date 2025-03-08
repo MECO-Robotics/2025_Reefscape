@@ -88,6 +88,19 @@ public class RobotContainer {
 
   private final LoggedNetworkBoolean Reattempt;
 
+  private final LoggedNetworkBoolean reefA;
+  private final LoggedNetworkBoolean reefB;
+  private final LoggedNetworkBoolean reefC;
+  private final LoggedNetworkBoolean reefD;
+  private final LoggedNetworkBoolean reefE;
+  private final LoggedNetworkBoolean reefF;
+  private final LoggedNetworkBoolean reefG;
+  private final LoggedNetworkBoolean reefH;
+  private final LoggedNetworkBoolean reefI;
+  private final LoggedNetworkBoolean reefJ;
+  private final LoggedNetworkBoolean reefK;
+  private final LoggedNetworkBoolean reefL;
+
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -335,6 +348,19 @@ public class RobotContainer {
     Score = new LoggedNetworkBoolean("/Score/", false);
     Reattempt = new LoggedNetworkBoolean("/Reattempt/", false);
 
+    reefA = new LoggedNetworkBoolean("/Presets/ReefA", false);
+    reefB = new LoggedNetworkBoolean("/Presets/ReefB", false);
+    reefC = new LoggedNetworkBoolean("/Presets/ReefC", false);
+    reefD = new LoggedNetworkBoolean("/Presets/ReefD", false);
+    reefE = new LoggedNetworkBoolean("/Presets/ReefE", false);
+    reefF = new LoggedNetworkBoolean("/Presets/ReefF", false);
+    reefG = new LoggedNetworkBoolean("/Presets/ReefG", false);
+    reefH = new LoggedNetworkBoolean("/Presets/ReefH", false);
+    reefI = new LoggedNetworkBoolean("/Presets/ReefI", false);
+    reefJ = new LoggedNetworkBoolean("/Presets/ReefJ", false);
+    reefK = new LoggedNetworkBoolean("/Presets/ReefK", false);
+    reefL = new LoggedNetworkBoolean("/Presets/ReefL", false);
+
     NamedCommands.registerCommand(
         "Intake", IntakeCommands.deployIntake(rightCoralRotationMotor, rightCoralRollerMotor));
     NamedCommands.registerCommand(
@@ -360,6 +386,8 @@ public class RobotContainer {
         "Stow",
         ElevatorCommands.setPreset(
             elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.STOW));
+
+    NamedCommands.registerCommand("Score", ElevatorCommands.scorePreset(elevatorMotor, elbowMotor));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -402,6 +430,18 @@ public class RobotContainer {
     // Switch to X pattern when X button is pressed
     driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
+    Pose2d reefAPos = new Pose2d(3.347, 4.181, Rotation2d.fromDegrees(0));
+    Pose2d reefBPos = new Pose2d(3.304, 3.869, Rotation2d.fromDegrees(0));
+    Pose2d reefCPos = new Pose2d(3.730, 3.104, Rotation2d.fromDegrees(55.4));
+    Pose2d reefDPos = new Pose2d(4.056, 2.948, Rotation2d.fromDegrees(54.7));
+    Pose2d reefEPos = new Pose2d(4.948, 2.877, Rotation2d.fromDegrees(119.1));
+    Pose2d reefFPos = new Pose2d(5.232, 3.061, Rotation2d.fromDegrees(122.3));
+    Pose2d reefGPos = new Pose2d(5.685, 3.869, Rotation2d.fromDegrees(-178.6));
+    Pose2d reefHPos = new Pose2d(5.671, 4.181, Rotation2d.fromDegrees(-178.6));
+    Pose2d reefIPos = new Pose2d(5.232, 4.932, Rotation2d.fromDegrees(-117.8));
+    Pose2d reefJPos = new Pose2d(4.92, 5.102, Rotation2d.fromDegrees(-117.8));
+    Pose2d reefKPos = new Pose2d(4.041, 5.130, Rotation2d.fromDegrees(-61.3));
+    Pose2d reefLPos = new Pose2d(3.772, 4.954, Rotation2d.fromDegrees(-61.9));
     // // Reset gyro / odometry
     final Runnable resetGyro =
         () ->
@@ -417,6 +457,8 @@ public class RobotContainer {
     // Reset gyro to 0° when B button is pressed
     driverController.b().onTrue(Commands.runOnce(resetGyro, drive).ignoringDisable(true));
 
+    // Riases the elevator and wrist to the prests for L4
+    // Also incorpeates the safety algorithm for the wirst and elevator
     driverController
         .povUp()
         .onTrue(
@@ -448,33 +490,29 @@ public class RobotContainer {
         .whileTrue(IntakeCommands.deployIntake(leftCoralRotationMotor, leftCoralRollerMotor))
         .whileFalse(IntakeCommands.stowIntake(leftCoralRotationMotor, leftCoralRollerMotor));
 
+    // Trigger for the elevator positions
+    // Shows up on the dashboard
     new Trigger(l1::get)
         .onTrue(
             ElevatorCommands.setPreset(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_ONE_CORAL));
-
     new Trigger(l2::get)
         .onTrue(
             ElevatorCommands.setPreset(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_TWO_CORAL));
-
     new Trigger(l3::get)
         .onTrue(
             ElevatorCommands.setPreset(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_THREE_CORAL));
-
     new Trigger(l4::get)
         .onTrue(
             ElevatorCommands.setPreset(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
-
     new Trigger(HANDOFF::get)
         .onTrue(
             ElevatorCommands.setPreset(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.HANDOFF));
-
     new Trigger(Score::get).onTrue(ElevatorCommands.scorePreset(elevatorMotor, elbowMotor));
-
     new Trigger(Reattempt::get).onTrue(ElevatorCommands.scoreReattempt(elevatorMotor, elbowMotor));
 
     new Trigger(l1::get)
@@ -502,6 +540,53 @@ public class RobotContainer {
                   if (elbowMotor.getCurrentCommand() != null) {
                     elbowMotor.getCurrentCommand().cancel();
                   }
+                }));
+
+    // Auto Driving
+    // Poses for each of the different branches in the reef
+    // See 4481's strategy sheet to find out which branches are which letter
+
+    new Trigger(reefA::get).onTrue(DriveCommands.pathfindToPose(drive, reefAPos));
+    new Trigger(reefB::get).onTrue(DriveCommands.pathfindToPose(drive, reefBPos));
+    new Trigger(reefC::get).onTrue(DriveCommands.pathfindToPose(drive, reefCPos));
+    new Trigger(reefD::get).onTrue(DriveCommands.pathfindToPose(drive, reefDPos));
+    new Trigger(reefE::get).onTrue(DriveCommands.pathfindToPose(drive, reefEPos));
+    new Trigger(reefF::get).onTrue(DriveCommands.pathfindToPose(drive, reefFPos));
+    new Trigger(reefG::get).onTrue(DriveCommands.pathfindToPose(drive, reefGPos));
+    new Trigger(reefH::get).onTrue(DriveCommands.pathfindToPose(drive, reefHPos));
+    new Trigger(reefI::get).onTrue(DriveCommands.pathfindToPose(drive, reefIPos));
+    new Trigger(reefJ::get).onTrue(DriveCommands.pathfindToPose(drive, reefJPos));
+    new Trigger(reefK::get).onTrue(DriveCommands.pathfindToPose(drive, reefKPos));
+    new Trigger(reefL::get).onTrue(DriveCommands.pathfindToPose(drive, reefLPos));
+
+    // Trigger for the reef positions that goes on the touchscreen
+    new Trigger(reefA::get)
+        .or(reefB::get)
+        .or(reefC::get)
+        .or(reefD::get)
+        .or(reefE::get)
+        .or(reefF::get)
+        .or(reefG::get)
+        .or(reefH::get)
+        .or(reefI::get)
+        .or(reefJ::get)
+        .or(reefK::get)
+        .or(reefL::get)
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  reefA.set(false);
+                  reefB.set(false);
+                  reefC.set(false);
+                  reefD.set(false);
+                  reefE.set(false);
+                  reefF.set(false);
+                  reefG.set(false);
+                  reefH.set(false);
+                  reefI.set(false);
+                  reefJ.set(false);
+                  reefK.set(false);
+                  reefL.set(false);
                 }));
   }
 
