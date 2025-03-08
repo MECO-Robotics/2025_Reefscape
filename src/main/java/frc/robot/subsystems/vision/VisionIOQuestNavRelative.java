@@ -18,8 +18,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.TimestampedDouble;
 import edu.wpi.first.networktables.TimestampedFloatArray;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.subsystems.vision.VisionIOQuestNav.QuestNavData;
 import org.littletonrobotics.junction.Logger;
 
@@ -33,13 +33,14 @@ public class VisionIOQuestNavRelative implements VisionIO {
 
   // Subscribe to the Network Tables questnav data topics
   private DoubleSubscriber questTimestamp = nt4Table.getDoubleTopic("timestamp").subscribe(0.0f);
-  private FloatArraySubscriber questPosition = nt4Table.getFloatArrayTopic("position")
-      .subscribe(new float[] { 0.0f, 0.0f, 0.0f });
-  private FloatArraySubscriber questQuaternion = nt4Table.getFloatArrayTopic("quaternion")
-      .subscribe(new float[] { 0.0f, 0.0f, 0.0f, 0.0f });
-  private FloatArraySubscriber questEulerAngles = nt4Table.getFloatArrayTopic("eulerAngles")
-      .subscribe(new float[] { 0.0f, 0.0f, 0.0f });
-  private DoubleSubscriber questBatteryPercent = nt4Table.getDoubleTopic("batteryPercent").subscribe(0.0f);
+  private FloatArraySubscriber questPosition =
+      nt4Table.getFloatArrayTopic("position").subscribe(new float[] {0.0f, 0.0f, 0.0f});
+  private FloatArraySubscriber questQuaternion =
+      nt4Table.getFloatArrayTopic("quaternion").subscribe(new float[] {0.0f, 0.0f, 0.0f, 0.0f});
+  private FloatArraySubscriber questEulerAngles =
+      nt4Table.getFloatArrayTopic("eulerAngles").subscribe(new float[] {0.0f, 0.0f, 0.0f});
+  private DoubleSubscriber questBatteryPercent =
+      nt4Table.getDoubleTopic("batteryPercent").subscribe(0.0f);
 
   // Local heading helper variables
   private float yaw_offset = 0.0f;
@@ -60,10 +61,23 @@ public class VisionIOQuestNavRelative implements VisionIO {
     if (!hasAllianceReset) {
       if (DriverStation.getAlliance().isPresent()) {
         if (DriverStation.getAlliance().get() == Alliance.Blue) {
-          offset = new Transform3d(new Pose3d(), new Pose3d(new Translation3d(1, 1, 0), new Rotation3d()));
+          zeroPosition();
+          offset =
+              new Transform3d(
+                      new Pose3d(
+                          new Translation3d(5.643, 4, 0),
+                          new Rotation3d(0, 0, Math.toRadians(180))),
+                      new Pose3d())
+                  .plus(robotToCamera);
           hasAllianceReset = true;
         } else {
-          offset = new Transform3d(new Pose3d(), new Pose3d(new Translation3d(3, 3, 0), new Rotation3d()));
+          zeroPosition();
+          offset =
+              new Transform3d(
+                  new Pose3d(
+                          new Translation3d(11.893, 4, 0), new Rotation3d(0, 0, Math.toRadians(0)))
+                      .plus(robotToCamera),
+                  new Pose3d(getPose()));
           hasAllianceReset = true;
         }
       }
@@ -76,15 +90,16 @@ public class VisionIOQuestNavRelative implements VisionIO {
     inputs.poseObservations = new PoseObservation[questNavData.length];
 
     for (int i = 0; i < questNavData.length; i++) {
-      inputs.poseObservations[i] = new PoseObservation(
-          questNavData[i].timestamp(),
-          new Pose3d(
-              questNavData[i].pose().getTranslation(), questNavData[i].pose().getRotation())
-              .transformBy(offset),
-          0.0,
-          -1,
-          0.0,
-          PoseObservationType.QUESTNAV);
+      inputs.poseObservations[i] =
+          new PoseObservation(
+              questNavData[i].timestamp(),
+              new Pose3d(
+                  questNavData[i].pose().getTranslation().plus(offset.getTranslation()),
+                  questNavData[i].pose().getRotation().plus(offset.getRotation())),
+              0.0,
+              -1,
+              0.0,
+              PoseObservationType.QUESTNAV);
     }
     inputs.tagIds = new int[0];
 
@@ -92,6 +107,9 @@ public class VisionIOQuestNavRelative implements VisionIO {
 
     Logger.recordOutput("QuestNav/offset", offset);
 
+    Logger.recordOutput("QuestNav/RawPose", getPose());
+
+    Logger.recordOutput("QuestNav/AllianceReset", hasAllianceReset);
     cleanUpQuestNavMessages();
   }
 
@@ -108,12 +126,13 @@ public class VisionIOQuestNavRelative implements VisionIO {
     QuestNavData[] data = new QuestNavData[length];
 
     for (int i = 0; i < length; i++) {
-      data[i] = new QuestNavData(
-          getQuestNavPose(positions[i].value, angles[i].value).plus(robotToCamera.inverse()),
-          battery,
-          timestamps[i].timestamp,
-          positions[i].value,
-          angles[i].value);
+      data[i] =
+          new QuestNavData(
+              getQuestNavPose(positions[i].value, angles[i].value).plus(robotToCamera.inverse()),
+              battery,
+              timestamps[i].timestamp,
+              positions[i].value,
+              angles[i].value);
     }
 
     return data;
@@ -210,7 +229,8 @@ public class VisionIOQuestNavRelative implements VisionIO {
   }
 
   private Pose2d getQuestNavPose() {
-    var oculousPositionCompensated = getQuestNavTranslation().minus(new Translation2d(0, 0.1651)); // 6.5
+    var oculousPositionCompensated =
+        getQuestNavTranslation().minus(new Translation2d(0, 0.1651)); // 6.5
     return new Pose2d(oculousPositionCompensated, Rotation2d.fromDegrees(getOculusYaw()));
   }
 }
