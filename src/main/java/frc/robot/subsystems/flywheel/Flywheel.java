@@ -1,9 +1,12 @@
 package frc.robot.subsystems.flywheel;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.flywheel.FlywheelVelocityCommand;
 import frc.robot.subsystems.flywheel.FlywheelConstants.FlywheelGains;
 import frc.robot.util.mechanical_advantage.LinearProfile;
 import frc.robot.util.mechanical_advantage.LoggedTunableNumber;
+import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Flywheel extends SubsystemBase {
@@ -106,5 +109,19 @@ public class Flywheel extends SubsystemBase {
 
   public boolean isFinished() {
     return Math.abs(inputs.velocity - inputs.desiredVelocity) < kTolerance.get();
+  }
+
+  /*
+   * Command factory to set flywheel velocity
+   */
+  public static Command setVelocity(Flywheel flywheel, DoubleSupplier velocity) {
+    return new FlywheelVelocityCommand(flywheel, velocity);
+  }
+
+  /*
+   * Command factory to set flywheel voltage
+   */
+  public static Command setVoltage(Flywheel flywheel, DoubleSupplier voltage) {
+    return new FlywheelVelocityCommand(flywheel, voltage);
   }
 }

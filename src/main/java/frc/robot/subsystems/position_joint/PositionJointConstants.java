@@ -78,17 +78,17 @@ public class PositionJointConstants {
           "");
 
   public static final PositionJointGains ELEVATOR_GAINS =
-      new PositionJointGains(10, 0, 0, 0.25, 0.5, 0.75, 0, 8.0, 8.0, -0.287, 1.014, 0, 0);
+      new PositionJointGains(15, 0, 0, 0.26, 0.4, 3.75, .3, 5, 5.0, -0.287, 1.014, 0.01, 0);
 
   public static final PositionJointGains ELEVATOR_GAINS_SIM =
-      new PositionJointGains(10, 0, 0, 0.25, 0.5, 0.75, 0, 8.0, 8.0, 0, 1.3, 0, 0);
+      new PositionJointGains(10, 0, 0, 0.25, 0.5, 0.75, 0, 8.0, 4.0, 0, 1.3, 0, 0);
 
   public static final PositionJointHardwareConfig ELEVATOR_CONFIG =
       new PositionJointHardwareConfig(
           new int[] {30, 31},
           new boolean[] {false, true},
           (31.4 + 8.8) / Units.inchesToMeters(51),
-          40,
+          80,
           GravityType.CONSTANT,
           EncoderType.INTERNAL,
           -1,
@@ -97,20 +97,20 @@ public class PositionJointConstants {
   // 31.4 max
   // -8.88 stow
   public static final PositionJointGains PIVOT_GAINS =
-      new PositionJointGains(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      new PositionJointGains(80, 0, 0, 0, 0.27, 0, 0, 2, 2, -0.25, 0.35, 0.01, -0.25);
 
   public static final PositionJointGains PIVOT_GAINS_SIM =
-      new PositionJointGains(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      new PositionJointGains(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.53, 0, 0);
 
   public static final PositionJointHardwareConfig ELBOW_CONFIG =
       new PositionJointHardwareConfig(
           new int[] {33},
-          new boolean[] {false},
-          1,
+          new boolean[] {true},
+          (72.0 / 16.0) * (70.0 / 16.0),
           40,
           GravityType.COSINE,
           EncoderType.INTERNAL,
           -1,
-          Rotation2d.fromRotations(0),
+          Rotation2d.fromRotations(-0.25),
           "");
 }
