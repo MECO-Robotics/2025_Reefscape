@@ -45,8 +45,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
-import frc.robot.subsystems.vision.VisionIOPhotonVisionTrig;
-import frc.robot.subsystems.vision.VisionIOQuestNav;
+import frc.robot.subsystems.vision.VisionIOQuestNavRelative;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
@@ -67,7 +66,7 @@ public class RobotContainer {
   private PositionJoint elevatorMotor;
   private PositionJoint elbowMotor;
   private Flywheel endEffectorMotor;
-  private VisionIOQuestNav questNav;
+  private VisionIOQuestNavRelative questNav;
 
   @SuppressWarnings("unused")
   private final Vision vision;
@@ -187,14 +186,19 @@ public class RobotContainer {
                 new FlywheelIOSparkMax("EndEffectorMotor", FlywheelConstants.END_EFFECTOR_CONFIG),
                 FlywheelConstants.END_EFFECTOR_GAINS);
 
-        questNav =
-            new VisionIOQuestNav(
-                VisionConstants.robotToCamera0,
-                new VisionIOPhotonVisionTrig(
-                    "USB_Camera", VisionConstants.robotToCamera1, drive::getRotation));
+        // questNav =
+        // new VisionIOQuestNav(
+        // VisionConstants.robotToCamera0,
+        // new VisionIOPhotonVisionTrig(
+        // "USB_Camera", VisionConstants.robotToCamera1, drive::getRotation));
+
+        questNav = new VisionIOQuestNavRelative(VisionConstants.robotToCamera0);
 
         // vision
-        vision = new Vision(drive::addVisionMeasurement, questNav);
+        vision =
+            new Vision(
+                drive::addVisionMeasurement,
+                new VisionIOQuestNavRelative(VisionConstants.robotToCamera0));
 
         break;
 
@@ -469,6 +473,7 @@ public class RobotContainer {
     // Reset gyro to 0° when B button is pressed
     driverController.b().onTrue(Commands.runOnce(resetGyro, drive).ignoringDisable(true));
 
+    driverController.a().onTrue(new InstantCommand(() -> questNav.zeroPosition()));
     // Riases the elevator and wrist to the prests for L4
     // Also incorpeates the safety algorithm for the wirst and elevator
     driverController
