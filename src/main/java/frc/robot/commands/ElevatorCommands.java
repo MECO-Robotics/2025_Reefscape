@@ -41,7 +41,8 @@ public class ElevatorCommands {
         new CoralPreset("L4_Score", 1.01, Rotation2d.fromRotations(0.16));
 
     public static final CoralPreset WAIT_FOR_CORAL =
-        new CoralPreset("Wait_For_Coral", 0.5, Rotation2d.fromRotations(-0.25));
+        new CoralPreset(
+            "Wait_For_Coral", 0.2, Rotation2d.fromRotations(-0.25)); // elevator used to be 0.5
   }
 
   public static final LoggedTunableNumber tinyBitDown =
