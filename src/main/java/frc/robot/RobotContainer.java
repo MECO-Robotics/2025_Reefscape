@@ -74,6 +74,7 @@ public class RobotContainer {
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
+  private final CommandXboxController coPilotController = new CommandXboxController(1);
 
   private final LoggedNetworkBoolean l1;
 
@@ -477,13 +478,33 @@ public class RobotContainer {
             ElevatorCommands.setPreset(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
 
+    coPilotController
+        .povUp()
+        .onTrue(
+            ElevatorCommands.setPreset(
+                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
+
     driverController
         .povDown()
         .onTrue(
             ElevatorCommands.setPreset(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.HANDOFF));
 
+    coPilotController
+        .povDown()
+        .onTrue(
+            ElevatorCommands.setPreset(
+                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.HANDOFF));
+
     driverController
+        .y()
+        .onTrue(
+            ElevatorCommands.setPreset(
+                elevatorMotor,
+                elbowMotor,
+                ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.WAIT_FOR_CORAL));
+
+    coPilotController
         .y()
         .onTrue(
             ElevatorCommands.setPreset(
@@ -502,12 +523,14 @@ public class RobotContainer {
         .whileTrue(IntakeCommands.deployIntake(leftCoralRotationMotor, leftCoralRollerMotor))
         .whileFalse(IntakeCommands.stowIntake(leftCoralRotationMotor, leftCoralRollerMotor));
 
+    coPilotController.x().whileTrue(ElevatorCommands.scorePreset(elevatorMotor, elbowMotor));
+
     // Trigger for the elevator positions
     // Shows up on the dashboard
     new Trigger(l1::get)
         .onTrue(
             ElevatorCommands.setPreset(
-                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_ONE_CORAL));
+                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.HANDOFF));
     new Trigger(l2::get)
         .onTrue(
             ElevatorCommands.setPreset(
