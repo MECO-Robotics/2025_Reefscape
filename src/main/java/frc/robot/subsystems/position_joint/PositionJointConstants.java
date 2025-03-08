@@ -88,7 +88,7 @@ public class PositionJointConstants {
           new int[] {30, 31},
           new boolean[] {false, true},
           (31.4 + 8.8) / Units.inchesToMeters(51),
-          60,
+          80,
           GravityType.CONSTANT,
           EncoderType.INTERNAL,
           -1,

@@ -44,8 +44,9 @@ import frc.robot.subsystems.position_joint.PositionJointIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO;
-import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import frc.robot.subsystems.vision.VisionIOPhotonVisionTrig;
+import frc.robot.subsystems.vision.VisionIOQuestNav;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
@@ -66,6 +67,7 @@ public class RobotContainer {
   private PositionJoint elevatorMotor;
   private PositionJoint elbowMotor;
   private Flywheel endEffectorMotor;
+  private VisionIOQuestNav questNav;
 
   @SuppressWarnings("unused")
   private final Vision vision;
@@ -106,6 +108,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -184,12 +187,15 @@ public class RobotContainer {
                 new FlywheelIOSparkMax("EndEffectorMotor", FlywheelConstants.END_EFFECTOR_CONFIG),
                 FlywheelConstants.END_EFFECTOR_GAINS);
 
-        // Vision
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOPhotonVision(
-                    VisionConstants.camera0Name, VisionConstants.robotToCamera0));
+        questNav =
+            new VisionIOQuestNav(
+                VisionConstants.robotToCamera0,
+                new VisionIOPhotonVisionTrig(
+                    "USB_Camera", VisionConstants.robotToCamera1, drive::getRotation));
+
+        // vision
+        vision = new Vision(drive::addVisionMeasurement, questNav);
+
         break;
 
       case SIM:
@@ -320,6 +326,12 @@ public class RobotContainer {
 
         break;
     }
+    /*
+     * CommandScheduler.getInstance().schedule(Commands.sequence(
+     * Commands.waitSeconds(1),
+     * Commands.runOnce(questNav::reset
+     * ));
+     */
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());

@@ -36,7 +36,8 @@ public class VisionIOQuestNav implements VisionIO {
     RESET_COMPLETE
   }
 
-  // Configure Network Tables topics (questnav/...) to communicate with the Quest HMD
+  // Configure Network Tables topics (questnav/...) to communicate with the Quest
+  // HMD
   private NetworkTableInstance nt4Instance = NetworkTableInstance.getDefault();
   private NetworkTable nt4Table = nt4Instance.getTable("questnav");
   private IntegerSubscriber questMiso = nt4Table.getIntegerTopic("miso").subscribe(0);
@@ -66,6 +67,9 @@ public class VisionIOQuestNav implements VisionIO {
 
   private Translation3d[] questNavRawToFieldCoordinateSystemQueue = new Translation3d[5];
   private Translation3d questNavRawToFieldCoordinateSystem = new Translation3d();
+
+  protected Rotation3d gyroResetAngle = new Rotation3d();
+  protected Pose3d lastPose3d = new Pose3d();
 
   int count = 0;
   int idx = 0;
@@ -248,9 +252,21 @@ public class VisionIOQuestNav implements VisionIO {
     resetQueue = QuestNavResetState.RESET_POSE_QUEUED;
   }
 
+  public void resetHeading(Rotation2d heading) {
+    questMosi.accept(3);
+
+    gyroResetAngle =
+        (lastPose3d.getRotation().minus(gyroResetAngle).minus(new Rotation3d(heading)))
+            .unaryMinus();
+  }
+
   public void resetHeading() {
     questMosi.accept(3);
     delay = 0;
     resetQueue = QuestNavResetState.RESET_HEADING_QUEUED;
+  }
+
+  public void resetBlue() {
+    resetHeading(Rotation2d.kZero);
   }
 }
