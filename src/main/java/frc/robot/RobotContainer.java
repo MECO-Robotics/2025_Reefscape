@@ -410,7 +410,7 @@ public class RobotContainer {
         ElevatorCommands.setPreset(
             elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.STOW));
 
-    NamedCommands.registerCommand("Score", ElevatorCommands.scorePreset(elevatorMotor, elbowMotor));
+    NamedCommands.registerCommand("Score", ElevatorCommands.scorePreset(elbowMotor));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -487,31 +487,23 @@ public class RobotContainer {
     driverController
         .povUp()
         .onTrue(
-            ElevatorCommands.setPreset(
+            ElevatorCommands.moveSafe(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
 
     coPilotController
         .povUp()
         .onTrue(
-            ElevatorCommands.setPreset(
+            ElevatorCommands.moveSafe(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
 
-    driverController
-        .povDown()
-        .onTrue(
-            ElevatorCommands.setPreset(
-                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.HANDOFF));
+    driverController.povDown().onTrue(ElevatorCommands.handOff(elevatorMotor, elbowMotor));
 
-    coPilotController
-        .povDown()
-        .onTrue(
-            ElevatorCommands.setPreset(
-                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.HANDOFF));
+    coPilotController.povDown().onTrue(ElevatorCommands.handOff(elevatorMotor, elbowMotor));
 
     driverController
         .y()
         .onTrue(
-            ElevatorCommands.setPreset(
+            ElevatorCommands.moveSafe(
                 elevatorMotor,
                 elbowMotor,
                 ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.WAIT_FOR_CORAL));
@@ -519,7 +511,7 @@ public class RobotContainer {
     coPilotController
         .y()
         .onTrue(
-            ElevatorCommands.setPreset(
+            ElevatorCommands.moveSafe(
                 elevatorMotor,
                 elbowMotor,
                 ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.WAIT_FOR_CORAL));
@@ -539,26 +531,23 @@ public class RobotContainer {
     // Shows up on the dashboard
     new Trigger(l1::get)
         .onTrue(
-            ElevatorCommands.setPreset(
+            ElevatorCommands.moveSafe(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_ONE_CORAL));
     new Trigger(l2::get)
         .onTrue(
-            ElevatorCommands.setPreset(
+            ElevatorCommands.moveSafe(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_TWO_CORAL));
     new Trigger(l3::get)
         .onTrue(
-            ElevatorCommands.setPreset(
+            ElevatorCommands.moveSafe(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_THREE_CORAL));
     new Trigger(l4::get)
         .onTrue(
-            ElevatorCommands.setPreset(
+            ElevatorCommands.moveSafe(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
-    new Trigger(HANDOFF::get)
-        .onTrue(
-            ElevatorCommands.setPreset(
-                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.HANDOFF));
-    new Trigger(Score::get).onTrue(ElevatorCommands.scorePreset(elevatorMotor, elbowMotor));
-    new Trigger(Reattempt::get).onTrue(ElevatorCommands.scoreReattempt(elevatorMotor, elbowMotor));
+    new Trigger(HANDOFF::get).onTrue(ElevatorCommands.handOff(elevatorMotor, elbowMotor));
+    new Trigger(Score::get).onTrue(ElevatorCommands.scorePreset(elbowMotor));
+    new Trigger(Reattempt::get).onTrue(ElevatorCommands.scoreReattempt(elbowMotor));
 
     new Trigger(l1::get)
         .or(new Trigger(l2::get))
