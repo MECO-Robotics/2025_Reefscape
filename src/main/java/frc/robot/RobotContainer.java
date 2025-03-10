@@ -410,7 +410,7 @@ public class RobotContainer {
         ElevatorCommands.setPreset(
             elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.STOW));
 
-    NamedCommands.registerCommand("Score", ElevatorCommands.scorePreset(elevatorMotor, elbowMotor));
+    NamedCommands.registerCommand("Score", ElevatorCommands.scorePreset(elbowMotor));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -546,8 +546,8 @@ public class RobotContainer {
             ElevatorCommands.moveSafe(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
     new Trigger(HANDOFF::get).onTrue(ElevatorCommands.handOff(elevatorMotor, elbowMotor));
-    new Trigger(Score::get).onTrue(ElevatorCommands.scorePreset(elevatorMotor, elbowMotor));
-    new Trigger(Reattempt::get).onTrue(ElevatorCommands.scoreReattempt(elevatorMotor, elbowMotor));
+    new Trigger(Score::get).onTrue(ElevatorCommands.scorePreset(elbowMotor));
+    new Trigger(Reattempt::get).onTrue(ElevatorCommands.scoreReattempt(elbowMotor));
 
     new Trigger(l1::get)
         .or(new Trigger(l2::get))
