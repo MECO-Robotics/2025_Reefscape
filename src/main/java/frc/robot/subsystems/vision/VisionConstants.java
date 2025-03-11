@@ -23,13 +23,13 @@ public class VisionConstants {
       new Transform3d(0.0, 0.0, 0.0, new Rotation3d(0.0, 0.0, Math.toRadians(180.0)));
   public static Transform3d robotToCamera1 =
       new Transform3d(-0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, Math.PI));
-  public static Transform3d robotToFrontTagCamera =
+  public static Transform3d robotToBackTagCamera =
       new Transform3d(
           Units.inchesToMeters(6 + 1 / 32),
           Units.inchesToMeters(-2.25),
           Units.inchesToMeters(26),
           new Rotation3d(0.0, 0.0, Math.toRadians(0)));
-  public static Transform3d robotToBackTagCamera =
+  public static Transform3d robotToFrontTagCamera =
       new Transform3d(
           Units.inchesToMeters(-6 + 1 / 32),
           Units.inchesToMeters(-6.25),

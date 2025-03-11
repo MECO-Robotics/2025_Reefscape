@@ -203,7 +203,7 @@ public class RobotContainer {
             new Vision(
                 drive::addVisionMeasurement,
                 new VisionIOQuestNav(
-                    VisionConstants.robotToFrontTagCamera,
+                    VisionConstants.robotToCamera0,
                     new VisionIOPhotonVisionTrig(
                         VisionConstants.frontTagCamera,
                         VisionConstants.robotToFrontTagCamera,
