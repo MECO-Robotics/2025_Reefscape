@@ -78,7 +78,7 @@ public class DriveConstants {
       (2 * Math.PI) / 60.0 / steerMotorGearRatio; // RPM -> Rad/Sec
 
   // PathPlanner configuration
-  public static final double robotMassKg = 74.088;
+  public static final double robotMassKg = Units.lbsToKilograms(123);
   public static final double robotMOI = 6.883;
   public static final double wheelCOF = 1.2;
   public static final RobotConfig ppConfig =
@@ -94,8 +94,8 @@ public class DriveConstants {
               1),
           moduleTranslations);
 
-  public static final PIDConstants translationPID = new PIDConstants(5, 0, 0);
-  public static final PIDConstants rotationPID = new PIDConstants(5, 0, 0);
+  public static final PIDConstants translationPID = new PIDConstants(25, 0, 0);
+  public static final PIDConstants rotationPID = new PIDConstants(7, 0, 0);
 
   public static final DriveTrainSimulationConfig mapleSimConfig =
       DriveTrainSimulationConfig.Default()
