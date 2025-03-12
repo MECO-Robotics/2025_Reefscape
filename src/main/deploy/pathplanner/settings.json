@@ -4,8 +4,9 @@
   "holonomicMode": true,
   "pathFolders": [
     "Auto alignment paths",
-    "Blue Auto paths",
-    "Preset A"
+    "Center Blue Auto paths",
+    "Left Blue auto paths",
+    "Right Blue auto paths"
   ],
   "autoFolders": [
     "New Folder"

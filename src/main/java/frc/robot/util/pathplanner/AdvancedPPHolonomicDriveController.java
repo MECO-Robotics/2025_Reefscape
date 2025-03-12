@@ -7,6 +7,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import frc.robot.util.mechanical_advantage.LoggedTunableNumber;
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -16,6 +17,14 @@ public class AdvancedPPHolonomicDriveController implements PathFollowingControll
   private final PIDController xController;
   private final PIDController yController;
   private final PIDController rotationController;
+
+  private final LoggedTunableNumber translationalP;
+  private final LoggedTunableNumber translationalI;
+  private final LoggedTunableNumber translationalD;
+
+  private final LoggedTunableNumber rotationalP;
+  private final LoggedTunableNumber rotationalI;
+  private final LoggedTunableNumber rotationalD;
 
   private boolean isEnabled = true;
 
@@ -37,6 +46,15 @@ public class AdvancedPPHolonomicDriveController implements PathFollowingControll
    */
   public AdvancedPPHolonomicDriveController(
       PIDConstants translationConstants, PIDConstants rotationConstants, double period) {
+
+    translationalP = new LoggedTunableNumber("Pathplanner/TranslationalP", translationConstants.kP);
+    translationalI = new LoggedTunableNumber("Pathplanner/TranslationalI", translationConstants.kI);
+    translationalD = new LoggedTunableNumber("Pathplanner/TranslationalD", translationConstants.kD);
+
+    rotationalP = new LoggedTunableNumber("Pathplanner/RotationalP", rotationConstants.kP);
+    rotationalI = new LoggedTunableNumber("Pathplanner/RotationalI", rotationConstants.kI);
+    rotationalD = new LoggedTunableNumber("Pathplanner/RotationalD", rotationConstants.kD);
+
     this.xController =
         new PIDController(
             translationConstants.kP, translationConstants.kI, translationConstants.kD, period);
@@ -132,6 +150,21 @@ public class AdvancedPPHolonomicDriveController implements PathFollowingControll
     if (rotFeedbackOverride != null) {
       rotationFeedback = rotFeedbackOverride.getAsDouble();
     }
+
+    LoggedTunableNumber.ifChanged(
+        hashCode(),
+        (values) -> {
+          xController.setPID(values[0], values[1], values[2]);
+          yController.setPID(values[0], values[1], values[2]);
+
+          rotationController.setPID(values[3], values[4], values[5]);
+        },
+        translationalP,
+        translationalI,
+        translationalD,
+        rotationalP,
+        rotationalI,
+        rotationalD);
 
     return ChassisSpeeds.fromFieldRelativeSpeeds(
         xFF + xFeedback, yFF + yFeedback, rotationFF + rotationFeedback, currentPose.getRotation());

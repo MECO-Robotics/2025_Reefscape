@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.config.ModuleConfig;
+import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -26,7 +27,8 @@ public class DriveConstants {
       new CANBus(DriveMotorConstants.canBusName).isNetworkFD()
               && new CANBus(AzimuthMotorConstants.canBusName).isNetworkFD()
           ? 250.0
-          : 100.0; // If both Azimuth and Drive use CANFD, sample odometry at 250 Hz, if either loop
+          : 100.0; // If both Azimuth and Drive use CANFD, sample odometry at 250 Hz, if either
+  // loop
   // is not FD, sample odometry at 100 Hz
 
   public static final double trackWidth = Units.inchesToMeters(26.5);
@@ -45,19 +47,24 @@ public class DriveConstants {
   public static final double kDriveInertia = 0.025;
 
   public static final LinearVelocity maxSpeedAt12Volts =
-      FeetPerSecond.of(15); // MK4i 16.5 ft/s L3 Kraken FOC With 14t pinion
+      FeetPerSecond.of(15); // MK4i 16.5 ft/s L3 Kraken FOC With
+  // 14t pinion
 
   // Drive motor configuration
   public static final int driveMotorCurrentLimit = 50;
   public static final double driveMotorGearRatio =
-      1 / ((14.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0)); // Mk4i L3 with 14t pinion
+      1 / ((14.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0)); // Mk4i L3
+  // with 14t
+  // pinion
   public static final DCMotor driveGearbox = DCMotor.getKrakenX60Foc(1);
 
   // Drive encoder configuration
   public static final double driveEncoderPositionFactor =
-      2 * Math.PI / driveMotorGearRatio; // Rotor Rotations -> Wheel Radians
+      2 * Math.PI / driveMotorGearRatio; // Rotor Rotations ->
+  // Wheel Radians
   public static final double driveEncoderVelocityFactor =
-      (2 * Math.PI) / 60.0 / driveMotorGearRatio; // Rotor RPM -> Wheel Rad/Sec
+      (2 * Math.PI) / 60.0 / driveMotorGearRatio; // Rotor RPM ->
+  // Wheel Rad/Sec
 
   // Turn motor configuration
   public static final double steerMotorGearRatio = 150.0 / 7.0; // MK4i
@@ -71,7 +78,7 @@ public class DriveConstants {
       (2 * Math.PI) / 60.0 / steerMotorGearRatio; // RPM -> Rad/Sec
 
   // PathPlanner configuration
-  public static final double robotMassKg = 74.088;
+  public static final double robotMassKg = Units.lbsToKilograms(123);
   public static final double robotMOI = 6.883;
   public static final double wheelCOF = 1.2;
   public static final RobotConfig ppConfig =
@@ -86,6 +93,9 @@ public class DriveConstants {
               driveMotorCurrentLimit,
               1),
           moduleTranslations);
+
+  public static final PIDConstants translationPID = new PIDConstants(25, 0, 0);
+  public static final PIDConstants rotationPID = new PIDConstants(7, 0, 0);
 
   public static final DriveTrainSimulationConfig mapleSimConfig =
       DriveTrainSimulationConfig.Default()
