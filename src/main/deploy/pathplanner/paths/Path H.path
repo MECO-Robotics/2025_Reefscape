@@ -42,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -179.49208873233903
+    "rotation": -179.49208873233906
   },
   "reversed": false,
-  "folder": "Preset A",
+  "folder": "Auto alignment paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -178.5597269646917

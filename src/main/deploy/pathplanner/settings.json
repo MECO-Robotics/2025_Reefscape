@@ -3,9 +3,9 @@
   "robotLength": 0.6096,
   "holonomicMode": true,
   "pathFolders": [
+    "Center Blue Auto paths",
     "Auto alignment paths",
-    "Blue Auto paths",
-    "Preset A"
+    "Right Blue auto paths"
   ],
   "autoFolders": [
     "New Folder"
