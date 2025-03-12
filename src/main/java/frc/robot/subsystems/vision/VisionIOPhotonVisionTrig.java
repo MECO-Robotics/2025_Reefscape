@@ -19,6 +19,7 @@ public class VisionIOPhotonVisionTrig implements VisionIO {
   protected final PhotonCamera camera;
   protected final Transform3d robotToCamera;
   protected final Supplier<Rotation2d> gyroRotationSupplier;
+
   /**
    * Creates a new VisionIOPhotonVision.
    *
@@ -50,11 +51,12 @@ public class VisionIOPhotonVisionTrig implements VisionIO {
                 Rotation2d.fromDegrees(result.getBestTarget().getPitch()));
 
         Transform3d cameraToTarget = result.getBestTarget().getBestCameraToTarget();
-        // Transform3d bestFieldToRobot = bestFieldToCamera.plus(robotToCamera.inverse());
+        // Transform3d bestFieldToRobot =
+        // bestFieldToCamera.plus(robotToCamera.inverse());
 
         double distance = cameraToTarget.getTranslation().getNorm();
 
-        double tx = -Units.degreesToRadians(result.getBestTarget().getYaw());
+        double tx = Units.degreesToRadians(result.getBestTarget().getYaw());
         double ty = Units.degreesToRadians(result.getBestTarget().getPitch());
 
         Rotation2d gyro = gyroRotationSupplier.get();
