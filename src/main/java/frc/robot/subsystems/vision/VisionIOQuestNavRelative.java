@@ -64,19 +64,18 @@ public class VisionIOQuestNavRelative implements VisionIO {
           zeroPosition();
           offset =
               new Transform3d(
-                      new Pose3d(
-                          new Translation3d(5.643, 4, 0),
-                          new Rotation3d(0, 0, Math.toRadians(180))),
-                      new Pose3d())
-                  .plus(robotToCamera);
+                  new Pose3d(
+                      new Translation3d(5.643, 4, 0).plus(robotToCamera.getTranslation()),
+                      new Rotation3d(0, 0, Math.toRadians(0)).plus(robotToCamera.getRotation())),
+                  new Pose3d());
           hasAllianceReset = true;
         } else {
           zeroPosition();
           offset =
               new Transform3d(
                   new Pose3d(
-                          new Translation3d(11.893, 4, 0), new Rotation3d(0, 0, Math.toRadians(0)))
-                      .plus(robotToCamera),
+                      new Translation3d(11.893, 4, 0).plus(robotToCamera.getTranslation()),
+                      new Rotation3d(0, 0, Math.toRadians(180)).plus(robotToCamera.getRotation())),
                   new Pose3d(getPose()));
           hasAllianceReset = true;
         }
@@ -139,7 +138,7 @@ public class VisionIOQuestNavRelative implements VisionIO {
   }
 
   private Translation3d getQuestNavTranslation(float[] position) {
-    return new Translation3d(position[2], -position[0], position[1]);
+    return new Translation3d(-position[2], position[0], position[1]);
   }
 
   // Gets the Rotation of the Quest.

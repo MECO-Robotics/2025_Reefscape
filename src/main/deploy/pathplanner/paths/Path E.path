@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6624118203773242,
-        "y": 6.787770230910106
+        "x": 5.260428862362499,
+        "y": 2.400636068899612
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3999095354614024,
-        "y": 6.045954035974772
+        "x": 5.039427663552478,
+        "y": 2.7332930108777376
       },
       "isLocked": false,
-      "linkedName": "gournd Intake"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.769058498293421,
-        "y": 4.94152596217198
+        "x": 4.931056534111989,
+        "y": 2.9376508418671636
       },
       "prevControl": {
-        "x": 3.293200485270649,
-        "y": 5.341645788837557
+        "x": 5.149548907099614,
+        "y": 2.657071851286921
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "path 5 end"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.475435963061365
+    "rotation": 119.26638736363691
   },
   "reversed": false,
-  "folder": "Center Blue Auto paths",
+  "folder": "Auto alignment paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -136.9075653889993
+    "rotation": 118.93999541147944
   },
   "useDefaultConstraints": true
 }

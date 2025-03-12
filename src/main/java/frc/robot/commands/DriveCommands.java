@@ -2,6 +2,8 @@ package frc.robot.commands;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FileVersionException;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -19,12 +21,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+import org.json.simple.parser.ParseException;
 
 /** A collection of commands for controlling the drive subsystem. */
 public class DriveCommands {
@@ -239,6 +243,17 @@ public class DriveCommands {
                   System.out.println("\tkS: " + formatter.format(kS));
                   System.out.println("\tkV: " + formatter.format(kV));
                 }));
+  }
+
+  public static Command pathfindToPath(Drive drive, String path) {
+    try {
+      return AutoBuilder.pathfindThenFollowPath(
+          PathPlannerPath.fromPathFile(path),
+          new PathConstraints(4, 4, Math.toRadians(360), Math.toRadians(360), 12, false));
+    } catch (FileVersionException | IOException | ParseException e) {
+      e.printStackTrace();
+    }
+    return Commands.none();
   }
 
   /** Measures the robot's wheel radius by spinning in a circle. */
