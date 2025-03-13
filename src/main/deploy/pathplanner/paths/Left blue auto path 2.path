@@ -1,0 +1,99 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.229444999235812,
+        "y": 3.1127699008381713
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.37153497760327,
+        "y": 2.8205920733302663
+      },
+      "isLocked": false,
+      "linkedName": "Left blue auto path 1 end"
+    },
+    {
+      "anchor": {
+        "x": 5.41702302631579,
+        "y": 1.6580592105263157
+      },
+      "prevControl": {
+        "x": 5.791470595327252,
+        "y": 2.4010438389651827
+      },
+      "nextControl": {
+        "x": 5.081453610344261,
+        "y": 0.9922172116070428
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.3772203947368418,
+        "y": 0.4938322368421052
+      },
+      "prevControl": {
+        "x": 4.251589845500587,
+        "y": 0.5278746367591288
+      },
+      "nextControl": {
+        "x": 2.8024303732959983,
+        "y": 0.47145355954372503
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.9236842105263158,
+        "y": 1.3501644736842104
+      },
+      "prevControl": {
+        "x": 2.24138818627332,
+        "y": 0.31489425913732916
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Left blue auto path 2 end"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "CoralWait",
+      "waypointRelativePos": 0.49012567324955125,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "Intake",
+      "waypointRelativePos": 2.1436265709156217,
+      "endWaypointRelativePos": 3.0,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 50.19442890773484
+  },
+  "reversed": false,
+  "folder": "Left Blue auto paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 121.58129191893129
+  },
+  "useDefaultConstraints": true
+}
