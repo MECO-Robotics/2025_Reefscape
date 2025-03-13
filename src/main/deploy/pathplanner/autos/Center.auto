@@ -7,13 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left blue auto path 1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Score"
+            "pathName": "New Path"
           }
         }
       ]
