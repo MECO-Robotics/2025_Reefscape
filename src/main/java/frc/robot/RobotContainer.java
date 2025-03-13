@@ -9,13 +9,15 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.CoralPreset;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.IntakeCommands;
 import frc.robot.subsystems.components.Components;
+import frc.robot.subsystems.drive.AutoDriveConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.Module;
 import frc.robot.subsystems.drive.azimuth_motor.AzimuthMotorConstants;
@@ -45,10 +47,10 @@ import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionTrig;
 import frc.robot.subsystems.vision.VisionIOQuestNav;
-import frc.robot.subsystems.vision.VisionIOQuestNavRelative;
-import java.util.function.DoubleSupplier;
+import frc.robot.util.controller.ControllerUtil;
+import java.util.Set;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -65,8 +67,7 @@ public class RobotContainer {
   private Flywheel leftCoralRollerMotor;
   private PositionJoint elevatorMotor;
   private PositionJoint elbowMotor;
-  private Flywheel endEffectorMotor;
-  private VisionIOQuestNavRelative questNav;
+  // private Flywheel endEffectorMotor;
 
   @SuppressWarnings("unused")
   private final Vision vision;
@@ -74,37 +75,6 @@ public class RobotContainer {
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
   private final CommandXboxController coPilotController = new CommandXboxController(1);
-
-  private final LoggedNetworkBoolean l1;
-
-  private final LoggedNetworkBoolean l2;
-  ;
-
-  private final LoggedNetworkBoolean l3;
-
-  private final LoggedNetworkBoolean l4;
-
-  private final LoggedNetworkBoolean HANDOFF;
-
-  private final LoggedNetworkBoolean Score;
-
-  private final LoggedNetworkBoolean Reattempt;
-
-  private final LoggedNetworkBoolean reefA;
-  private final LoggedNetworkBoolean reefB;
-  private final LoggedNetworkBoolean reefC;
-  private final LoggedNetworkBoolean reefD;
-  private final LoggedNetworkBoolean reefE;
-  private final LoggedNetworkBoolean reefF;
-  private final LoggedNetworkBoolean reefG;
-  private final LoggedNetworkBoolean reefH;
-  private final LoggedNetworkBoolean reefI;
-  private final LoggedNetworkBoolean reefJ;
-  private final LoggedNetworkBoolean reefK;
-  private final LoggedNetworkBoolean reefL;
-
-  private final LoggedNetworkBoolean resetPoseRed;
-  private final LoggedNetworkBoolean resetPoseBlue;
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -185,10 +155,10 @@ public class RobotContainer {
                 PositionJointConstants.PIVOT_GAINS);
 
         // End Effector
-        endEffectorMotor =
-            new Flywheel(
-                new FlywheelIOSparkMax("EndEffectorMotor", FlywheelConstants.END_EFFECTOR_CONFIG),
-                FlywheelConstants.END_EFFECTOR_GAINS);
+        // endEffectorMotor = new Flywheel(
+        // new FlywheelIOSparkMax("EndEffectorMotor",
+        // FlywheelConstants.END_EFFECTOR_CONFIG),
+        // FlywheelConstants.END_EFFECTOR_GAINS);
 
         VisionIOQuestNav questNav =
             new VisionIOQuestNav(
@@ -227,13 +197,6 @@ public class RobotContainer {
                 null,
                 null);
 
-        // vision = new Vision(
-        // drive::addVisionMeasurement,
-        // new VisionIOPhotonVisionSim(
-        // VisionConstants.camera0Name, VisionConstants.robotToQuest, drive::getPose),
-        // new VisionIOPhotonVisionSim(
-        // VisionConstants.camera1Name, VisionConstants.robotToCamera1,
-        // drive::getPose));
         vision =
             new Vision(
                 drive::addVisionMeasurement,
@@ -278,10 +241,9 @@ public class RobotContainer {
                 new PositionJointIOSim("ElbowMotor", PositionJointConstants.ELBOW_CONFIG),
                 PositionJointConstants.PIVOT_GAINS_SIM);
 
-        endEffectorMotor =
-            new Flywheel(
-                new FlywheelIOSim("EndEffectorMotor", FlywheelConstants.END_EFFECTOR_CONFIG),
-                FlywheelConstants.END_EFFECTOR_GAINS);
+        // endEffectorMotor = new Flywheel(
+        // new FlywheelIOSim("EndEffectorMotor", FlywheelConstants.END_EFFECTOR_CONFIG),
+        // FlywheelConstants.END_EFFECTOR_GAINS);
 
         break;
 
@@ -336,9 +298,9 @@ public class RobotContainer {
             new PositionJoint(
                 new PositionJointIOReplay("ElbowMotor"), PositionJointConstants.PIVOT_GAINS);
 
-        endEffectorMotor =
-            new Flywheel(
-                new FlywheelIOReplay("EndEffectorMotor"), FlywheelConstants.END_EFFECTOR_GAINS);
+        // endEffectorMotor = new Flywheel(
+        // new FlywheelIOReplay("EndEffectorMotor"),
+        // FlywheelConstants.END_EFFECTOR_GAINS);
 
         break;
     }
@@ -351,50 +313,6 @@ public class RobotContainer {
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-
-    // Set up SysId routines
-    // autoChooser.addOption(
-    // "Drive Wheel Radius Characterization",
-    // DriveCommands.wheelRadiusCharacterization(drive));
-    // autoChooser.addOption(
-    // "Drive Simple FF Characterization",
-    // DriveCommands.feedforwardCharacterization(drive));
-    // autoChooser.addOption(
-    // "Drive SysId (Quasistatic Forward)",
-    // drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    // autoChooser.addOption(
-    // "Drive SysId (Quasistatic Reverse)",
-    // drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    // autoChooser.addOption(
-    // "Drive SysId (Dynamic Forward)",
-    // drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    // autoChooser.addOption(
-    // "Drive SysId (Dynamic Reverse)",
-    // drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-
-    l1 = new LoggedNetworkBoolean("/Presets/L1", false);
-    l2 = new LoggedNetworkBoolean("/Presets/L2", false);
-    l3 = new LoggedNetworkBoolean("/Presets/L3", false);
-    l4 = new LoggedNetworkBoolean("/Presets/L4", false);
-    HANDOFF = new LoggedNetworkBoolean("/Presets/HANDOFF", false);
-    Score = new LoggedNetworkBoolean("/Score/", false);
-    Reattempt = new LoggedNetworkBoolean("/Reattempt/", false);
-
-    reefA = new LoggedNetworkBoolean("/Presets/ReefA", false);
-    reefB = new LoggedNetworkBoolean("/Presets/ReefB", false);
-    reefC = new LoggedNetworkBoolean("/Presets/ReefC", false);
-    reefD = new LoggedNetworkBoolean("/Presets/ReefD", false);
-    reefE = new LoggedNetworkBoolean("/Presets/ReefE", false);
-    reefF = new LoggedNetworkBoolean("/Presets/ReefF", false);
-    reefG = new LoggedNetworkBoolean("/Presets/ReefG", false);
-    reefH = new LoggedNetworkBoolean("/Presets/ReefH", false);
-    reefI = new LoggedNetworkBoolean("/Presets/ReefI", false);
-    reefJ = new LoggedNetworkBoolean("/Presets/ReefJ", false);
-    reefK = new LoggedNetworkBoolean("/Presets/ReefK", false);
-    reefL = new LoggedNetworkBoolean("/Presets/ReefL", false);
-
-    resetPoseRed = new LoggedNetworkBoolean("QuestReset/ResetRed", false);
-    resetPoseBlue = new LoggedNetworkBoolean("QuestReset/ResetBlue", false);
 
     NamedCommands.registerCommand(
         "Intake", IntakeCommands.deployIntake(rightCoralRotationMotor, rightCoralRollerMotor));
@@ -432,12 +350,10 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    // TODO: Remove "filler" and replace with actual getPosition methods of actual
     // subsystems
-    DoubleSupplier filler = () -> 0;
     new Components(
         elevatorMotor::getPosition,
-        filler,
+        elbowMotor::getPosition,
         rightCoralRotationMotor::getPosition,
         leftCoralRotationMotor::getPosition);
   }
@@ -470,20 +386,6 @@ public class RobotContainer {
     // Switch to X pattern when X button is pressed
     driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    Pose2d reefAPos = new Pose2d(3.347, 4.181, Rotation2d.fromDegrees(0));
-    Pose2d reefBPos = new Pose2d(3.304, 3.869, Rotation2d.fromDegrees(0));
-    Pose2d reefCPos = new Pose2d(3.730, 3.104, Rotation2d.fromDegrees(55.4));
-    Pose2d reefDPos = new Pose2d(4.056, 2.948, Rotation2d.fromDegrees(54.7));
-    Pose2d reefEPos = new Pose2d(4.948, 2.877, Rotation2d.fromDegrees(119.1));
-    Pose2d reefFPos = new Pose2d(5.232, 3.061, Rotation2d.fromDegrees(122.3));
-
-    // Pose2d reefGPos = new Pose2d(5.685, 3.869, Rotation2d.fromDegrees(-178.6));
-    // Pose2d reefHPos = new Pose2d(5.671, 4.181, Rotation2d.fromDegrees(-178.6));
-
-    Pose2d reefIPos = new Pose2d(5.232, 4.932, Rotation2d.fromDegrees(-117.8));
-    Pose2d reefJPos = new Pose2d(4.92, 5.102, Rotation2d.fromDegrees(-117.8));
-    Pose2d reefKPos = new Pose2d(4.041, 5.130, Rotation2d.fromDegrees(-61.3));
-    Pose2d reefLPos = new Pose2d(3.772, 4.954, Rotation2d.fromDegrees(-61.9));
     // // Reset gyro / odometry
     final Runnable resetGyro =
         () ->
@@ -525,14 +427,6 @@ public class RobotContainer {
                 elbowMotor,
                 ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.WAIT_FOR_CORAL));
 
-    coPilotController
-        .y()
-        .onTrue(
-            ElevatorCommands.moveSafe(
-                elevatorMotor,
-                elbowMotor,
-                ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.WAIT_FOR_CORAL));
-
     // Coral Intake
     driverController // Right bumper to deploy right coral intake
         .rightBumper()
@@ -546,115 +440,42 @@ public class RobotContainer {
 
     // Trigger for the elevator positions
     // Shows up on the dashboard
-    new Trigger(l1::get)
-        .onTrue(
-            ElevatorCommands.moveSafe(
-                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_ONE_CORAL));
-    new Trigger(l2::get)
-        .onTrue(
-            ElevatorCommands.moveSafe(
-                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_TWO_CORAL));
-    new Trigger(l3::get)
-        .onTrue(
-            ElevatorCommands.moveSafe(
-                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_THREE_CORAL));
-    new Trigger(l4::get)
-        .onTrue(
-            ElevatorCommands.moveSafe(
-                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
-    new Trigger(HANDOFF::get).onTrue(ElevatorCommands.handOff(elevatorMotor, elbowMotor));
-    new Trigger(Score::get).onTrue(ElevatorCommands.scorePreset(elbowMotor));
-    new Trigger(Reattempt::get).onTrue(ElevatorCommands.scoreReattempt(elbowMotor));
+    // Right side reef
 
-    new Trigger(l1::get)
-        .or(new Trigger(l2::get))
-        .or(new Trigger(l3::get))
-        .or(new Trigger(l4::get))
-        .or(new Trigger(HANDOFF::get))
-        .or(new Trigger(Score::get))
-        .or(new Trigger(Reattempt::get))
-        .onTrue(
-            new InstantCommand(
-                () -> {
-                  l1.set(false);
-                  l2.set(false);
-                  l3.set(false);
-                  l4.set(false);
-                  HANDOFF.set(false);
-                  Score.set(false);
-                  Reattempt.set(false);
+    coPilotController.rightBumper().whileTrue(autoDrive(0));
+    coPilotController.leftBumper().whileTrue(autoDrive(1));
+  }
 
-                  if (elevatorMotor.getCurrentCommand() != null) {
-                    elevatorMotor.getCurrentCommand().cancel();
-                  }
+  private Command autoDrive(int index) {
+    Supplier<Pose2d> selectedReefPose =
+        () ->
+            AutoDriveConstants.reefPoses[index][
+                ControllerUtil.getIndex(
+                    coPilotController.getLeftX(), coPilotController.getLeftY())];
 
-                  if (elbowMotor.getCurrentCommand() != null) {
-                    elbowMotor.getCurrentCommand().cancel();
-                  }
-                }));
+    Supplier<CoralPreset> selectedPreset =
+        () ->
+            AutoDriveConstants.coralPresets[
+                ControllerUtil.getIndex(
+                    coPilotController.getRightX(), coPilotController.getRightY())];
 
-    // Auto Driving
-    // Poses for each of the different branches in the reef
-    // See 4481's strategy sheet to find out which branches are which letter
-    /*
-     * new Trigger(reefA::get).onTrue(DriveCommands.pathfindToPose(drive,
-     * reefAPos));
-     * new Trigger(reefB::get).onTrue(DriveCommands.pathfindToPose(drive,
-     * reefBPos));
-     * new Trigger(reefC::get).onTrue(DriveCommands.pathfindToPose(drive,
-     * reefCPos));
-     * new Trigger(reefD::get).onTrue(DriveCommands.pathfindToPose(drive,
-     * reefDPos));
-     * new Trigger(reefE::get).onTrue(DriveCommands.pathfindToPose(drive,
-     * reefEPos));
-     * new Trigger(reefF::get).onTrue(DriveCommands.pathfindToPose(drive,
-     * reefFPos));
-     * // new Trigger(reefG::get).onTrue(DriveCommands.pathfindToPath(drive,
-     * // reefGPos));
-     */
-    new Trigger(reefA::get).onTrue(DriveCommands.pathfindToPath(drive, "Path A"));
-    new Trigger(reefB::get).onTrue(DriveCommands.pathfindToPath(drive, "Path B"));
-    new Trigger(reefC::get).onTrue(DriveCommands.pathfindToPath(drive, "Path C"));
-    new Trigger(reefD::get).onTrue(DriveCommands.pathfindToPath(drive, "Path D"));
-    new Trigger(reefE::get).onTrue(DriveCommands.pathfindToPath(drive, "Path E"));
-    new Trigger(reefF::get).onTrue(DriveCommands.pathfindToPath(drive, "Path F"));
-    new Trigger(reefG::get).onTrue(DriveCommands.pathfindToPath(drive, "Path G"));
-    new Trigger(reefH::get).onTrue(DriveCommands.pathfindToPath(drive, "Path H"));
-    new Trigger(reefI::get).onTrue(DriveCommands.pathfindToPath(drive, "Path I"));
-    new Trigger(reefI::get).onTrue(DriveCommands.pathfindToPose(drive, reefIPos));
-    new Trigger(reefJ::get).onTrue(DriveCommands.pathfindToPose(drive, reefJPos));
-    new Trigger(reefK::get).onTrue(DriveCommands.pathfindToPose(drive, reefKPos));
-    new Trigger(reefL::get).onTrue(DriveCommands.pathfindToPose(drive, reefLPos));
-
-    // Trigger for the reef positions that goes on the touchscreen
-    new Trigger(reefA::get)
-        .or(reefB::get)
-        .or(reefC::get)
-        .or(reefD::get)
-        .or(reefE::get)
-        .or(reefF::get)
-        .or(reefG::get)
-        .or(reefH::get)
-        .or(reefI::get)
-        .or(reefJ::get)
-        .or(reefK::get)
-        .or(reefL::get)
-        .onTrue(
-            new InstantCommand(
-                () -> {
-                  reefA.set(false);
-                  reefB.set(false);
-                  reefC.set(false);
-                  reefD.set(false);
-                  reefE.set(false);
-                  reefF.set(false);
-                  reefG.set(false);
-                  reefH.set(false);
-                  reefI.set(false);
-                  reefJ.set(false);
-                  reefK.set(false);
-                  reefL.set(false);
-                }));
+    return Commands.defer(
+        () ->
+            DriveCommands.pathfindToPose(drive, selectedReefPose.get())
+                .asProxy()
+                .alongWith(
+                    new WaitUntilCommand(
+                            () ->
+                                selectedReefPose
+                                        .get()
+                                        .getTranslation()
+                                        .getDistance(drive.getPose().getTranslation())
+                                    < AutoDriveConstants.DISTANCE_THRESH)
+                        .andThen(
+                            new PrintCommand("Moving Arm and elevator"),
+                            ElevatorCommands.moveSafe(
+                                elevatorMotor, elbowMotor, selectedPreset.get()))),
+        Set.of(drive, elevatorMotor, elbowMotor));
   }
 
   /**
