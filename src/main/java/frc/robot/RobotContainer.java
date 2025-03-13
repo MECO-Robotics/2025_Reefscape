@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.CoralPreset;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ElevatorCommands;
+import frc.robot.commands.ElevatorCommands.ELEVATOR_HEIGHT_PRESETS;
 import frc.robot.commands.IntakeCommands;
 import frc.robot.subsystems.components.Components;
 import frc.robot.subsystems.drive.AutoDriveConstants;
@@ -444,6 +444,12 @@ public class RobotContainer {
 
     coPilotController.rightBumper().onTrue(autoDrive(0));
     coPilotController.leftBumper().onTrue(autoDrive(1));
+    coPilotController
+        .a()
+        .onTrue(
+            ElevatorCommands.moveSafe(
+                elevatorMotor, elbowMotor, ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
+    coPilotController.b().onTrue(ElevatorCommands.handOff(elevatorMotor, elbowMotor));
   }
 
   private Command autoDrive(int index) {
@@ -473,7 +479,6 @@ public class RobotContainer {
                                         .getDistance(drive.getPose().getTranslation())
                                     < AutoDriveConstants.DISTANCE_THRESH)
                         .andThen(
-                            new PrintCommand("Moving Arm and elevator"),
                             ElevatorCommands.moveSafe(
                                 elevatorMotor, elbowMotor, selectedPreset.get())),
                 Set.of(elevatorMotor, elbowMotor)));

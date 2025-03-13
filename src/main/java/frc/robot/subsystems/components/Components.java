@@ -14,15 +14,6 @@ public class Components extends SubsystemBase {
   private final DoubleSupplier intakeRight;
   private final DoubleSupplier intakeLeft;
 
-  // private final LoggedTunableNumber elevator = new
-  // LoggedTunableNumber("ElevatorSimPosition", 0);
-  // private final LoggedTunableNumber pivot = new
-  // LoggedTunableNumber("PivotSimPosition", 0);
-  // private final LoggedTunableNumber intakeRight =
-  // new LoggedTunableNumber("RightIntakeSimPosition", 0);
-  // private final LoggedTunableNumber intakeLeft =
-  // new LoggedTunableNumber("LeftIntakeSimPosition", 0);
-
   public Components(
       DoubleSupplier elevator,
       DoubleSupplier pivot,
@@ -43,13 +34,16 @@ public class Components extends SubsystemBase {
 
     // Elevator
     poses[1] = new Pose3d(new Translation3d(0, 0, elevator.getAsDouble() / 2), new Rotation3d());
-    poses[2] = new Pose3d(new Translation3d(0, 0, elevator.getAsDouble()), new Rotation3d());
+    poses[2] = new Pose3d(new Translation3d(0, 0, elevator.getAsDouble() + 0.5), new Rotation3d());
 
     // Pivot
     poses[3] =
         new Pose3d(
             new Translation3d(0.40005 - 0.3048, 0, elevator.getAsDouble() + 0.31116367),
-            new Rotation3d(0, Units.degreesToRadians(pivot.getAsDouble()), 0));
+            new Rotation3d(
+                0,
+                Units.rotationsToRadians(-pivot.getAsDouble()) - Units.degreesToRadians(-90),
+                0));
 
     // Intake Right
     poses[4] =

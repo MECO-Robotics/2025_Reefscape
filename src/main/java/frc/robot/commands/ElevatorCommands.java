@@ -94,7 +94,8 @@ public class ElevatorCommands {
                 // move wrist right after in safe position
                 .andThen(
                     PositionJoint.setPosition(wristMotor, () -> preset.getWristPos().getRotations())
-                        // wait for the wrist position to be 0 (horizontal position), then move the
+                        // wait for the wrist position to be 0 (horizontal position), then move
+                        // the
                         // elevator again
                         .alongWith(
                             Commands.waitUntil(
