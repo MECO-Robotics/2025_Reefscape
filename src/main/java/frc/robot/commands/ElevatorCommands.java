@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.position_joint.PositionJointPositionCommand;
 import frc.robot.subsystems.position_joint.PositionJoint;
@@ -58,6 +59,9 @@ public class ElevatorCommands {
         new LoggedTunableNumber("Presets/EndEffectorVelocity", 0);
   }
 
+  public static final LoggedTunableNumber tinyBitDown =
+      new LoggedTunableNumber("Tiny Bit Down", 0.1);
+
   public static final Command setPreset(
       PositionJoint elevatorMotor, PositionJoint wristMotor, CoralPreset preset) {
     // move elevator to L3, move wrist, then down or up depending on where to score
@@ -81,22 +85,29 @@ public class ElevatorCommands {
                                 > ELEVATOR_HEIGHT_PRESETS.SAFE.getElevatorPos())
                     .andThen(
                         PositionJoint.setPosition(
-                            wristMotor, () -> preset.getWristPos().getRotations()))),
+                            wristMotor, () -> preset.getWristPos().getRotations())),
+                new PrintCommand("From Handoff below")),
         // if elevator is below 0, then move elevator to the safe position
-        PositionJoint.setPosition(
-                elevatorMotor, () -> ELEVATOR_HEIGHT_PRESETS.SAFE.getElevatorPos())
-            // move wrist right after in safe position
-            .andThen(
-                PositionJoint.setPosition(wristMotor, () -> preset.getWristPos().getRotations())
-                    // wait for the wrist position to be 0 (horizontal position), then move the
-                    // elevator again
-                    .alongWith(
-                        Commands.waitUntil(
-                            () ->
-                                wristMotor.getPosition()
-                                    > ELEVATOR_HEIGHT_PRESETS.SAFE.getWristPos().getRotations()))
-                    .andThen(
-                        PositionJoint.setPosition(elevatorMotor, () -> preset.getElevatorPos()))),
+        Commands.parallel(
+            PositionJoint.setPosition(
+                    elevatorMotor, () -> ELEVATOR_HEIGHT_PRESETS.SAFE.getElevatorPos())
+                // move wrist right after in safe position
+                .andThen(
+                    PositionJoint.setPosition(wristMotor, () -> preset.getWristPos().getRotations())
+                        // wait for the wrist position to be 0 (horizontal position), then move the
+                        // elevator again
+                        .alongWith(
+                            Commands.waitUntil(
+                                () ->
+                                    wristMotor.getPosition()
+                                        > ELEVATOR_HEIGHT_PRESETS
+                                            .SAFE
+                                            .getWristPos()
+                                            .getRotations()))
+                        .andThen(
+                            PositionJoint.setPosition(
+                                elevatorMotor, () -> preset.getElevatorPos()))),
+            new PrintCommand("From Handoff above")),
         // check and see if the elevator is above 0
         () -> preset.getElevatorPos() > ELEVATOR_HEIGHT_PRESETS.HANDOFF.getElevatorPos());
   }
@@ -109,10 +120,12 @@ public class ElevatorCommands {
         .andThen(
             PositionJoint.setPosition(
                 wristMotor, () -> ELEVATOR_HEIGHT_PRESETS.HANDOFF.getWristPos().getRotations()))
-        // when the wrist is done, this command ends, even if it doesn't reach it's point
+        // when the wrist is done, this command ends, even if it doesn't reach it's
+        // point
         .deadlineFor(
             PositionJoint.setPosition(
-                elevatorMotor, () -> ELEVATOR_HEIGHT_PRESETS.SAFE.getElevatorPos()))
+                elevatorMotor, () -> ELEVATOR_HEIGHT_PRESETS.SAFE.getElevatorPos()),
+            new PrintCommand("To Handoff"))
         // elevator goes down to pickup the piece.
         .andThen(
             PositionJoint.setPosition(
@@ -128,15 +141,13 @@ public class ElevatorCommands {
         PositionJoint.setPosition(elevatorMotor, () -> preset.getElevatorPos())
             .alongWith(
                 PositionJoint.setPosition(wristMotor, () -> preset.getWristPos().getRotations())),
-        // check if the current position of the wrist and elevator is the handoff position
+        // check if the current position of the wrist and elevator is the handoff
+        // position
         () ->
             elevatorMotor.getDesiredPosition() == ELEVATOR_HEIGHT_PRESETS.HANDOFF.getElevatorPos()
                 && wristMotor.getDesiredPosition()
                     == ELEVATOR_HEIGHT_PRESETS.HANDOFF.getWristPos().getRotations());
   }
-
-  public static final LoggedTunableNumber tinyBitDown =
-      new LoggedTunableNumber("Tiny Bit Down", 0.1);
 
   public static final Command scorePreset(PositionJoint wristMotor) {
     // move wrist down to place and score (remember to back up!)

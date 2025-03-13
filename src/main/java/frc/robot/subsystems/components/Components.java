@@ -5,19 +5,19 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.util.mechanical_advantage.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Components extends SubsystemBase {
   private final DoubleSupplier elevator;
-  // private final DoubleSupplier pivot;
+  private final DoubleSupplier pivot;
   private final DoubleSupplier intakeRight;
   private final DoubleSupplier intakeLeft;
 
   // private final LoggedTunableNumber elevator = new
   // LoggedTunableNumber("ElevatorSimPosition", 0);
-  private final LoggedTunableNumber pivot = new LoggedTunableNumber("PivotSimPosition", 0);
+  // private final LoggedTunableNumber pivot = new
+  // LoggedTunableNumber("PivotSimPosition", 0);
   // private final LoggedTunableNumber intakeRight =
   // new LoggedTunableNumber("RightIntakeSimPosition", 0);
   // private final LoggedTunableNumber intakeLeft =
@@ -29,7 +29,7 @@ public class Components extends SubsystemBase {
       DoubleSupplier intakeRight,
       DoubleSupplier intakeLeft) {
     this.elevator = elevator;
-    // this.pivot = pivot;
+    this.pivot = pivot;
     this.intakeRight = intakeRight;
     this.intakeLeft = intakeLeft;
   }
