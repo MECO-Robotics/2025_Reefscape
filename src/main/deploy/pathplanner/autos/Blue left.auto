@@ -5,28 +5,73 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "parallel",
                 "data": {
-                  "pathName": "Left blue auto path 1"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Left blue auto path 1"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Elevator L4"
+                      }
+                    }
+                  ]
                 }
               },
               {
-                "type": "named",
+                "type": "wait",
                 "data": {
-                  "name": "Elevator L4"
+                  "waitTime": 2.0
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "Score"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator L4"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Score"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              }
+            ]
           }
         }
       ]
