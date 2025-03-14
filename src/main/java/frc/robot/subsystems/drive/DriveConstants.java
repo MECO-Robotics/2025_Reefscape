@@ -60,7 +60,7 @@ public class DriveConstants {
   public static final DCMotor driveGearbox = DCMotor.getKrakenX60Foc(1);
 
   // Module limits for sim
-  public static final ModuleLimits currentModuleLimits = new ModuleLimits(10, 10, 10, 2 * Math.PI);
+  public static final ModuleLimits currentModuleLimits = new ModuleLimits(10, 20, 10, 2 * Math.PI);
 
   // Drive encoder configuration
   public static final double driveEncoderPositionFactor =

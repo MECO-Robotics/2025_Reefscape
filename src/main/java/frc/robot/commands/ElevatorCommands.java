@@ -16,7 +16,7 @@ public class ElevatorCommands {
   public static final class ELEVATOR_HEIGHT_PRESETS {
 
     public static final CoralPreset HANDOFF =
-        new CoralPreset("HandOff", 0, Rotation2d.fromRotations(-0.25));
+        new CoralPreset("HandOff", -0.07, Rotation2d.fromRotations(-0.25));
 
     public static final CoralPreset STOW =
         new CoralPreset("Stow", 0.0, Rotation2d.fromRotations(0.25));
@@ -28,13 +28,13 @@ public class ElevatorCommands {
         new CoralPreset("L1", 0.35, Rotation2d.fromRotations(-0.21));
 
     public static final CoralPreset L_TWO_CORAL =
-        new CoralPreset("L2", 0.55, Rotation2d.fromRotations(-0.21));
+        new CoralPreset("L2", 0.5, Rotation2d.fromRotations(-0.21));
 
     public static final CoralPreset L_THREE_CORAL =
         new CoralPreset("L3", 0.5, Rotation2d.fromRotations(0.15));
 
     public static final CoralPreset L_FOUR_CORAL =
-        new CoralPreset("L4", 1.01, Rotation2d.fromRotations(0.16));
+        new CoralPreset("L4", 1.0, Rotation2d.fromRotations(0.16));
 
     public static final LoggedTunableNumber WRIST_HANDOFF =
         new LoggedTunableNumber("Presets/WristPosition/Handoff", 0);

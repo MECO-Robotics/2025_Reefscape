@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.CoralPreset;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ElevatorCommands;
-import frc.robot.commands.ElevatorCommands.ELEVATOR_HEIGHT_PRESETS;
 import frc.robot.commands.IntakeCommands;
 import frc.robot.subsystems.components.Components;
 import frc.robot.subsystems.drive.AutoDriveConstants;
@@ -188,7 +187,7 @@ public class RobotContainer {
         // vision
         vision = new Vision(drive::addVisionMeasurement, questNav);
 
-        driverController.b().onTrue(Commands.runOnce(questNav::resetPose).ignoringDisable(true));
+        driverController.b().onTrue(Commands.runOnce(questNav::resetHeading).ignoringDisable(true));
 
         break;
 
@@ -371,16 +370,6 @@ public class RobotContainer {
     // work
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-    // Configure the button bindings
-    configureButtonBindings();
-
-    // subsystems
-    new Components(
-        elevatorMotor::getPosition,
-        elbowMotor::getPosition,
-        rightCoralRotationMotor::getPosition,
-        leftCoralRotationMotor::getPosition);
-
     reefA = new LoggedNetworkBoolean("/Presets/ReefA", false);
     reefB = new LoggedNetworkBoolean("/Presets/ReefB", false);
     reefC = new LoggedNetworkBoolean("/Presets/ReefC", false);
@@ -393,6 +382,16 @@ public class RobotContainer {
     reefJ = new LoggedNetworkBoolean("/Presets/ReefJ", false);
     reefK = new LoggedNetworkBoolean("/Presets/ReefK", false);
     reefL = new LoggedNetworkBoolean("/Presets/ReefL", false);
+
+    // Configure the button bindings
+    configureButtonBindings();
+
+    // subsystems
+    new Components(
+        elevatorMotor::getPosition,
+        elbowMotor::getPosition,
+        rightCoralRotationMotor::getPosition,
+        leftCoralRotationMotor::getPosition);
   }
 
   Pose2d reefAPos = new Pose2d(3.17, 4.18, Rotation2d.fromDegrees(0));
@@ -459,15 +458,7 @@ public class RobotContainer {
             ElevatorCommands.moveSafe(
                 elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
 
-    coPilotController
-        .povUp()
-        .onTrue(
-            ElevatorCommands.moveSafe(
-                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
-
     driverController.povDown().onTrue(ElevatorCommands.handOff(elevatorMotor, elbowMotor));
-
-    coPilotController.povDown().onTrue(ElevatorCommands.handOff(elevatorMotor, elbowMotor));
 
     driverController
         .y()
@@ -528,14 +519,12 @@ public class RobotContainer {
                 elbowMotor,
                 ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.WAIT_FOR_CORAL));
 
+    coPilotController.povRight().onTrue(ElevatorCommands.scorePreset(elbowMotor));
+
     coPilotController.rightBumper().onTrue(autoDrive(0));
     coPilotController.leftBumper().onTrue(autoDrive(1));
-    coPilotController
-        .a()
-        .onTrue(
-            ElevatorCommands.moveSafe(
-                elevatorMotor, elbowMotor, ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
-    coPilotController.b().onTrue(ElevatorCommands.handOff(elevatorMotor, elbowMotor));
+
+    coPilotController.x().whileTrue(ElevatorCommands.scorePreset(elbowMotor));
 
     new Trigger(reefA::get).onTrue(DriveCommands.pathfindToPose(drive, reefAPos));
     new Trigger(reefB::get).onTrue(DriveCommands.pathfindToPose(drive, reefBPos));

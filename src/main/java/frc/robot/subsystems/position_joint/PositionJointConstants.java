@@ -78,7 +78,7 @@ public class PositionJointConstants {
           "");
 
   public static final PositionJointGains ELEVATOR_GAINS =
-      new PositionJointGains(15, 0, 0, 0.26, 0.4, 3.75, .3, 5, 5.0, -0.287, 1.014, 0.01, 0);
+      new PositionJointGains(8, 0, 0, 0.26, 0.475, 3.5, .3, 5, 5.0, -0.287, 1.014, 0.01, 0);
 
   public static final PositionJointGains ELEVATOR_GAINS_SIM =
       new PositionJointGains(10, 0, 0, 0.25, 0.5, 0.75, 0, 8.0, 4.0, -0.287, 1.014, 0.01, 0);
