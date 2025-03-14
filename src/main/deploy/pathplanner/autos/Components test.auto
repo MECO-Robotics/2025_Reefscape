@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "test path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Four"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralWait"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Three"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralWait"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stow"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

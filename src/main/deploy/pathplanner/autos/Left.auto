@@ -9,18 +9,6 @@
           "data": {
             "pathName": "Left blue auto path 1"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left blue auto path 2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left blue auto path 3"
-          }
         }
       ]
     }
