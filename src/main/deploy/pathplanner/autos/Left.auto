@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left blue auto path 1"
+            "pathName": "right blue 1"
           }
         },
         {
@@ -25,13 +25,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left blue auto path 2"
+            "pathName": "Right blue 2"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left blue auto path 3"
+            "pathName": "Right blue 3"
           }
         },
         {
@@ -49,7 +55,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left blue auto path 4"
+            "pathName": "Right blue 4"
           }
         }
       ]
