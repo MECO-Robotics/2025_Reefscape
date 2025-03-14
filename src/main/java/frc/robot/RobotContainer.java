@@ -312,12 +312,15 @@ public class RobotContainer {
      */
 
     // Set up auto routines
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     NamedCommands.registerCommand(
-        "Intake", IntakeCommands.deployIntake(rightCoralRotationMotor, rightCoralRollerMotor));
+        "LIntake", IntakeCommands.deployIntake(leftCoralRotationMotor, leftCoralRollerMotor));
     NamedCommands.registerCommand(
-        "Stow", IntakeCommands.stowIntake(rightCoralRotationMotor, rightCoralRollerMotor));
+        "LStow", IntakeCommands.stowIntake(leftCoralRotationMotor, leftCoralRollerMotor));
+    NamedCommands.registerCommand(
+        "RIntake", IntakeCommands.deployIntake(rightCoralRotationMotor, rightCoralRollerMotor));
+    NamedCommands.registerCommand(
+        "RStow", IntakeCommands.stowIntake(rightCoralRotationMotor, rightCoralRollerMotor));
 
     NamedCommands.registerCommand(
         "One",
@@ -346,6 +349,9 @@ public class RobotContainer {
             elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.HANDOFF));
 
     NamedCommands.registerCommand("Score", ElevatorCommands.scorePreset(elbowMotor));
+
+    // Need to create the NamedCommands before the autoChooser or else they won't work
+    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Configure the button bindings
     configureButtonBindings();
