@@ -67,5 +67,5 @@ public class AzimuthMotorConstants {
   public static final AzimuthMotorGains AZMITH_GAINS = new AzimuthMotorGains(6, 0, 0, 0.15, 1.5, 0);
 
   public static final AzimuthMotorGains AZMITH_GAINS_SIM =
-      new AzimuthMotorGains(10, 0, 0, 0.0, 3, 0);
+      new AzimuthMotorGains(35, 0, 0, 0.0, 3, 0);
 }
