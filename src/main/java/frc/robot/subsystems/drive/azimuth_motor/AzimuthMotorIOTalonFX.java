@@ -6,6 +6,7 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
@@ -101,7 +102,11 @@ public class AzimuthMotorIOTalonFX implements AzimuthMotorIO {
                         config.reversed()[0]
                             ? InvertedValue.CounterClockwise_Positive
                             : InvertedValue.Clockwise_Positive))
-            .withClosedLoopGeneral(new ClosedLoopGeneralConfigs().withContinuousWrap(true));
+            .withClosedLoopGeneral(new ClosedLoopGeneralConfigs().withContinuousWrap(true))
+            .withCurrentLimits(
+                new CurrentLimitsConfigs()
+                    .withSupplyCurrentLimit(config.currentLimit())
+                    .withSupplyCurrentLimitEnable(true));
 
     switch (hardwareConfig.encoderType()) {
       case INTERNAL:

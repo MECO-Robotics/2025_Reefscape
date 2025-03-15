@@ -4,6 +4,7 @@ import static frc.robot.util.PhoenixUtil.tryUntilOk;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -88,7 +89,11 @@ public class DriveMotorIOTalonFX implements DriveMotorIO {
             .withFeedback(
                 new FeedbackConfigs()
                     .withSensorToMechanismRatio(config.gearRatio())
-                    .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor));
+                    .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor))
+            .withCurrentLimits(
+                new CurrentLimitsConfigs()
+                    .withSupplyCurrentLimit(config.currentLimit())
+                    .withSupplyCurrentLimitEnable(true));
 
     tryUntilOk(5, () -> motors[0].getConfigurator().apply(leaderConfig));
 

@@ -5,6 +5,7 @@ import static frc.robot.util.PhoenixUtil.tryUntilOk;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
@@ -99,7 +100,11 @@ public class PositionJointIOTalonFX implements PositionJointIO {
                     .withInverted(
                         config.reversed()[0]
                             ? InvertedValue.Clockwise_Positive
-                            : InvertedValue.CounterClockwise_Positive));
+                            : InvertedValue.CounterClockwise_Positive))
+            .withCurrentLimits(
+                new CurrentLimitsConfigs()
+                    .withSupplyCurrentLimit(config.currentLimit())
+                    .withSupplyCurrentLimitEnable(true));
 
     switch (hardwareConfig.encoderType()) {
       case INTERNAL:
