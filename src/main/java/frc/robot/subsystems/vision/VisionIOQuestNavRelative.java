@@ -85,7 +85,7 @@ public class VisionIOQuestNavRelative implements VisionIO {
     QuestNavData[] questNavData = getQuestNavData();
 
     inputs.connected = connected();
-    inputs.latestTargetObservation = new TargetObservation(new Rotation2d(), new Rotation2d());
+    inputs.latestTargetObservation = new TargetObservation(new Rotation2d(), new Rotation2d(), 0);
     inputs.poseObservations = new PoseObservation[questNavData.length];
 
     for (int i = 0; i < questNavData.length; i++) {

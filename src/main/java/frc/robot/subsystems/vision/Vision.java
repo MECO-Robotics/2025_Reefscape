@@ -168,16 +168,20 @@ public class Vision extends SubsystemBase {
         allRobotPosesRejected.toArray(new Pose3d[allRobotPosesRejected.size()]));
   }
 
-  public boolean hasTarget() {
-    return inputs[0].hasTarget;
+  public boolean[] hasTarget() {
+    boolean[] hasTarget = new boolean[inputs.length];
+    for (int i = 0; i < inputs.length; i++) {
+      hasTarget[i] = inputs[i].hasTarget;
+    }
+    return hasTarget;
   }
 
-  public TargetObservation getLatestTargetObservation() {
-    return inputs[0].latestTargetObservation;
-  }
-
-  public int getTagID() {
-    return inputs[0].tagIds[0];
+  public TargetObservation[] getLatestTargetObservation() {
+    TargetObservation[] latestTargetObservation = new TargetObservation[inputs.length];
+    for (int i = 0; i < inputs.length; i++) {
+      latestTargetObservation[i] = inputs[i].latestTargetObservation;
+    }
+    return latestTargetObservation;
   }
 
   @FunctionalInterface

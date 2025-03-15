@@ -46,13 +46,16 @@ public class VisionIOLimelight implements VisionIO {
 
   @Override
   public void updateInputs(VisionIOInputs inputs) {
-    // Update connection status based on whether an update has been seen in the last 250ms
+    // Update connection status based on whether an update has been seen in the last
+    // 250ms
     inputs.connected = (RobotController.getFPGATime() - latencySubscriber.getLastChange()) < 250;
 
     // Update target observation
     inputs.latestTargetObservation =
         new TargetObservation(
-            Rotation2d.fromDegrees(txSubscriber.get()), Rotation2d.fromDegrees(tySubscriber.get()));
+            Rotation2d.fromDegrees(txSubscriber.get()),
+            Rotation2d.fromDegrees(tySubscriber.get()),
+            0);
 
     // Update orientation for MegaTag 2
     orientationPublisher.accept(
@@ -76,7 +79,8 @@ public class VisionIOLimelight implements VisionIO {
               // 3D pose estimate
               parsePose(rawSample.value),
 
-              // Ambiguity, using only the first tag because ambiguity isn't applicable for multitag
+              // Ambiguity, using only the first tag because ambiguity isn't applicable for
+              // multitag
               rawSample.value.length >= 17 ? rawSample.value[16] : 0.0,
 
               // Tag count

@@ -21,8 +21,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
+import frc.robot.subsystems.position_joint.PositionJoint;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.mechanical_advantage.LoggedTunableNumber;
+import frc.robot.util.pathplanner.AllianceUtil;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -31,6 +33,7 @@ import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.json.simple.parser.ParseException;
+import org.littletonrobotics.junction.Logger;
 
 /** A collection of commands for controlling the drive subsystem. */
 public class DriveCommands {
@@ -181,9 +184,14 @@ public class DriveCommands {
   public static final Command joystickDriveToReef(
       Drive drive,
       Vision vision,
+      PositionJoint elevatorMotor,
+      PositionJoint wristMotor,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
-      DoubleSupplier omegaSupplier) {
+      DoubleSupplier omegaSupplier,
+      Supplier<String> reefSupplier,
+      Supplier<String> sideSupplier,
+      Supplier<String> levelSupplier) {
 
     // Create PID controller
     ProfiledPIDController angleController =
@@ -203,96 +211,25 @@ public class DriveCommands {
 
               // Calculate angular speed
               double omega;
+              int cameraNum = 0;
 
-              if (vision.hasTarget()) {
-                switch (vision.getTagID()) {
-                  case 6:
-                    omega =
-                        angleController.calculate(
-                            drive.getRotation().getRadians(),
-                            Rotation2d.fromDegrees(120).getRadians());
-                    break;
-                  case 7:
-                    omega =
-                        angleController.calculate(
-                            drive.getRotation().getRadians(),
-                            Rotation2d.fromDegrees(180).getRadians());
-                    break;
-                  case 8:
-                    omega =
-                        angleController.calculate(
-                            drive.getRotation().getRadians(),
-                            Rotation2d.fromDegrees(-120).getRadians());
-                    break;
-                  case 9:
-                    omega =
-                        angleController.calculate(
-                            drive.getRotation().getRadians(),
-                            Rotation2d.fromDegrees(-60).getRadians());
-                    break;
-                  case 10:
-                    omega =
-                        angleController.calculate(
-                            drive.getRotation().getRadians(),
-                            Rotation2d.fromDegrees(0).getRadians());
-                    break;
-                  case 11:
-                    omega =
-                        angleController.calculate(
-                            drive.getRotation().getRadians(),
-                            Rotation2d.fromDegrees(60).getRadians());
-                    break;
-                  case 17:
-                    omega =
-                        angleController.calculate(
-                            drive.getRotation().getRadians(),
-                            Rotation2d.fromDegrees(60).getRadians());
-                    break;
-                  case 18:
-                    omega =
-                        angleController.calculate(
-                            drive.getRotation().getRadians(),
-                            Rotation2d.fromDegrees(0).getRadians());
-                    break;
-                  case 19:
-                    omega =
-                        angleController.calculate(
-                            drive.getRotation().getRadians(),
-                            Rotation2d.fromDegrees(-60).getRadians());
-                    break;
-                  case 20:
-                    omega =
-                        angleController.calculate(
-                            drive.getRotation().getRadians(),
-                            Rotation2d.fromDegrees(-120).getRadians());
-                    break;
-                  case 21:
-                    omega =
-                        angleController.calculate(
-                            drive.getRotation().getRadians(),
-                            Rotation2d.fromDegrees(180).getRadians());
-                    break;
-                  case 22:
-                    omega =
-                        angleController.calculate(
-                            drive.getRotation().getRadians(),
-                            Rotation2d.fromDegrees(120).getRadians());
-                    break;
-                  default:
-                    // Apply rotation deadband
-                    omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
-
-                    // Square rotation value for more precise control
-                    omega = Math.copySign(omega * omega, omega);
-                    break;
-                }
-              } else {
-                // Apply rotation deadband
-                omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
-
-                // Square rotation value for more precise control
-                omega = Math.copySign(omega * omega, omega);
+              if (sideSupplier.get() == "Left") {
+                cameraNum = 0;
+              } else if (sideSupplier.get() == "Right") {
+                cameraNum = 1;
               }
+
+              Logger.recordOutput("Servo/SelectedCamera", cameraNum);
+              Logger.recordOutput(
+                  "Servo/SelectedTargetData", vision.getLatestTargetObservation()[cameraNum]);
+
+              omega =
+                  angleController.calculate(
+                      drive.getRotation().getRadians(),
+                      AllianceUtil.flipRotation2dAlliance(
+                              AllianceUtil.getRotationFromReefTagID(
+                                  AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get())))
+                          .getRadians());
 
               // Convert to field relative speeds & send command
               ChassisSpeeds speeds =
@@ -310,16 +247,22 @@ public class DriveCommands {
                           ? drive.getRotation().plus(new Rotation2d(Math.PI))
                           : drive.getRotation());
 
-              double headingEffort =
-                  REEF_P.get() * vision.getLatestTargetObservation().tx().getRadians();
+              if (vision.hasTarget()[cameraNum]
+                  && vision.getLatestTargetObservation()[cameraNum].tagId()
+                      == AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get())) {
 
-              if (vision.hasTarget()) {
-                if (Math.abs(headingEffort) < 0.1) {
-                  speeds.vyMetersPerSecond = headingEffort;
+                double effort =
+                    REEF_P.get() * vision.getLatestTargetObservation()[cameraNum].tx().getRadians();
+
+                Logger.recordOutput("Servo/TargetEffort", effort);
+
+                if (Math.abs(effort) > 0.1) {
+                  speeds.vyMetersPerSecond = effort;
                 }
 
                 if (angleController.atGoal()
-                    && Math.abs(vision.getLatestTargetObservation().tx().getRadians()) < 0.1) {
+                    && Math.abs(vision.getLatestTargetObservation()[cameraNum].tx().getRadians())
+                        < 0.1) {
                   speeds.vxMetersPerSecond = APPROACH_SPEED.get();
                 }
               }
@@ -329,7 +272,8 @@ public class DriveCommands {
             drive)
 
         // Reset PID controller when command starts
-        .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
+        .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()))
+        .until(() -> omegaSupplier.getAsDouble() > 0.3);
   }
 
   public static final Command pathfindToPose(Drive drive, Pose2d targetPose) {

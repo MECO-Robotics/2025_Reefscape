@@ -9,8 +9,10 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.CoralPreset;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ElevatorCommands;
@@ -44,12 +46,13 @@ import frc.robot.subsystems.position_joint.PositionJointIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionTrig;
-import frc.robot.subsystems.vision.VisionIOQuestNav;
 import frc.robot.util.controller.ControllerUtil;
 import java.util.Set;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+import org.littletonrobotics.junction.networktables.LoggedNetworkString;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -77,6 +80,11 @@ public class RobotContainer {
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
+
+  private final LoggedNetworkString selectedReef = new LoggedNetworkString("Selected Reef", "None");
+  private final LoggedNetworkString selectedSide = new LoggedNetworkString("Selected Side", "None");
+  private final LoggedNetworkString selectedLevel =
+      new LoggedNetworkString("Selected Level", "None");
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -159,18 +167,16 @@ public class RobotContainer {
         // FlywheelConstants.END_EFFECTOR_CONFIG),
         // FlywheelConstants.END_EFFECTOR_GAINS);
 
-        VisionIOQuestNav questNav =
-            new VisionIOQuestNav(
-                VisionConstants.robotToQuest,
-                new VisionIOPhotonVisionTrig(
-                    VisionConstants.frontTagCamera,
-                    VisionConstants.robotToFrontTagCamera,
-                    drive::getRotation));
-
         // vision
-        vision = new Vision(drive::addVisionMeasurement, questNav);
+        vision =
+            new Vision(
+                drive::addVisionMeasurement,
+                new VisionIOPhotonVisionTrig(
+                    "LeftCamera", VisionConstants.robotToLeftTagCamera, drive::getRotation),
+                new VisionIOPhotonVisionTrig(
+                    "RightCamera", VisionConstants.robotToRightTagCamera, drive::getRotation));
 
-        driverController.b().onTrue(Commands.runOnce(questNav::resetHeading).ignoringDisable(true));
+        // driverController.b().onTrue(Commands.runOnce(questNav::resetHeading).ignoringDisable(true));
 
         break;
 
@@ -199,12 +205,7 @@ public class RobotContainer {
         vision =
             new Vision(
                 drive::addVisionMeasurement,
-                new VisionIOQuestNav(
-                    VisionConstants.robotToQuest,
-                    new VisionIOPhotonVisionTrig(
-                        VisionConstants.frontTagCamera,
-                        VisionConstants.robotToFrontTagCamera,
-                        drive::getRotation)));
+                new VisionIOPhotonVisionSim("Hello", VisionConstants.robotToQuest, drive::getPose));
 
         rightCoralRotationMotor =
             new PositionJoint(
@@ -455,11 +456,20 @@ public class RobotContainer {
         .whileTrue(IntakeCommands.deployIntake(leftCoralRotationMotor, leftCoralRollerMotor))
         .whileFalse(IntakeCommands.stowIntake(leftCoralRotationMotor, leftCoralRollerMotor));
 
-    // driverController.start().toggleOnTrue(DriveCommands.joystickDriveToReef(drive,
-    // vision,
-    // () -> -driverController.getLeftY(),
-    // () -> -driverController.getLeftX(),
-    // () -> -driverController.getRightX()));
+    driverController
+        .start()
+        .onTrue(
+            DriveCommands.joystickDriveToReef(
+                drive,
+                vision,
+                elevatorMotor,
+                elbowMotor,
+                () -> -driverController.getLeftY(),
+                () -> -driverController.getLeftX(),
+                () -> -driverController.getRightX(),
+                selectedReef::get,
+                selectedSide::get,
+                selectedLevel::get));
 
     // Trigger for the elevator positions
     // Shows up on the dashboard
@@ -507,6 +517,51 @@ public class RobotContainer {
     coPilotController.leftBumper().onTrue(autoDrive(1));
 
     coPilotController.x().whileTrue(ElevatorCommands.scorePreset(elbowMotor));
+
+    new Trigger(
+            () ->
+                ControllerUtil.getIndex(coPilotController.getLeftX(), coPilotController.getLeftY())
+                    == 1)
+        .onTrue(new InstantCommand(() -> selectedReef.set("AB")));
+
+    new Trigger(
+            () ->
+                ControllerUtil.getIndex(coPilotController.getLeftX(), coPilotController.getLeftY())
+                    == 2)
+        .onTrue(new InstantCommand(() -> selectedReef.set("CD")));
+
+    new Trigger(
+            () ->
+                ControllerUtil.getIndex(coPilotController.getLeftX(), coPilotController.getLeftY())
+                    == 3)
+        .onTrue(new InstantCommand(() -> selectedReef.set("EF")));
+
+    new Trigger(
+            () ->
+                ControllerUtil.getIndex(coPilotController.getLeftX(), coPilotController.getLeftY())
+                    == 4)
+        .onTrue(new InstantCommand(() -> selectedReef.set("GH")));
+
+    new Trigger(
+            () ->
+                ControllerUtil.getIndex(coPilotController.getLeftX(), coPilotController.getLeftY())
+                    == 5)
+        .onTrue(new InstantCommand(() -> selectedReef.set("IJ")));
+
+    new Trigger(
+            () ->
+                ControllerUtil.getIndex(coPilotController.getLeftX(), coPilotController.getLeftY())
+                    == 6)
+        .onTrue(new InstantCommand(() -> selectedReef.set("KL")));
+
+    // TODO: Change for actual buttons
+    coPilotController.a().onTrue(new InstantCommand(() -> selectedSide.set("Left")));
+    coPilotController.b().onTrue(new InstantCommand(() -> selectedSide.set("Right")));
+
+    coPilotController.y().onTrue(new InstantCommand(() -> selectedLevel.set("L1")));
+    coPilotController.x().onTrue(new InstantCommand(() -> selectedLevel.set("L2")));
+    coPilotController.povUp().onTrue(new InstantCommand(() -> selectedLevel.set("L3")));
+    coPilotController.povRight().onTrue(new InstantCommand(() -> selectedLevel.set("L4")));
   }
 
   // -----------------------------------------------------------
