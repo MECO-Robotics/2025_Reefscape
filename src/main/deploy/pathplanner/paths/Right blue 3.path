@@ -45,7 +45,7 @@
     },
     {
       "name": "Elevator L4",
-      "waypointRelativePos": 0.7072599531615924,
+      "waypointRelativePos": 0.5101298701298705,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -68,7 +68,7 @@
     "rotation": -60.14159625379575
   },
   "reversed": false,
-  "folder": "Right Blue auto paths",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": -50.41834874284777

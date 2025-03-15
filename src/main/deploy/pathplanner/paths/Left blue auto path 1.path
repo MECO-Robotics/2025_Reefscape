@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 6.075475501269172,
-        "y": 2.154728510823486
+        "y": 2.1547285108234866
       },
       "isLocked": false,
       "linkedName": null
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "Four",
-      "waypointRelativePos": 0.6463195691202885,
+      "waypointRelativePos": 0.2774025974025965,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -57,7 +57,7 @@
     "rotation": 121.58129191893129
   },
   "reversed": false,
-  "folder": "Left Blue auto paths",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 179.3904934233248

@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "Elevator L4",
-      "waypointRelativePos": 0.754098360655738,
+      "waypointRelativePos": 0.3542857142857133,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -57,7 +57,7 @@
     "rotation": -119.01908285160505
   },
   "reversed": false,
-  "folder": "Right Blue auto paths",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 179.87630786222067

@@ -460,30 +460,30 @@ public class RobotContainer {
         // Right side reef
 
         // Co-pilot controller elevator values
-        coPilotController
-                .x()
-                .whileTrue(
-                        ElevatorCommands.moveSafe(
-                                elevatorMotor, elbowMotor,
-                                ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_ONE_CORAL));
-        coPilotController
-                .a()
-                .whileTrue(
-                        ElevatorCommands.moveSafe(
-                                elevatorMotor, elbowMotor,
-                                ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_TWO_CORAL));
-        coPilotController
-                .b()
-                .whileTrue(
-                        ElevatorCommands.moveSafe(
-                                elevatorMotor, elbowMotor,
-                                ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_THREE_CORAL));
-        coPilotController
-                .y()
-                .whileTrue(
-                        ElevatorCommands.moveSafe(
-                                elevatorMotor, elbowMotor,
-                                ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
+        // coPilotController
+        // .x()
+        // .whileTrue(
+        // ElevatorCommands.moveSafe(
+        // elevatorMotor, elbowMotor,
+        // ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_ONE_CORAL));
+        // coPilotController
+        // .a()
+        // .whileTrue(
+        // ElevatorCommands.moveSafe(
+        // elevatorMotor, elbowMotor,
+        // ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_TWO_CORAL));
+        // coPilotController
+        // .b()
+        // .whileTrue(
+        // ElevatorCommands.moveSafe(
+        // elevatorMotor, elbowMotor,
+        // ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_THREE_CORAL));
+        // coPilotController
+        // .y()
+        // .whileTrue(
+        // ElevatorCommands.moveSafe(
+        // elevatorMotor, elbowMotor,
+        // ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
 
         // Co-pilot controller stow and handoff values
         coPilotController
@@ -534,14 +534,10 @@ public class RobotContainer {
         coPilotController.leftBumper().onTrue(new InstantCommand(() -> selectedSide.set("Left")));
         coPilotController.rightBumper().onTrue(new InstantCommand(() -> selectedSide.set("Right")));
 
-        // coPilotController.x().onTrue(new InstantCommand(() ->
-        // selectedLevel.set("L1")));
-        // coPilotController.a().onTrue(new InstantCommand(() ->
-        // selectedLevel.set("L2")));
-        // coPilotController.b().onTrue(new InstantCommand(() ->
-        // selectedLevel.set("L3")));
-        // coPilotController.y().onTrue(new InstantCommand(() ->
-        // selectedLevel.set("L4")));
+        coPilotController.x().onTrue(new InstantCommand(() -> selectedLevel.set("L1")));
+        coPilotController.a().onTrue(new InstantCommand(() -> selectedLevel.set("L2")));
+        coPilotController.b().onTrue(new InstantCommand(() -> selectedLevel.set("L3")));
+        coPilotController.y().onTrue(new InstantCommand(() -> selectedLevel.set("L4")));
 
         coPilotController
                 .povLeft()
@@ -599,4 +595,14 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return autoChooser.get();
     }
-}
+
+  
+
+    
+     
+     
+     
+     
+    
+        
+    
