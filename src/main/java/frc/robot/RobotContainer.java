@@ -584,7 +584,7 @@ public class RobotContainer {
     coPilotController
         .povLeft()
         .onTrue(
-            ElevatorCommands.moveSafe(
+            ElevatorCommands.moveSequential(
                 elevatorMotor,
                 elbowMotor,
                 () -> {
