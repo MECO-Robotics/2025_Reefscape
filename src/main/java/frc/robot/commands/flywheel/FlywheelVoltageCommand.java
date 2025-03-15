@@ -14,6 +14,10 @@ public class FlywheelVoltageCommand extends Command {
     addRequirements(flywheel);
   }
 
+  public FlywheelVoltageCommand(Flywheel rollerMotor, int i) {
+    // TODO Auto-generated constructor stub
+  }
+
   @Override
   public void execute() {
     flywheel.setVoltage(voltage.getAsDouble());

@@ -26,6 +26,8 @@ public class IntakeCommands {
         new LoggedTunableNumber("CoralIntakeSpeed", -5);
     public static final LoggedTunableNumber STOW =
         new LoggedTunableNumber("CoralOuttakeSpeed", -1.5);
+    public static final LoggedTunableNumber EMERGENCY =
+        new LoggedTunableNumber("Emergency Outtake", -12);
   }
 
   /**
@@ -36,6 +38,10 @@ public class IntakeCommands {
     return Commands.parallel(
         new PositionJointPositionCommand(rotationMotor, ROTATION_POSITIONS.STOW),
         new FlywheelVoltageCommand(rollerMotor, ROLLER_VOLTS.STOW));
+  }
+
+  public static Command emergencyOuttake(Flywheel rollerMotor) {
+    return Commands.parallel(new FlywheelVoltageCommand(rollerMotor, ROLLER_VOLTS.EMERGENCY));
   }
 
   /**
