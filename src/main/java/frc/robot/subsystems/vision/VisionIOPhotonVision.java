@@ -40,6 +40,7 @@ public class VisionIOPhotonVision implements VisionIO {
                 Rotation2d.fromDegrees(result.getBestTarget().getYaw()),
                 Rotation2d.fromDegrees(result.getBestTarget().getPitch()),
                 result.getBestTarget().fiducialId);
+        inputs.hasTarget = true;
       } else {
         inputs.latestTargetObservation =
             new TargetObservation(new Rotation2d(), new Rotation2d(), 0);

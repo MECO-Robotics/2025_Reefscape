@@ -204,7 +204,10 @@ public class RobotContainer {
         vision =
             new Vision(
                 drive::addVisionMeasurement,
-                new VisionIOPhotonVisionSim("Hello", VisionConstants.robotToQuest, drive::getPose));
+                new VisionIOPhotonVisionSim(
+                    "LeftCamera", VisionConstants.robotToLeftTagCamera, drive::getPose),
+                new VisionIOPhotonVisionSim(
+                    "RightCamera", VisionConstants.robotToRightTagCamera, drive::getPose));
 
         rightCoralRotationMotor =
             new PositionJoint(
@@ -457,7 +460,7 @@ public class RobotContainer {
 
     driverController
         .y()
-        .onTrue(
+        .whileTrue(
             DriveCommands.joystickDriveToReef(
                 drive,
                 vision,
@@ -524,37 +527,37 @@ public class RobotContainer {
     new Trigger(
             () ->
                 ControllerUtil.getIndex(coPilotController.getLeftX(), coPilotController.getLeftY())
-                    == 1)
+                    == 4)
         .onTrue(new InstantCommand(() -> selectedReef.set("AB")));
 
     new Trigger(
             () ->
                 ControllerUtil.getIndex(coPilotController.getLeftX(), coPilotController.getLeftY())
-                    == 2)
+                    == 3)
         .onTrue(new InstantCommand(() -> selectedReef.set("CD")));
 
     new Trigger(
             () ->
                 ControllerUtil.getIndex(coPilotController.getLeftX(), coPilotController.getLeftY())
-                    == 3)
+                    == 2)
         .onTrue(new InstantCommand(() -> selectedReef.set("EF")));
 
     new Trigger(
             () ->
                 ControllerUtil.getIndex(coPilotController.getLeftX(), coPilotController.getLeftY())
-                    == 4)
+                    == 1)
         .onTrue(new InstantCommand(() -> selectedReef.set("GH")));
 
     new Trigger(
             () ->
                 ControllerUtil.getIndex(coPilotController.getLeftX(), coPilotController.getLeftY())
-                    == 5)
+                    == 0)
         .onTrue(new InstantCommand(() -> selectedReef.set("IJ")));
 
     new Trigger(
             () ->
                 ControllerUtil.getIndex(coPilotController.getLeftX(), coPilotController.getLeftY())
-                    == 6)
+                    == 5)
         .onTrue(new InstantCommand(() -> selectedReef.set("KL")));
 
     // TODO: Change for actual buttons

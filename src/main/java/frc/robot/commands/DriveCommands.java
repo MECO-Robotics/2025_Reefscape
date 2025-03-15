@@ -215,15 +215,25 @@ public class DriveCommands {
 
               // Calculate angular speed
               double omega;
-              int cameraNum = 0;
+              int cameraNum;
 
-              if (sideSupplier.get() == "Left") {
-                cameraNum = 0;
-              } else if (sideSupplier.get() == "Right") {
-                cameraNum = 1;
+              Logger.recordOutput("Servo/SideSupplier", sideSupplier.get());
+
+              switch (sideSupplier.get()) {
+                case "Left":
+                  cameraNum = 0;
+                  break;
+                case "Right":
+                  cameraNum = 1;
+                  break;
+                default:
+                  cameraNum = 0;
+                  break;
               }
 
               Logger.recordOutput("Servo/SelectedCamera", cameraNum);
+              Logger.recordOutput(
+                  "Servo/DesiredTag", AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get()));
               Logger.recordOutput(
                   "Servo/SelectedTargetData", vision.getLatestTargetObservation()[cameraNum]);
 
@@ -278,29 +288,30 @@ public class DriveCommands {
 
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()))
-        .until(() -> xController.atGoal())
-        .andThen(
-            ElevatorCommands.moveSafe(
-                    elevatorMotor,
-                    elbowMotor,
-                    () -> {
-                      switch (levelSupplier.get()) {
-                        case "L1":
-                          return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_ONE_CORAL;
-                        case "L2":
-                          return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_TWO_CORAL;
-                        case "L3":
-                          return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_THREE_CORAL;
-                        case "L4":
-                          return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL;
-                        default:
-                          return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL;
-                      }
-                    })
-                .alongWith(
-                    Commands.run(
-                        () -> drive.runVelocity(new ChassisSpeeds(APPROACH_SPEED.get(), 0, 0)),
-                        drive)));
+    // .until(() -> xController.atGoal())
+    // .andThen(
+    // ElevatorCommands.moveSafe(
+    // elevatorMotor,
+    // elbowMotor,
+    // () -> {
+    // switch (levelSupplier.get()) {
+    // case "L1":
+    // return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_ONE_CORAL;
+    // case "L2":
+    // return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_TWO_CORAL;
+    // case "L3":
+    // return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_THREE_CORAL;
+    // case "L4":
+    // return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL;
+    // default:
+    // return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL;
+    // }
+    // })
+    // .alongWith(
+    // Commands.run(
+    // () -> drive.runVelocity(new ChassisSpeeds(APPROACH_SPEED.get(), 0, 0)),
+    // drive)))
+    ;
   }
 
   public static final Command pathfindToPose(Drive drive, Pose2d targetPose) {

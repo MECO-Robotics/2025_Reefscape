@@ -20,17 +20,17 @@ public class AllianceUtil {
   public static Rotation2d getRotationFromReefTagID(int tagID) {
     switch (tagID) {
       case 6:
-        return Rotation2d.fromDegrees(120);
-      case 7:
-        return Rotation2d.fromDegrees(180);
-      case 8:
-        return Rotation2d.fromDegrees(-120);
-      case 9:
         return Rotation2d.fromDegrees(-60);
-      case 10:
+      case 7:
         return Rotation2d.fromDegrees(0);
-      case 11:
+      case 8:
         return Rotation2d.fromDegrees(60);
+      case 9:
+        return Rotation2d.fromDegrees(120);
+      case 10:
+        return Rotation2d.fromDegrees(180);
+      case 11:
+        return Rotation2d.fromDegrees(-120);
       case 17:
         return Rotation2d.fromDegrees(60);
       case 18:

@@ -13,7 +13,7 @@ public class VisionConstants {
 
   // Camera names, must match names configured on coprocessor
   // public static String camera0Name = "camera_0";
-  // public static String camera1Name = "camera_1";
+  // public static String camera1Name = "camera_1"
   public static String frontTagCamera = "front_tag_camera";
   public static String backTagCamera = "back_tag_camera";
 
@@ -38,7 +38,7 @@ public class VisionConstants {
           Units.inchesToMeters(-6 + 1 / 32),
           Units.inchesToMeters(-6.25),
           Units.inchesToMeters(26),
-          new Rotation3d(0.0, 0, Units.degreesToRadians(180)));
+          new Rotation3d(0.0, 0, Units.degreesToRadians(0)));
 
   // Basic filtering thresholds
   public static double maxAmbiguity = 0.3;
