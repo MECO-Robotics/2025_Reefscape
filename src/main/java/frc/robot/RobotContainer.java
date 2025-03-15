@@ -9,10 +9,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.CoralPreset;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ElevatorCommands;
@@ -52,7 +50,6 @@ import frc.robot.util.controller.ControllerUtil;
 import java.util.Set;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -70,20 +67,6 @@ public class RobotContainer {
   private PositionJoint elevatorMotor;
   private PositionJoint elbowMotor;
   // private Flywheel endEffectorMotor;
-
-  // Just in case
-  private final LoggedNetworkBoolean reefA;
-  private final LoggedNetworkBoolean reefB;
-  private final LoggedNetworkBoolean reefC;
-  private final LoggedNetworkBoolean reefD;
-  private final LoggedNetworkBoolean reefE;
-  private final LoggedNetworkBoolean reefF;
-  private final LoggedNetworkBoolean reefG;
-  private final LoggedNetworkBoolean reefH;
-  private final LoggedNetworkBoolean reefI;
-  private final LoggedNetworkBoolean reefJ;
-  private final LoggedNetworkBoolean reefK;
-  private final LoggedNetworkBoolean reefL;
 
   @SuppressWarnings("unused")
   private final Vision vision;
@@ -370,19 +353,6 @@ public class RobotContainer {
     // work
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-    reefA = new LoggedNetworkBoolean("/Presets/ReefA", false);
-    reefB = new LoggedNetworkBoolean("/Presets/ReefB", false);
-    reefC = new LoggedNetworkBoolean("/Presets/ReefC", false);
-    reefD = new LoggedNetworkBoolean("/Presets/ReefD", false);
-    reefE = new LoggedNetworkBoolean("/Presets/ReefE", false);
-    reefF = new LoggedNetworkBoolean("/Presets/ReefF", false);
-    reefG = new LoggedNetworkBoolean("/Presets/ReefG", false);
-    reefH = new LoggedNetworkBoolean("/Presets/ReefH", false);
-    reefI = new LoggedNetworkBoolean("/Presets/ReefI", false);
-    reefJ = new LoggedNetworkBoolean("/Presets/ReefJ", false);
-    reefK = new LoggedNetworkBoolean("/Presets/ReefK", false);
-    reefL = new LoggedNetworkBoolean("/Presets/ReefL", false);
-
     // Configure the button bindings
     configureButtonBindings();
 
@@ -537,50 +507,6 @@ public class RobotContainer {
     coPilotController.leftBumper().onTrue(autoDrive(1));
 
     coPilotController.x().whileTrue(ElevatorCommands.scorePreset(elbowMotor));
-
-    new Trigger(reefA::get).onTrue(DriveCommands.pathfindToPose(drive, reefAPos));
-    new Trigger(reefB::get).onTrue(DriveCommands.pathfindToPose(drive, reefBPos));
-    new Trigger(reefC::get).onTrue(DriveCommands.pathfindToPose(drive, reefCPos));
-    new Trigger(reefD::get).onTrue(DriveCommands.pathfindToPose(drive, reefDPos));
-    new Trigger(reefE::get).onTrue(DriveCommands.pathfindToPose(drive, reefEPos));
-    new Trigger(reefF::get).onTrue(DriveCommands.pathfindToPose(drive, reefFPos));
-    new Trigger(reefG::get).onTrue(DriveCommands.pathfindToPose(drive, reefGPos));
-    new Trigger(reefH::get).onTrue(DriveCommands.pathfindToPose(drive, reefHPos));
-    new Trigger(reefI::get).onTrue(DriveCommands.pathfindToPose(drive, reefIPos));
-    new Trigger(reefI::get).onTrue(DriveCommands.pathfindToPose(drive, reefIPos));
-    new Trigger(reefJ::get).onTrue(DriveCommands.pathfindToPose(drive, reefJPos));
-    new Trigger(reefK::get).onTrue(DriveCommands.pathfindToPose(drive, reefKPos));
-    new Trigger(reefL::get).onTrue(DriveCommands.pathfindToPose(drive, reefLPos));
-
-    // Trigger for the reef positions that goes on the touchscreen
-    new Trigger(reefA::get)
-        .or(reefB::get)
-        .or(reefC::get)
-        .or(reefD::get)
-        .or(reefE::get)
-        .or(reefF::get)
-        .or(reefG::get)
-        .or(reefH::get)
-        .or(reefI::get)
-        .or(reefJ::get)
-        .or(reefK::get)
-        .or(reefL::get)
-        .onTrue(
-            new InstantCommand(
-                () -> {
-                  reefA.set(false);
-                  reefB.set(false);
-                  reefC.set(false);
-                  reefD.set(false);
-                  reefE.set(false);
-                  reefF.set(false);
-                  reefG.set(false);
-                  reefH.set(false);
-                  reefI.set(false);
-                  reefJ.set(false);
-                  reefK.set(false);
-                  reefL.set(false);
-                }));
   }
 
   // -----------------------------------------------------------
