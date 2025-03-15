@@ -338,8 +338,10 @@ public class RobotContainer {
             elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_THREE_CORAL));
     NamedCommands.registerCommand(
         "Four",
-        ElevatorCommands.moveSafe(
-            elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
+        ElevatorCommands.moveSequential(
+            elevatorMotor,
+            elbowMotor,
+            () -> ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
     NamedCommands.registerCommand(
         "CoralWait",
         ElevatorCommands.moveSafe(
@@ -474,15 +476,15 @@ public class RobotContainer {
     driverController
         .povUp()
         .whileTrue(
-            DriveCommands.joystickDriveRobotRelative(drive, () -> 0.25, () -> 0.0, () -> 0.0));
+            DriveCommands.joystickDriveRobotRelative(drive, () -> 0.5, () -> 0.0, () -> 0.0));
     driverController
         .povLeft()
         .whileTrue(
-            DriveCommands.joystickDriveRobotRelative(drive, () -> 0.0, () -> 0.25, () -> 0.0));
+            DriveCommands.joystickDriveRobotRelative(drive, () -> 0.5, () -> 0.25, () -> 0.0));
     driverController
         .povRight()
         .whileTrue(
-            DriveCommands.joystickDriveRobotRelative(drive, () -> 0.0, () -> -0.25, () -> 0.0));
+            DriveCommands.joystickDriveRobotRelative(drive, () -> 0.5, () -> -0.25, () -> 0.0));
 
     // Trigger for the elevator positions
     // Shows up on the dashboard
