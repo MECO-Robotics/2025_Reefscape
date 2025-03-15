@@ -388,6 +388,11 @@ public class RobotContainer {
                 .onTrue(
                         IntakeCommands.emergencyOuttake(rightCoralRollerMotor)
                                 .alongWith(IntakeCommands.emergencyOuttake(leftCoralRollerMotor)));
+        driverController
+                .rightTrigger(0.1)
+                .onTrue(
+                        IntakeCommands.stop(rightCoralRollerMotor)
+                                .alongWith(IntakeCommands.stop(leftCoralRollerMotor)));
 
         // Lock to 0° when A button is held
         driverController
@@ -417,13 +422,6 @@ public class RobotContainer {
 
         // Riases the elevator and wrist to the prests for L4
         // Also incorpeates the safety algorithm for the wirst and elevator
-        driverController
-                .povUp()
-                .onTrue(
-                        ElevatorCommands.moveSafe(
-                                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
-
-        driverController.povDown().onTrue(ElevatorCommands.handOff(elevatorMotor, elbowMotor));
 
         // driverController
         // .y()
@@ -459,10 +457,14 @@ public class RobotContainer {
                                 selectedSide::get,
                                 selectedLevel::get));
 
-        driverController.povUp().whileTrue(new InstantCommand(() -> drive.runVelocity(new ChassisSpeeds(1.0, 0, 0))));
-        driverController.povLeft()
+        driverController
+                .povUp()
+                .whileTrue(new InstantCommand(() -> drive.runVelocity(new ChassisSpeeds(1.0, 0, 0))));
+        driverController
+                .povLeft()
                 .whileTrue(new InstantCommand(() -> drive.runVelocity(new ChassisSpeeds(0.0, 1.0, 0))));
-        driverController.povRight()
+        driverController
+                .povRight()
                 .whileTrue(new InstantCommand(() -> drive.runVelocity(new ChassisSpeeds(0.0, -1.0, 0))));
 
         // Trigger for the elevator positions
@@ -605,4 +607,15 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return autoChooser.get();
     }
-}
+
+      
+            
+
+    
+     
+     
+     
+     
+    
+        
+    
