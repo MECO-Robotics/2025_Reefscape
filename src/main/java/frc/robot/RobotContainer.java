@@ -177,7 +177,6 @@ public class RobotContainer {
                     "RightCamera", VisionConstants.robotToRightTagCamera, drive::getRotation));
 
         // driverController.b().onTrue(Commands.runOnce(questNav::resetHeading).ignoringDisable(true));
-
         break;
 
       case SIM:
@@ -437,13 +436,13 @@ public class RobotContainer {
 
     driverController.povDown().onTrue(ElevatorCommands.handOff(elevatorMotor, elbowMotor));
 
-    driverController
-        .y()
-        .onTrue(
-            ElevatorCommands.moveSafe(
-                elevatorMotor,
-                elbowMotor,
-                ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.WAIT_FOR_CORAL));
+    // driverController
+    // .y()
+    // .onTrue(
+    // ElevatorCommands.moveSafe(
+    // elevatorMotor,
+    // elbowMotor,
+    // ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.WAIT_FOR_CORAL));
 
     // Coral Intake
     driverController // Right bumper to deploy right coral intake
@@ -457,7 +456,7 @@ public class RobotContainer {
         .whileFalse(IntakeCommands.stowIntake(leftCoralRotationMotor, leftCoralRollerMotor));
 
     driverController
-        .start()
+        .y()
         .onTrue(
             DriveCommands.joystickDriveToReef(
                 drive,
@@ -476,26 +475,30 @@ public class RobotContainer {
     // Right side reef
 
     // Co-pilot controller elevator values
-    coPilotController
-        .x()
-        .whileTrue(
-            ElevatorCommands.moveSafe(
-                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_ONE_CORAL));
-    coPilotController
-        .a()
-        .whileTrue(
-            ElevatorCommands.moveSafe(
-                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_TWO_CORAL));
-    coPilotController
-        .b()
-        .whileTrue(
-            ElevatorCommands.moveSafe(
-                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_THREE_CORAL));
-    coPilotController
-        .y()
-        .whileTrue(
-            ElevatorCommands.moveSafe(
-                elevatorMotor, elbowMotor, ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
+    // coPilotController
+    // .x()
+    // .whileTrue(
+    // ElevatorCommands.moveSafe(
+    // elevatorMotor, elbowMotor,
+    // ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_ONE_CORAL));
+    // coPilotController
+    // .a()
+    // .whileTrue(
+    // ElevatorCommands.moveSafe(
+    // elevatorMotor, elbowMotor,
+    // ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_TWO_CORAL));
+    // coPilotController
+    // .b()
+    // .whileTrue(
+    // ElevatorCommands.moveSafe(
+    // elevatorMotor, elbowMotor,
+    // ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_THREE_CORAL));
+    // coPilotController
+    // .y()
+    // .whileTrue(
+    // ElevatorCommands.moveSafe(
+    // elevatorMotor, elbowMotor,
+    // ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
 
     // Co-pilot controller stow and handoff values
     coPilotController
@@ -513,8 +516,8 @@ public class RobotContainer {
 
     coPilotController.povRight().onTrue(ElevatorCommands.scorePreset(elbowMotor));
 
-    coPilotController.rightBumper().onTrue(autoDrive(0));
-    coPilotController.leftBumper().onTrue(autoDrive(1));
+    // coPilotController.rightBumper().onTrue(autoDrive(0));
+    // coPilotController.leftBumper().onTrue(autoDrive(1));
 
     coPilotController.x().whileTrue(ElevatorCommands.scorePreset(elbowMotor));
 
@@ -555,13 +558,13 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> selectedReef.set("KL")));
 
     // TODO: Change for actual buttons
-    coPilotController.a().onTrue(new InstantCommand(() -> selectedSide.set("Left")));
-    coPilotController.b().onTrue(new InstantCommand(() -> selectedSide.set("Right")));
+    coPilotController.leftBumper().onTrue(new InstantCommand(() -> selectedSide.set("Left")));
+    coPilotController.rightBumper().onTrue(new InstantCommand(() -> selectedSide.set("Right")));
 
-    coPilotController.y().onTrue(new InstantCommand(() -> selectedLevel.set("L1")));
-    coPilotController.x().onTrue(new InstantCommand(() -> selectedLevel.set("L2")));
-    coPilotController.povUp().onTrue(new InstantCommand(() -> selectedLevel.set("L3")));
-    coPilotController.povRight().onTrue(new InstantCommand(() -> selectedLevel.set("L4")));
+    coPilotController.x().onTrue(new InstantCommand(() -> selectedLevel.set("L1")));
+    coPilotController.a().onTrue(new InstantCommand(() -> selectedLevel.set("L2")));
+    coPilotController.b().onTrue(new InstantCommand(() -> selectedLevel.set("L3")));
+    coPilotController.y().onTrue(new InstantCommand(() -> selectedLevel.set("L4")));
   }
 
   // -----------------------------------------------------------
