@@ -459,8 +459,7 @@ public class RobotContainer {
 
         driverController
                 .povUp()
-                .whileTrue(
-                        DriveCommands.joystickDrive(drive, () -> 1.0, () -> 0.0, () -> 0.0));
+                .whileTrue(DriveCommands.joystickDrive(drive, () -> -1.0, () -> 0.0, () -> 0.0));
         driverController
                 .povLeft()
                 .whileTrue(
