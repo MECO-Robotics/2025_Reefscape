@@ -459,13 +459,13 @@ public class RobotContainer {
 
         driverController
                 .povUp()
-                .whileTrue(new InstantCommand(() -> drive.runVelocity(new ChassisSpeeds(1.0, 0, 0))));
+                .whileTrue(new InstantCommand(() -> drive.runVelocity(new ChassisSpeeds(1.0, 0, 0)), drive));
         driverController
                 .povLeft()
-                .whileTrue(new InstantCommand(() -> drive.runVelocity(new ChassisSpeeds(0.0, 1.0, 0))));
+                .whileTrue(new InstantCommand(() -> drive.runVelocity(new ChassisSpeeds(0.0, 1.0, 0)), drive));
         driverController
                 .povRight()
-                .whileTrue(new InstantCommand(() -> drive.runVelocity(new ChassisSpeeds(0.0, -1.0, 0))));
+                .whileTrue(new InstantCommand(() -> drive.runVelocity(new ChassisSpeeds(0.0, -1.0, 0)), drive));
 
         // Trigger for the elevator positions
         // Shows up on the dashboard
@@ -607,4 +607,14 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return autoChooser.get();
     }
-}
+  
+            
+
+    
+     
+     
+     
+     
+    
+        
+    

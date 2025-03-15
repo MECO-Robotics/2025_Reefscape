@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -15,22 +14,25 @@ public class IntakeCommands {
 
   /** Intake rotation preset positions. */
   public static final class ROTATION_POSITIONS {
-    public static final LoggedTunableNumber STOW = new LoggedTunableNumber("CoralIntakeRotation", 0);
-    public static final LoggedTunableNumber DEPLOY = new LoggedTunableNumber("CoralIntakePosition",
-        Units.degreesToRotations(101));
+    public static final LoggedTunableNumber STOW =
+        new LoggedTunableNumber("CoralIntakeRotation", 0);
+    public static final LoggedTunableNumber DEPLOY =
+        new LoggedTunableNumber("CoralIntakePosition", Units.degreesToRotations(101));
   }
 
   /** Intake roller preset voltages. */
   public final class ROLLER_VOLTS {
-    public static final LoggedTunableNumber INTAKE = new LoggedTunableNumber("CoralIntakeSpeed", -5);
-    public static final LoggedTunableNumber STOW = new LoggedTunableNumber("CoralOuttakeSpeed", -1.5);
-    public static final LoggedTunableNumber EMERGENCY = new LoggedTunableNumber("Emergency Outtake", -12);
+    public static final LoggedTunableNumber INTAKE =
+        new LoggedTunableNumber("CoralIntakeSpeed", -5);
+    public static final LoggedTunableNumber STOW =
+        new LoggedTunableNumber("CoralOuttakeSpeed", -1.5);
+    public static final LoggedTunableNumber EMERGENCY =
+        new LoggedTunableNumber("Emergency Outtake", -12);
     public static final LoggedTunableNumber STOP = new LoggedTunableNumber("Stop ", 0);
   }
 
   /**
-   * Stows the intake by moving the rotation motor to the up position and set ting
-   * the roller motor
+   * Stows the intake by moving the rotation motor to the up position and set ting the roller motor
    * to stow speed.
    */
   public static Command stowIntake(PositionJoint rotationMotor, Flywheel rollerMotor) {
@@ -48,8 +50,7 @@ public class IntakeCommands {
   }
 
   /**
-   * Deploys the intake by moving the rotation motor to the down position and
-   * setting the roller
+   * Deploys the intake by moving the rotation motor to the down position and setting the roller
    * motor to intake speed.
    */
   public static Command deployIntake(PositionJoint rotationMotor, Flywheel rollerMotor) {
