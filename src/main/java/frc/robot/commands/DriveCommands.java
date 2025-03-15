@@ -185,7 +185,7 @@ public class DriveCommands {
       Drive drive,
       Vision vision,
       PositionJoint elevatorMotor,
-      PositionJoint wristMotor,
+      PositionJoint elbowMotor,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       DoubleSupplier omegaSupplier,
@@ -201,6 +201,9 @@ public class DriveCommands {
             ANGLE_KD,
             new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
     angleController.enableContinuousInput(-Math.PI, Math.PI);
+
+    ProfiledPIDController xController =
+        new ProfiledPIDController(REEF_P.get(), 0.0, 0.0, new TrapezoidProfile.Constraints(1, 1));
 
     // Construct command
     return Commands.run(
@@ -252,7 +255,8 @@ public class DriveCommands {
                       == AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get())) {
 
                 double effort =
-                    REEF_P.get() * vision.getLatestTargetObservation()[cameraNum].tx().getRadians();
+                    xController.calculate(
+                        vision.getLatestTargetObservation()[cameraNum].tx().getRadians(), 0.0);
 
                 Logger.recordOutput("Servo/TargetEffort", effort);
 
@@ -273,7 +277,29 @@ public class DriveCommands {
 
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()))
-        .until(() -> omegaSupplier.getAsDouble() > 0.3);
+        .until(() -> xController.atGoal())
+        .andThen(
+            ElevatorCommands.moveSafe(
+                    elevatorMotor,
+                    elbowMotor,
+                    () -> {
+                      switch (levelSupplier.get()) {
+                        case "L1":
+                          return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_ONE_CORAL;
+                        case "L2":
+                          return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_TWO_CORAL;
+                        case "L3":
+                          return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_THREE_CORAL;
+                        case "L4":
+                          return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL;
+                        default:
+                          return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL;
+                      }
+                    })
+                .alongWith(
+                    Commands.run(
+                        () -> drive.runVelocity(new ChassisSpeeds(APPROACH_SPEED.get(), 0, 0)),
+                        drive)));
   }
 
   public static final Command pathfindToPose(Drive drive, Pose2d targetPose) {

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.position_joint.PositionJointPositionCommand;
 import frc.robot.subsystems.position_joint.PositionJoint;
 import frc.robot.util.mechanical_advantage.LoggedTunableNumber;
+import java.util.function.Supplier;
 
 /** A collection of commands for controlling the intake. */
 public class ElevatorCommands {
@@ -142,6 +143,24 @@ public class ElevatorCommands {
         PositionJoint.setPosition(elevatorMotor, () -> preset.getElevatorPos())
             .alongWith(
                 PositionJoint.setPosition(wristMotor, () -> preset.getWristPos().getRotations())),
+        // check if the current position of the wrist and elevator is the handoff
+        // position
+        () ->
+            elevatorMotor.getDesiredPosition() == ELEVATOR_HEIGHT_PRESETS.HANDOFF.getElevatorPos()
+                && wristMotor.getDesiredPosition()
+                    == ELEVATOR_HEIGHT_PRESETS.HANDOFF.getWristPos().getRotations());
+  }
+
+  public static Command moveSafe(
+      PositionJoint elevatorMotor, PositionJoint wristMotor, Supplier<CoralPreset> preset) {
+    return Commands.either(
+        // if the positions of both is in handoff, run fromHandoff
+        fromHandoff(elevatorMotor, wristMotor, preset.get()),
+        // if not, move the elevator and the wrist to it's posititon at the same time.
+        PositionJoint.setPosition(elevatorMotor, () -> preset.get().getElevatorPos())
+            .alongWith(
+                PositionJoint.setPosition(
+                    wristMotor, () -> preset.get().getWristPos().getRotations())),
         // check if the current position of the wrist and elevator is the handoff
         // position
         () ->
