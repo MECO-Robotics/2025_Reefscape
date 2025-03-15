@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.249727113750581,
-        "y": 4.158673176768961
+        "x": 7.488664772727272,
+        "y": 4.1684946259210225
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.297837429092588,
-        "y": 4.158182906524213
+        "x": 6.5367750880692785,
+        "y": 4.168004355676275
       },
       "isLocked": false,
       "linkedName": null
@@ -57,7 +57,7 @@
     "rotation": 179.54382568032466
   },
   "reversed": false,
-  "folder": "Center Bule auto paths",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": -179.96504476691825
