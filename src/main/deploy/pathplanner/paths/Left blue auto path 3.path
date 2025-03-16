@@ -61,7 +61,7 @@
     },
     {
       "name": "Handoff",
-      "waypointRelativePos": 0.5386416861826699,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -72,7 +72,7 @@
     },
     {
       "name": "Elevator L4",
-      "waypointRelativePos": 1.215584415584411,
+      "waypointRelativePos": 0.07067137809186838,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

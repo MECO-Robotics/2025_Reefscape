@@ -29,15 +29,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "Left blue auto path 3"
+            "waitTime": 1.0
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.5
+            "pathName": "Left blue auto path 3"
           }
         },
         {
@@ -50,12 +50,6 @@
           "type": "path",
           "data": {
             "pathName": "Left blue auto path 4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Four"
           }
         }
       ]

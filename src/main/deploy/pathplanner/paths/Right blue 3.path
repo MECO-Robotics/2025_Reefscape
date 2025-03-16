@@ -45,7 +45,7 @@
     },
     {
       "name": "Elevator L4",
-      "waypointRelativePos": 0.5101298701298705,
+      "waypointRelativePos": 0.06784452296820069,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
