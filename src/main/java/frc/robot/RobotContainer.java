@@ -436,18 +436,29 @@ public class RobotContainer {
         // Coral Intake
         driverController // Right bumper to deploy right coral intake
                 .rightBumper()
-                .whileTrue(IntakeCommands.deployIntake(rightCoralRotationMotor, rightCoralRollerMotor).alongWith(
-                        new FlywheelVoltageCommand(leftCoralRollerMotor, IntakeCommands.ROLLER_VOLTS.INTAKE)))
-                .whileFalse(IntakeCommands.stowIntake(rightCoralRotationMotor, rightCoralRollerMotor).alongWith(
-                        new FlywheelVoltageCommand(leftCoralRollerMotor, IntakeCommands.ROLLER_VOLTS.STOP)));
+                .whileTrue(
+                        IntakeCommands.deployIntake(rightCoralRotationMotor, rightCoralRollerMotor)
+                                .alongWith(
+                                        new FlywheelVoltageCommand(
+                                                leftCoralRollerMotor, IntakeCommands.ROLLER_VOLTS.INTAKE)))
+                .whileFalse(
+                        IntakeCommands.stowIntake(rightCoralRotationMotor, rightCoralRollerMotor)
+                                .alongWith(
+                                        new FlywheelVoltageCommand(
+                                                leftCoralRollerMotor, IntakeCommands.ROLLER_VOLTS.STOP)));
 
         driverController // Left bumper to deploy left coral intake
                 .leftBumper()
-                .whileTrue(IntakeCommands.deployIntake(leftCoralRotationMotor, leftCoralRollerMotor).alongWith(
-                        new FlywheelVoltageCommand(leftCoralRollerMotor,
-                                IntakeCommands.ROLLER_VOLTS.INTAKE)))
-                .whileFalse(IntakeCommands.stowIntake(leftCoralRotationMotor, leftCoralRollerMotor).alongWith(
-                        new FlywheelVoltageCommand(leftCoralRollerMotor, IntakeCommands.ROLLER_VOLTS.STOP)));
+                .whileTrue(
+                        IntakeCommands.deployIntake(leftCoralRotationMotor, leftCoralRollerMotor)
+                                .alongWith(
+                                        new FlywheelVoltageCommand(
+                                                rightCoralRollerMotor, IntakeCommands.ROLLER_VOLTS.INTAKE)))
+                .whileFalse(
+                        IntakeCommands.stowIntake(leftCoralRotationMotor, leftCoralRollerMotor)
+                                .alongWith(
+                                        new FlywheelVoltageCommand(
+                                                rightCoralRollerMotor, IntakeCommands.ROLLER_VOLTS.STOP)));
 
         driverController
                 .y()
@@ -477,12 +488,14 @@ public class RobotContainer {
                 .whileTrue(
                         DriveCommands.joystickDriveRobotRelative(drive, () -> 0.5, () -> -0.25, () -> 0.0));
 
-        driverController.axisGreaterThan(2, 0.3).whileTrue(
-                DriveCommands.joystickDrive(
-                        drive,
-                        () -> -0.5 * driverController.getLeftY(),
-                        () -> -0.5 * driverController.getLeftX(),
-                        () -> -0.5 * driverController.getRightX()));
+        driverController
+                .axisGreaterThan(2, 0.3)
+                .whileTrue(
+                        DriveCommands.joystickDrive(
+                                drive,
+                                () -> -0.5 * driverController.getLeftY(),
+                                () -> -0.5 * driverController.getLeftX(),
+                                () -> -0.5 * driverController.getRightX()));
         // Trigger for the elevator positions
         // Shows up on the dashboard
         // Right side reef
