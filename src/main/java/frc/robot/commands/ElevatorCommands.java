@@ -30,7 +30,7 @@ public class ElevatorCommands {
         new CoralPreset("L1", 0.35, Rotation2d.fromRotations(-0.21));
 
     public static final CoralPreset L_TWO_CORAL =
-        new CoralPreset("L2", 0.5, Rotation2d.fromRotations(-0.21));
+        new CoralPreset("L2", 0.15, Rotation2d.fromDegrees(30));
 
     public static final CoralPreset L_THREE_CORAL =
         new CoralPreset("L3", 0.41, Rotation2d.fromRotations(0.15));
