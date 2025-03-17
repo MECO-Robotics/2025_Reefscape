@@ -374,13 +374,15 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "AlignToLeftReef",
-                Commands.either(
-                        Commands.run(
-                                () -> AdvancedPPHolonomicDriveController.overrideYFeedback(
-                                        () -> vision.getLatestTargetObservation()[0].ty().getRadians()
-                                                * DriveCommands.REEF_P.get())),
-                        Commands.run(() -> AdvancedPPHolonomicDriveController.clearYFeedbackOverride()),
-                        () -> vision.hasTarget()[0]));
+                Commands.run(() -> {
+                    if (vision.hasTarget()[0]) {
+                        AdvancedPPHolonomicDriveController
+                                .overrideYFeedback(() -> vision.getLatestTargetObservation()[0].tx().getRadians()
+                                        * DriveCommands.REEF_P.get());
+                    }
+                })
+
+        );
 
         NamedCommands.registerCommand(
                 "AlignToRightReef",
@@ -389,8 +391,7 @@ public class RobotContainer {
                                 () -> AdvancedPPHolonomicDriveController.overrideYFeedback(
                                         () -> vision.getLatestTargetObservation()[1].ty().getRadians()
                                                 * DriveCommands.REEF_P.get())),
-                        Commands.run(() -> AdvancedPPHolonomicDriveController
-                                .clearYFeedbackOverride()),
+                        Commands.run(() -> AdvancedPPHolonomicDriveController.clearYFeedbackOverride()),
                         () -> vision.hasTarget()[1]));
 
         // Need to create the NamedCommands before the autoChooser or else they won't
@@ -686,4 +687,3 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return autoChooser.get();
     }
-}
