@@ -5,12 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "AlignToLeftReef"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Left blue auto path 1"

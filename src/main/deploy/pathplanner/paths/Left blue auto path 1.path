@@ -44,6 +44,17 @@
       }
     },
     {
+      "name": "Align",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "AlignToRightReef"
+        }
+      }
+    },
+    {
       "name": "stow",
       "waypointRelativePos": 0.10459363957597868,
       "endWaypointRelativePos": null,
