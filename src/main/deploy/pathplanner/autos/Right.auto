@@ -21,6 +21,30 @@
           "data": {
             "name": "Score"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left blue auto path 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left blue auto path 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left blue auto path 4"
+          }
         }
       ]
     }
