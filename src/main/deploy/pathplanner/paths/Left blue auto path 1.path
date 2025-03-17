@@ -16,19 +16,24 @@
     },
     {
       "anchor": {
-        "x": 5.193568231682522,
-        "y": 3.152770908857501
+        "x": 5.157491721854305,
+        "y": 3.269536423841059
       },
       "prevControl": {
-        "x": 5.7427512551310915,
-        "y": 2.2389084523809295
+        "x": 5.706674745302874,
+        "y": 2.3556739673644875
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Left blue auto path 1 end"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.14527845036319847,
+      "rotationDegrees": 119.99999999999999
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
