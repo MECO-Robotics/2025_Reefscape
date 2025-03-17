@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.vision.LinearInterpolationTable;
-
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,10 +51,11 @@ public class VisionIOPhotonVisionGoon implements VisionIO {
             Rotation2d.fromDegrees(result.getBestTarget().getPitch()),
             result.getBestTarget().fiducialId);
 
-        double distance = LinearInterpolationTable.table.getOutput(result.getBestTarget().getPitch());
-
         double tx = Units.degreesToRadians(result.getBestTarget().getYaw());
         double ty = Units.degreesToRadians(result.getBestTarget().getPitch());
+
+        double distance = LinearInterpolationTable.table.getOutput(result.getBestTarget().getPitch()) / Math.sin(
+            ty);
 
         Rotation2d gyro = gyroRotationSupplier.get();
 

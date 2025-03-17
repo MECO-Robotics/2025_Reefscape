@@ -42,6 +42,28 @@
           "name": "Four"
         }
       }
+    },
+    {
+      "name": "stow",
+      "waypointRelativePos": 0.10459363957597868,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "RStow"
+        }
+      }
+    },
+    {
+      "name": "Stow",
+      "waypointRelativePos": 0.24028268551237303,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "LStow"
+        }
+      }
     }
   ],
   "globalConstraints": {
