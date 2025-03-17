@@ -5,6 +5,18 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "LStow"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RStow"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Left blue auto path 1"
