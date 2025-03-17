@@ -374,25 +374,25 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "AlignToLeftReef",
-                Commands.run(() -> {
-                    if (vision.hasTarget()[0]) {
-                        AdvancedPPHolonomicDriveController
-                                .overrideYFeedback(() -> vision.getLatestTargetObservation()[0].tx().getRadians()
-                                        * DriveCommands.REEF_P.get());
-                    }
-                })
-
-        );
+                Commands.run(
+                        () -> {
+                            if (vision.hasTarget()[0]) {
+                                AdvancedPPHolonomicDriveController.overrideYFeedback(
+                                        () -> vision.getLatestTargetObservation()[0].tx().getRadians()
+                                                * DriveCommands.REEF_P.get());
+                            }
+                        }));
 
         NamedCommands.registerCommand(
                 "AlignToRightReef",
-                Commands.either(
-                        Commands.run(
-                                () -> AdvancedPPHolonomicDriveController.overrideYFeedback(
-                                        () -> vision.getLatestTargetObservation()[1].ty().getRadians()
-                                                * DriveCommands.REEF_P.get())),
-                        Commands.run(() -> AdvancedPPHolonomicDriveController.clearYFeedbackOverride()),
-                        () -> vision.hasTarget()[1]));
+                Commands.run(
+                        () -> {
+                            if (vision.hasTarget()[1]) {
+                                AdvancedPPHolonomicDriveController.overrideYFeedback(
+                                        () -> vision.getLatestTargetObservation()[1].tx().getRadians()
+                                                * DriveCommands.REEF_P.get());
+                            }
+                        }));
 
         // Need to create the NamedCommands before the autoChooser or else they won't
         // work
