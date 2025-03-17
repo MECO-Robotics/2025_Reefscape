@@ -6,8 +6,8 @@ import java.awt.geom.Point2D;
 /* This should be updated to use binary search at  some point */
 
 public class LinearInterpolationTable {
-  public static LinearInterpolationTable table =
-      new LinearInterpolationTable(new Point(1, 2), new Point(1, 2));
+  public static LinearInterpolationTable table = new LinearInterpolationTable(new Point(1, 2), new Point(1, 2),
+      new Point(1, 2), new Point(1, 2));
 
   private double m_maxInput = Double.NEGATIVE_INFINITY;
   private double m_minInput = Double.POSITIVE_INFINITY;
