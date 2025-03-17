@@ -298,12 +298,12 @@ public class DriveCommands {
 
             Logger.recordOutput("Servo/TargetEffort", effort);
 
-            if (Math.abs(effort) > 0.01) {
+            if (Math.abs(effort) > 0.005) {
               speeds.vyMetersPerSecond = effort;
             }
 
             if (angleController.atGoal()
-                && Math.abs(vision.getLatestTargetObservation()[cameraNum].tx().getRadians()) < 0.1) {
+                && Math.abs(vision.getLatestTargetObservation()[cameraNum].tx().getRadians()) < 0.05) {
               speeds.vxMetersPerSecond = APPROACH_SPEED.get();
             }
           }
@@ -314,7 +314,8 @@ public class DriveCommands {
 
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()))
-        .beforeStarting(() -> xController.reset(vision.getLatestTargetObservation()[0].tx().getRadians()))
+        .beforeStarting(
+            () -> xController.reset(vision.getLatestTargetObservation()[0].tx().getRadians()))
         .until(() -> xController.atGoal())
         .andThen(
             ElevatorCommands.moveSafe(
