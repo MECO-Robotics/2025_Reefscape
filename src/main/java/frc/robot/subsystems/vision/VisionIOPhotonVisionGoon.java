@@ -24,7 +24,7 @@ public class VisionIOPhotonVisionGoon implements VisionIO {
   /**
    * Creates a new VisionIOPhotonVision.
    *
-   * @param name             The configured name of the camera.
+   * @param name The configured name of the camera.
    * @param rotationSupplier The 3D position of the camera relative to the robot.
    */
   public VisionIOPhotonVisionGoon(
@@ -46,40 +46,44 @@ public class VisionIOPhotonVisionGoon implements VisionIO {
     for (var result : camera.getAllUnreadResults()) {
       // Update latest target observation
       if (result.hasTargets()) {
-        inputs.latestTargetObservation = new TargetObservation(
-            Rotation2d.fromDegrees(result.getBestTarget().getYaw()),
-            Rotation2d.fromDegrees(result.getBestTarget().getPitch()),
-            result.getBestTarget().fiducialId);
+        inputs.latestTargetObservation =
+            new TargetObservation(
+                Rotation2d.fromDegrees(result.getBestTarget().getYaw()),
+                Rotation2d.fromDegrees(result.getBestTarget().getPitch()),
+                result.getBestTarget().fiducialId);
 
         double tx = Units.degreesToRadians(result.getBestTarget().getYaw());
         double ty = Units.degreesToRadians(result.getBestTarget().getPitch());
 
-        double distance = LinearInterpolationTable.table.getOutput(result.getBestTarget().getPitch()) / Math.sin(
-            ty);
+        double distance =
+            LinearInterpolationTable.table.getOutput(result.getBestTarget().getPitch())
+                / Math.sin(ty);
 
         Rotation2d gyro = gyroRotationSupplier.get();
 
         double distance2d = distance * Math.cos(-robotToCamera.getRotation().getY() - ty);
-        Rotation2d camToTagRotation = gyro
-            .plus(robotToCamera.getRotation().toRotation2d().plus(Rotation2d.fromRadians(-tx)));
+        Rotation2d camToTagRotation =
+            gyro.plus(robotToCamera.getRotation().toRotation2d().plus(Rotation2d.fromRadians(-tx)));
 
-        Pose2d tagPose2d = VisionConstants.aprilTagLayout
-            .getTagPose(result.getBestTarget().fiducialId)
-            .get()
-            .toPose2d();
+        Pose2d tagPose2d =
+            VisionConstants.aprilTagLayout
+                .getTagPose(result.getBestTarget().fiducialId)
+                .get()
+                .toPose2d();
 
-        Translation2d fieldToCamTranslation = new Pose2d(tagPose2d.getTranslation(),
-            camToTagRotation.plus(Rotation2d.kPi))
-            .transformBy(new Transform2d(distance2d, 0.0, Rotation2d.kZero))
-            .getTranslation();
+        Translation2d fieldToCamTranslation =
+            new Pose2d(tagPose2d.getTranslation(), camToTagRotation.plus(Rotation2d.kPi))
+                .transformBy(new Transform2d(distance2d, 0.0, Rotation2d.kZero))
+                .getTranslation();
 
-        Pose2d robotPose2d = new Pose2d(fieldToCamTranslation, gyro.plus(robotToCamera.getRotation().toRotation2d()))
-            .transformBy(
-                new Transform2d(
-                    new Pose2d(
-                        robotToCamera.getTranslation().toTranslation2d(),
-                        robotToCamera.getRotation().toRotation2d()),
-                    Pose2d.kZero));
+        Pose2d robotPose2d =
+            new Pose2d(fieldToCamTranslation, gyro.plus(robotToCamera.getRotation().toRotation2d()))
+                .transformBy(
+                    new Transform2d(
+                        new Pose2d(
+                            robotToCamera.getTranslation().toTranslation2d(),
+                            robotToCamera.getRotation().toRotation2d()),
+                        Pose2d.kZero));
         robotPose2d = new Pose2d(robotPose2d.getTranslation(), gyro);
 
         poseObservations.add(
@@ -93,7 +97,8 @@ public class VisionIOPhotonVisionGoon implements VisionIO {
 
         inputs.hasTarget = true;
       } else {
-        inputs.latestTargetObservation = new TargetObservation(new Rotation2d(), new Rotation2d(), 0);
+        inputs.latestTargetObservation =
+            new TargetObservation(new Rotation2d(), new Rotation2d(), 0);
         inputs.hasTarget = false;
       }
     }
