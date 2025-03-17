@@ -21,7 +21,6 @@ public class LinearInterpolationTable {
         m_minInput = m_points[i].getX();
       }
     }
-
   }
 
   public double getOutput(double input) {
