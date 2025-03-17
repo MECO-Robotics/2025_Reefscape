@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 4.923493360772971,
-        "y": 5.1146360530176365
+        "x": 4.986692181234595,
+        "y": 5.233754217060741
       },
       "prevControl": {
-        "x": 5.960651114268807,
-        "y": 6.2528773976707885
+        "x": 6.023849934730431,
+        "y": 6.371995561713893
       },
       "nextControl": null,
       "isLocked": false,
@@ -57,7 +57,7 @@
     "rotation": -119.01908285160505
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Right Blue auto paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 179.87630786222067

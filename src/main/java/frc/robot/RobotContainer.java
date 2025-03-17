@@ -3,6 +3,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -38,6 +39,10 @@ import frc.robot.subsystems.flywheel.FlywheelConstants;
 import frc.robot.subsystems.flywheel.FlywheelIOReplay;
 import frc.robot.subsystems.flywheel.FlywheelIOSim;
 import frc.robot.subsystems.flywheel.FlywheelIOSparkMax;
+import frc.robot.subsystems.piece_detection.PieceDetection;
+import frc.robot.subsystems.piece_detection.PieceDetectionConstants;
+import frc.robot.subsystems.piece_detection.PieceDetectionIOPhoton;
+import frc.robot.subsystems.piece_detection.PieceDetectionIOReplay;
 import frc.robot.subsystems.position_joint.PositionJoint;
 import frc.robot.subsystems.position_joint.PositionJointConstants;
 import frc.robot.subsystems.position_joint.PositionJointIOReplay;
@@ -71,6 +76,9 @@ public class RobotContainer {
   private PositionJoint elevatorMotor;
   private PositionJoint elbowMotor;
   // private Flywheel endEffectorMotor;
+
+  private final PieceDetection leftPieceDetection;
+  private final PieceDetection rightPieceDetection;
 
   @SuppressWarnings("unused")
   private final Vision vision;
@@ -177,6 +185,17 @@ public class RobotContainer {
                 new VisionIOPhotonVisionTrig(
                     "RightCamera", VisionConstants.robotToRightTagCamera, drive::getRotation));
 
+        leftPieceDetection =
+            new PieceDetection(
+                new PieceDetectionIOPhoton(
+                    "LeftPieceDetection", PieceDetectionConstants.LEFT_CONFIG, 0),
+                () -> new Pose3d(drive.getPose()));
+        rightPieceDetection =
+            new PieceDetection(
+                new PieceDetectionIOPhoton(
+                    "RightPieceDetection", PieceDetectionConstants.RIGHT_CONFIG, 0),
+                () -> new Pose3d(drive.getPose()));
+
         // driverController.b().onTrue(Commands.runOnce(questNav::resetHeading).ignoringDisable(true));
         break;
 
@@ -248,6 +267,14 @@ public class RobotContainer {
         // new FlywheelIOSim("EndEffectorMotor", FlywheelConstants.END_EFFECTOR_CONFIG),
         // FlywheelConstants.END_EFFECTOR_GAINS);
 
+        leftPieceDetection =
+            new PieceDetection(
+                new PieceDetectionIOReplay("LeftPieceDetection"),
+                () -> new Pose3d(drive.getPose()));
+        rightPieceDetection =
+            new PieceDetection(
+                new PieceDetectionIOReplay("RightPieceDetection"),
+                () -> new Pose3d(drive.getPose()));
         break;
 
       default:
@@ -305,6 +332,14 @@ public class RobotContainer {
         // new FlywheelIOReplay("EndEffectorMotor"),
         // FlywheelConstants.END_EFFECTOR_GAINS);
 
+        leftPieceDetection =
+            new PieceDetection(
+                new PieceDetectionIOReplay("LeftPieceDetection"),
+                () -> new Pose3d(drive.getPose()));
+        rightPieceDetection =
+            new PieceDetection(
+                new PieceDetectionIOReplay("RightPieceDetection"),
+                () -> new Pose3d(drive.getPose()));
         break;
     }
     /*

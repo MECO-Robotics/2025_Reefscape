@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.229444999235812,
-        "y": 3.1127699008381713
+        "x": 5.288180629804315,
+        "y": 2.988253009940271
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.37153497760327,
-        "y": 2.8205920733302663
+        "x": 5.430270608171773,
+        "y": 2.696075182432366
       },
       "isLocked": false,
       "linkedName": "Left blue auto path 1 end"
@@ -103,7 +103,7 @@
   "folder": "Left Blue auto paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 121.58129191893129
+    "rotation": 121.43659708146872
   },
   "useDefaultConstraints": true
 }
