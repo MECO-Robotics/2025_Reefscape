@@ -231,6 +231,53 @@
       ]
     }
   ],
-  "cameras": [],
+  "cameras": [
+    {
+      "name": "Left Tag",
+      "rotations": [
+        {
+          "axis": "y",
+          "degrees": 38
+        },
+        {
+          "axis": "z",
+          "degrees": 0
+        }
+      ],
+      "position": [
+        0.00555625,
+        0.15875,
+        0.813
+      ],
+      "resolution": [
+        1280,
+        720
+      ],
+      "fov": 70
+    },
+    {
+      "name": "Right Tag",
+      "rotations": [
+        {
+          "axis": "y",
+          "degrees": 30
+        },
+        {
+          "axis": "z",
+          "degrees": 0
+        }
+      ],
+      "position": [
+        0.00555625,
+        -0.176,
+        0.6604
+      ],
+      "resolution": [
+        1280,
+        720
+      ],
+      "fov": 70
+    }
+  ],
   "name": "Hadal"
 }
