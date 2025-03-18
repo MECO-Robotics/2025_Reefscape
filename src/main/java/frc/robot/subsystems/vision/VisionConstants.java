@@ -30,7 +30,7 @@ public class VisionConstants {
   public static Transform3d robotToLeftTagCamera =
       new Transform3d(
           Units.inchesToMeters(6 + 1 / 32),
-          Units.inchesToMeters(-2.25),
+          Units.inchesToMeters(-6.25),
           Units.inchesToMeters(26),
           new Rotation3d());
   public static Transform3d robotToRightTagCamera =
