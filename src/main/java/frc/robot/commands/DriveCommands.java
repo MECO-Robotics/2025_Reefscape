@@ -38,8 +38,8 @@ import org.littletonrobotics.junction.Logger;
 /** A collection of commands for controlling the drive subsystem. */
 public class DriveCommands {
   private static final double DEADBAND = 0.1;
-  private static final double ANGLE_KP = 5.0;
-  private static final double ANGLE_KD = 0.4;
+  private static final LoggedTunableNumber ANGLE_KP = new LoggedTunableNumber("AngleKp", 5.0);
+  private static final LoggedTunableNumber ANGLE_KD = new LoggedTunableNumber("AngleKd", 0.4);
   private static final double ANGLE_MAX_VELOCITY = 8.0;
   private static final double ANGLE_MAX_ACCELERATION = 20.0;
   private static final double FF_START_DELAY = 2.0; // Secs
@@ -48,6 +48,11 @@ public class DriveCommands {
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
   public static final LoggedTunableNumber REEF_P = new LoggedTunableNumber("ReefP", 3.0);
+  public static final LoggedTunableNumber REEF_MAX_VELO =
+      new LoggedTunableNumber("ReefMaxVelo", 2.0);
+  public static final LoggedTunableNumber REEF_MAX_ACCEL =
+      new LoggedTunableNumber("ReefMaxAccel", 1.0);
+
   public static final LoggedTunableNumber APPROACH_SPEED =
       new LoggedTunableNumber("Approach Speed", 1.0);
 
@@ -180,9 +185,9 @@ public class DriveCommands {
     // Create PID controller
     ProfiledPIDController angleController =
         new ProfiledPIDController(
-            ANGLE_KP,
+            ANGLE_KP.get(),
             0.0,
-            ANGLE_KD,
+            ANGLE_KD.get(),
             new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
     angleController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -238,14 +243,18 @@ public class DriveCommands {
     // Create PID controller
     ProfiledPIDController angleController =
         new ProfiledPIDController(
-            ANGLE_KP,
+            ANGLE_KP.get(),
             0.0,
-            ANGLE_KD,
+            ANGLE_KD.get(),
             new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
     angleController.enableContinuousInput(-Math.PI, Math.PI);
 
     ProfiledPIDController xController =
-        new ProfiledPIDController(REEF_P.get(), 0.0, 0.0, new TrapezoidProfile.Constraints(2, 1));
+        new ProfiledPIDController(
+            REEF_P.get(),
+            0.0,
+            0.0,
+            new TrapezoidProfile.Constraints(REEF_MAX_VELO.get(), REEF_MAX_ACCEL.get()));
 
     // Construct command
     return Commands.run(
@@ -305,8 +314,7 @@ public class DriveCommands {
 
               if (vision.hasTarget()[cameraNum]
                   && vision.getLatestTargetObservation()[cameraNum].tagId()
-                      == AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get())
-                  && !(vision.getLatestTargetObservation()[cameraNum].ty().getDegrees() > 16)) {
+                      == AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get())) {
 
                 double effort =
                     xController.calculate(
@@ -411,9 +419,7 @@ public class DriveCommands {
 
                       return vision.hasTarget()[cameraNum]
                           && vision.getLatestTargetObservation()[cameraNum].tagId()
-                              == AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get())
-                          && !(vision.getLatestTargetObservation()[cameraNum].ty().getDegrees()
-                              > 16);
+                              == AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get());
                     })
                 .andThen(
                     IntakeCommands.deployIntakeAlign(rightCoralRotationMotor)
