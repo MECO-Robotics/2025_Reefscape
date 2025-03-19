@@ -76,13 +76,20 @@ public class RobotContainer {
   private Flywheel leftCoralRollerMotor;
   private PositionJoint elevatorMotor;
   private PositionJoint elbowMotor;
-  // private Flywheel endEffectorMotor;
 
-  private final PieceDetection leftPieceDetection;
-  private final PieceDetection rightPieceDetection;
+  private PositionJoint climber;
+  private Flywheel climberRoller;
+
+  // private Flywheel endEffectorMotor;
 
   @SuppressWarnings("unused")
   private final Vision vision;
+
+  @SuppressWarnings("unused")
+  private final PieceDetection leftPieceDetection;
+
+  @SuppressWarnings("unused")
+  private final PieceDetection rightPieceDetection;
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
@@ -171,6 +178,15 @@ public class RobotContainer {
                 new PositionJointIOTalonFX("ElbowMotor", PositionJointConstants.ELBOW_CONFIG),
                 PositionJointConstants.PIVOT_GAINS);
 
+        climber =
+            new PositionJoint(
+                new PositionJointIOSparkMax("ClimberMotor", PositionJointConstants.CLIMBER_CONFIG),
+                PositionJointConstants.CLIMBER_GAINS);
+
+        climberRoller =
+            new Flywheel(
+                new FlywheelIOSparkMax("ClimberRoller", FlywheelConstants.CLIMBER_ROLLER_CONFIG),
+                FlywheelConstants.CLIMBER_ROLLER_GAINS);
         // End Effector
         // endEffectorMotor = new Flywheel(
         // new FlywheelIOSparkMax("EndEffectorMotor",
@@ -276,6 +292,16 @@ public class RobotContainer {
             new PieceDetection(
                 new PieceDetectionIOReplay("RightPieceDetection"),
                 () -> new Pose3d(drive.getPose()));
+
+        climber =
+            new PositionJoint(
+                new PositionJointIOSim("ClimberMotor", PositionJointConstants.CLIMBER_CONFIG),
+                PositionJointConstants.CLIMBER_GAINS);
+
+        climberRoller =
+            new Flywheel(
+                new FlywheelIOSim("ClimberRoller", FlywheelConstants.CLIMBER_ROLLER_CONFIG),
+                FlywheelConstants.CLIMBER_ROLLER_GAINS);
         break;
 
       default:
@@ -341,6 +367,14 @@ public class RobotContainer {
             new PieceDetection(
                 new PieceDetectionIOReplay("RightPieceDetection"),
                 () -> new Pose3d(drive.getPose()));
+
+        climber =
+            new PositionJoint(
+                new PositionJointIOReplay("ClimberMotor"), PositionJointConstants.CLIMBER_GAINS);
+
+        climberRoller =
+            new Flywheel(
+                new FlywheelIOReplay("ClimberRoller"), FlywheelConstants.CLIMBER_ROLLER_GAINS);
         break;
     }
     /*
@@ -395,19 +429,19 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
         "AlignToLeftReef",
-        Commands.run(
+        Commands.runOnce(
             () -> {
               if (vision.hasTarget()[0]) {
                 AdvancedPPHolonomicDriveController.overrideYFeedback(
                     () ->
-                        vision.getLatestTargetObservation()[0].tx().getRadians()
+                        -vision.getLatestTargetObservation()[0].tx().getRadians()
                             * DriveCommands.REEF_P.get());
               }
             }));
 
     NamedCommands.registerCommand(
         "AlignToRightReef",
-        Commands.run(
+        Commands.runOnce(
             () -> {
               if (vision.hasTarget()[1]) {
                 AdvancedPPHolonomicDriveController.overrideYFeedback(
@@ -573,6 +607,7 @@ public class RobotContainer {
                 () -> -0.5 * driverController.getLeftY(),
                 () -> -0.5 * driverController.getLeftX(),
                 () -> -0.5 * driverController.getRightX()));
+
     // Trigger for the elevator positions
     // Shows up on the dashboard
     // Right side reef
@@ -620,6 +655,22 @@ public class RobotContainer {
     // coPilotController.leftBumper().onTrue(autoDrive(1));
 
     coPilotController.x().whileTrue(ElevatorCommands.scorePreset(elbowMotor));
+
+    coPilotController
+        .rightBumper()
+        .onTrue(PositionJoint.setVoltage(climber, () -> 6.0))
+        .onFalse(PositionJoint.setVoltage(climber, () -> 0.0));
+
+    coPilotController
+        .leftBumper()
+        .onTrue(PositionJoint.setVoltage(climber, () -> -6.0))
+        .onFalse(PositionJoint.setVoltage(climber, () -> 0.0));
+
+    climberRoller.setDefaultCommand(
+        Flywheel.setVoltage(
+            climberRoller,
+            () ->
+                coPilotController.getLeftTriggerAxis() - coPilotController.getRightTriggerAxis()));
 
     new Trigger(
             () ->

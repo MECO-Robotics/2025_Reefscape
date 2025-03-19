@@ -243,8 +243,7 @@ public class DriveCommands {
     angleController.enableContinuousInput(-Math.PI, Math.PI);
 
     ProfiledPIDController xController =
-        new ProfiledPIDController(
-            REEF_P.get(), 0.0, 0.0, new TrapezoidProfile.Constraints(0.5, 0.5));
+        new ProfiledPIDController(REEF_P.get(), 0.0, 0.0, new TrapezoidProfile.Constraints(2, 1));
 
     // Construct command
     return Commands.run(
@@ -277,6 +276,7 @@ public class DriveCommands {
               Logger.recordOutput(
                   "Servo/SelectedTargetData", vision.getLatestTargetObservation()[cameraNum]);
 
+              // Face towards the desired tag
               omega =
                   angleController.calculate(
                       drive.getRotation().getRadians(),
@@ -311,15 +311,21 @@ public class DriveCommands {
 
                 Logger.recordOutput("Servo/TargetEffort", effort);
 
-                if (Math.abs(effort) > 0.005) {
-                  speeds.vyMetersPerSecond = effort;
+                speeds.vyMetersPerSecond = effort;
+
+                if (vision.getLatestTargetObservation()[cameraNum].ty().getDegrees() > -13) {
+                  speeds.vxMetersPerSecond = APPROACH_SPEED.get();
+                } else {
+                  speeds.vxMetersPerSecond = 0;
                 }
 
-                if (angleController.atGoal()
-                    && Math.abs(vision.getLatestTargetObservation()[cameraNum].tx().getRadians())
-                        < 0.05) {
-                  speeds.vxMetersPerSecond = APPROACH_SPEED.get();
-                }
+                // if (angleController.atGoal()
+                // && Math.abs(vision.getLatestTargetObservation()[cameraNum].tx().getRadians())
+                // < 0.05) {
+                // speeds.vxMetersPerSecond = APPROACH_SPEED.get();
+                // } else {
+                // speeds.vxMetersPerSecond = 0;
+                // }
               }
 
               drive.runVelocity(speeds);
@@ -329,30 +335,41 @@ public class DriveCommands {
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()))
         .beforeStarting(
-            () -> xController.reset(vision.getLatestTargetObservation()[0].tx().getRadians()))
-        .until(() -> xController.atGoal())
-        .andThen(
-            ElevatorCommands.moveSafe(
-                    elevatorMotor,
-                    elbowMotor,
-                    () -> {
-                      switch (levelSupplier.get()) {
-                        case "L1":
-                          return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_ONE_CORAL;
-                        case "L2":
-                          return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_TWO_CORAL;
-                        case "L3":
-                          return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_THREE_CORAL;
-                        case "L4":
-                          return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL;
-                        default:
-                          return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL;
-                      }
-                    })
-                .alongWith(
-                    Commands.run(
-                        () -> drive.runVelocity(new ChassisSpeeds(APPROACH_SPEED.get(), 0, 0)),
-                        drive)));
+            () -> {
+              int cameraNum;
+              switch (sideSupplier.get()) {
+                case "Left":
+                  cameraNum = 0;
+                  break;
+                case "Right":
+                  cameraNum = 1;
+                  break;
+                default:
+                  cameraNum = 0;
+                  break;
+              }
+              xController.reset(vision.getLatestTargetObservation()[cameraNum].tx().getRadians());
+            })
+        .alongWith(
+            Commands.waitUntil(() -> xController.atGoal())
+                .andThen(
+                    ElevatorCommands.moveSafe(
+                        elevatorMotor,
+                        elbowMotor,
+                        () -> {
+                          switch (levelSupplier.get()) {
+                            case "L1":
+                              return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_ONE_CORAL;
+                            case "L2":
+                              return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_TWO_CORAL;
+                            case "L3":
+                              return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_THREE_CORAL;
+                            case "L4":
+                              return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL;
+                            default:
+                              return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL;
+                          }
+                        })));
   }
 
   public static final Command pathfindToPose(Drive drive, Pose2d targetPose) {

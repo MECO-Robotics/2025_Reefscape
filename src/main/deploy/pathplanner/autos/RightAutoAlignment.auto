@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Left blue auto path 1"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left blue auto path 1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlignToLeftReef"
+                }
+              }
+            ]
           }
         },
         {

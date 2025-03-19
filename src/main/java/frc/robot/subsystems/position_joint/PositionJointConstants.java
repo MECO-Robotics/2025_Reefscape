@@ -113,4 +113,22 @@ public class PositionJointConstants {
           -1,
           Rotation2d.fromRotations(-0.25),
           "");
+
+  public static final PositionJointGains CLIMBER_GAINS =
+      new PositionJointGains(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+  public static final PositionJointGains CLIMBER_GAINS_SIM =
+      new PositionJointGains(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+  public static final PositionJointHardwareConfig CLIMBER_CONFIG =
+      new PositionJointHardwareConfig(
+          new int[] {40},
+          new boolean[] {true},
+          (72.0 / 16.0) * (70.0 / 16.0),
+          40,
+          GravityType.COSINE,
+          EncoderType.INTERNAL,
+          -1,
+          Rotation2d.fromRotations(-0.25),
+          "");
 }
