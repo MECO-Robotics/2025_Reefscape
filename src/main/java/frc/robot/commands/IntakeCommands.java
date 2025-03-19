@@ -15,9 +15,12 @@ public class IntakeCommands {
   /** Intake rotation preset positions. */
   public static final class ROTATION_POSITIONS {
     public static final LoggedTunableNumber STOW =
-        new LoggedTunableNumber("CoralIntakeRotation", 0);
+        new LoggedTunableNumber("CoralIntakeRotation/Stow", 0);
     public static final LoggedTunableNumber DEPLOY =
-        new LoggedTunableNumber("CoralIntakePosition", Units.degreesToRotations(101));
+        new LoggedTunableNumber("CoralIntakePosition/Deploy", Units.degreesToRotations(101));
+
+    public static final LoggedTunableNumber DEPLOY_ALIGN =
+        new LoggedTunableNumber("CoralIntakePosition/DeployAlign", 0.20);
   }
 
   /** Intake roller preset voltages. */
@@ -57,5 +60,10 @@ public class IntakeCommands {
     return Commands.parallel(
         new PositionJointPositionCommand(rotationMotor, ROTATION_POSITIONS.DEPLOY),
         new FlywheelVoltageCommand(rollerMotor, ROLLER_VOLTS.INTAKE));
+  }
+
+  public static Command deployIntakeAlign(PositionJoint rotationMotor) {
+    return Commands.parallel(
+        PositionJoint.setPosition(rotationMotor, ROTATION_POSITIONS.DEPLOY_ALIGN));
   }
 }

@@ -226,6 +226,8 @@ public class DriveCommands {
       Vision vision,
       PositionJoint elevatorMotor,
       PositionJoint elbowMotor,
+      PositionJoint rightCoralRotationMotor,
+      PositionJoint leftCoralRotationMotor,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       DoubleSupplier omegaSupplier,
@@ -260,10 +262,10 @@ public class DriveCommands {
 
               switch (sideSupplier.get()) {
                 case "Left":
-                  cameraNum = 0;
+                  cameraNum = 1;
                   break;
                 case "Right":
-                  cameraNum = 1;
+                  cameraNum = 0;
                   break;
                 default:
                   cameraNum = 0;
@@ -303,7 +305,8 @@ public class DriveCommands {
 
               if (vision.hasTarget()[cameraNum]
                   && vision.getLatestTargetObservation()[cameraNum].tagId()
-                      == AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get())) {
+                      == AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get())
+                  && !(vision.getLatestTargetObservation()[cameraNum].ty().getDegrees() > 16)) {
 
                 double effort =
                     xController.calculate(
@@ -313,8 +316,10 @@ public class DriveCommands {
 
                 speeds.vyMetersPerSecond = effort;
 
-                if (vision.getLatestTargetObservation()[cameraNum].ty().getDegrees() > -13) {
+                if (vision.getLatestTargetObservation()[cameraNum].ty().getDegrees() > 10) {
                   speeds.vxMetersPerSecond = APPROACH_SPEED.get();
+                } else if (vision.getLatestTargetObservation()[cameraNum].ty().getDegrees() > -13) {
+                  speeds.vxMetersPerSecond = 0.5 * APPROACH_SPEED.get();
                 } else {
                   speeds.vxMetersPerSecond = 0;
                 }
@@ -339,19 +344,37 @@ public class DriveCommands {
               int cameraNum;
               switch (sideSupplier.get()) {
                 case "Left":
-                  cameraNum = 0;
-                  break;
-                case "Right":
                   cameraNum = 1;
                   break;
-                default:
+                case "Right":
                   cameraNum = 0;
+                  break;
+                default:
+                  cameraNum = 1;
                   break;
               }
               xController.reset(vision.getLatestTargetObservation()[cameraNum].tx().getRadians());
             })
         .alongWith(
-            Commands.waitUntil(() -> xController.atGoal())
+            Commands.waitUntil(
+                    () -> {
+                      int cameraNum;
+                      switch (sideSupplier.get()) {
+                        case "Left":
+                          cameraNum = 1;
+                          break;
+                        case "Right":
+                          cameraNum = 0;
+                          break;
+                        default:
+                          cameraNum = 1;
+                          break;
+                      }
+
+                      return vision.hasTarget()[cameraNum]
+                          && vision.getLatestTargetObservation()[cameraNum].tagId()
+                              == AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get());
+                    })
                 .andThen(
                     ElevatorCommands.moveSafe(
                         elevatorMotor,
@@ -369,7 +392,32 @@ public class DriveCommands {
                             default:
                               return ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL;
                           }
-                        })));
+                        })))
+        .alongWith(
+            Commands.waitUntil(
+                    () -> {
+                      int cameraNum;
+                      switch (sideSupplier.get()) {
+                        case "Left":
+                          cameraNum = 1;
+                          break;
+                        case "Right":
+                          cameraNum = 0;
+                          break;
+                        default:
+                          cameraNum = 1;
+                          break;
+                      }
+
+                      return vision.hasTarget()[cameraNum]
+                          && vision.getLatestTargetObservation()[cameraNum].tagId()
+                              == AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get())
+                          && !(vision.getLatestTargetObservation()[cameraNum].ty().getDegrees()
+                              > 16);
+                    })
+                .andThen(
+                    IntakeCommands.deployIntakeAlign(rightCoralRotationMotor)
+                        .alongWith(IntakeCommands.deployIntakeAlign(leftCoralRotationMotor))));
   }
 
   public static final Command pathfindToPose(Drive drive, Pose2d targetPose) {

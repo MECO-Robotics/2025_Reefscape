@@ -579,12 +579,18 @@ public class RobotContainer {
                 vision,
                 elevatorMotor,
                 elbowMotor,
+                leftCoralRotationMotor,
+                rightCoralRotationMotor,
                 () -> -driverController.getLeftY(),
                 () -> -driverController.getLeftX(),
                 () -> -driverController.getRightX(),
                 selectedReef::get,
                 selectedSide::get,
-                selectedLevel::get));
+                selectedLevel::get))
+        .onFalse(
+            IntakeCommands.stowIntake(leftCoralRotationMotor, leftCoralRollerMotor)
+                .alongWith(
+                    IntakeCommands.stowIntake(rightCoralRotationMotor, rightCoralRollerMotor)));
 
     driverController
         .povUp()
