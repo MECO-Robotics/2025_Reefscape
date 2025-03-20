@@ -585,7 +585,8 @@ public class RobotContainer {
                 Flywheel.setVoltage(
                         endEffectorMotor,
                         () -> 12.0
-                                * (coPilotController.getLeftTriggerAxis() + 6.0
+                                * (coPilotController.getLeftTriggerAxis()
+                                        + 6.0
                                         - coPilotController.getRightTriggerAxis())));
         // Trigger for the elevator positions
         // Shows up on the dashboard
@@ -690,7 +691,7 @@ public class RobotContainer {
         coPilotController
                 .povLeft()
                 .onTrue(
-                        ElevatorCommands.moveSequential(
+                        ElevatorCommands.moveSafe(
                                 elevatorMotor,
                                 elbowMotor,
                                 () -> {
