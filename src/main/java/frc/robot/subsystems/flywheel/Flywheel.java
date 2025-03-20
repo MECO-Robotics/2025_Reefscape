@@ -3,6 +3,7 @@ package frc.robot.subsystems.flywheel;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.flywheel.FlywheelVelocityCommand;
+import frc.robot.commands.flywheel.FlywheelVoltageCommand;
 import frc.robot.subsystems.flywheel.FlywheelConstants.FlywheelGains;
 import frc.robot.util.mechanical_advantage.LinearProfile;
 import frc.robot.util.mechanical_advantage.LoggedTunableNumber;
@@ -122,6 +123,6 @@ public class Flywheel extends SubsystemBase {
    * Command factory to set flywheel voltage
    */
   public static Command setVoltage(Flywheel flywheel, DoubleSupplier voltage) {
-    return new FlywheelVelocityCommand(flywheel, voltage);
+    return new FlywheelVoltageCommand(flywheel, voltage);
   }
 }
