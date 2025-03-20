@@ -594,6 +594,8 @@ public class RobotContainer {
         // .whileTrue(Flywheel.setVoltage(endEffectorMotor, () -> -6.0))
         // .onFalse(Flywheel.setVoltage(endEffectorMotor, () -> 0.0));
 
+        endEffectorMotor.setDefaultCommand(Flywheel.setVoltage(endEffectorMotor,
+                () -> coPilotController.getLeftTriggerAxis() - coPilotController.getRightTriggerAxis()));
         // Trigger for the elevator positions
         // Shows up on the dashboard
         // Right side reef
