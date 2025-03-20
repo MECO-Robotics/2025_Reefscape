@@ -432,30 +432,18 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Score", ElevatorCommands.scorePreset(elbowMotor));
 
-    NamedCommands.registerCommand(
-        "AlignToLeftReef",
-        Commands.runOnce(
-            () -> {
-              if (vision.hasTarget()[0]) {
-                AdvancedPPHolonomicDriveController.overrideYFeedback(
-                    () ->
-                        -vision.getLatestTargetObservation()[0].tx().getRadians()
-                            * DriveCommands.REEF_P.get());
-              }
-            }));
+    NamedCommands.registerCommand("AlignToE", DriveCommands.autoAlignAuto(vision, "Left", "EF"));
+
+    NamedCommands.registerCommand("AlignToF", DriveCommands.autoAlignAuto(vision, "Right", "EF"));
+
+    NamedCommands.registerCommand("AlignToC", DriveCommands.autoAlignAuto(vision, "Left", "CD"));
+
+    NamedCommands.registerCommand("AlignToD", DriveCommands.autoAlignAuto(vision, "Right", "CD"));
 
     NamedCommands.registerCommand(
-        "AlignToRightReef",
+        "ClearOverrides",
         Commands.runOnce(
-            () -> {
-              if (vision.hasTarget()[1]) {
-                AdvancedPPHolonomicDriveController.overrideYFeedback(
-                    () ->
-                        vision.getLatestTargetObservation()[1].tx().getRadians()
-                            * DriveCommands.REEF_P.get());
-              }
-            }));
-
+            () -> AdvancedPPHolonomicDriveController.clearYFeedbackOverrideRobotRelative()));
     // Need to create the NamedCommands before the autoChooser or else they won't
     // work
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());

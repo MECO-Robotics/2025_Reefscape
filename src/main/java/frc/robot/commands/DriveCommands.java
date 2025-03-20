@@ -24,6 +24,7 @@ import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.position_joint.PositionJoint;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.mechanical_advantage.LoggedTunableNumber;
+import frc.robot.util.pathplanner.AdvancedPPHolonomicDriveController;
 import frc.robot.util.pathplanner.AllianceUtil;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -249,7 +250,7 @@ public class DriveCommands {
             new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
     angleController.enableContinuousInput(-Math.PI, Math.PI);
 
-    ProfiledPIDController xController =
+    ProfiledPIDController yController =
         new ProfiledPIDController(
             REEF_P.get(),
             0.0,
@@ -317,7 +318,7 @@ public class DriveCommands {
                       == AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get())) {
 
                 double effort =
-                    xController.calculate(
+                    yController.calculate(
                         vision.getLatestTargetObservation()[cameraNum].tx().getRadians(), 0.0);
 
                 Logger.recordOutput("Servo/TargetEffort", effort);
@@ -361,7 +362,7 @@ public class DriveCommands {
                   cameraNum = 1;
                   break;
               }
-              xController.reset(vision.getLatestTargetObservation()[cameraNum].tx().getRadians());
+              yController.reset(vision.getLatestTargetObservation()[cameraNum].tx().getRadians());
             })
         .alongWith(
             Commands.waitUntil(
@@ -424,6 +425,59 @@ public class DriveCommands {
                 .andThen(
                     IntakeCommands.deployIntakeAlign(rightCoralRotationMotor)
                         .alongWith(IntakeCommands.deployIntakeAlign(leftCoralRotationMotor))));
+  }
+
+  public static Command autoAlignAuto(Vision vision, String reefSide, String reefFace) {
+    int cameraNum;
+    switch (reefSide) {
+      case "Left":
+        cameraNum = 1;
+        break;
+      case "Right":
+        cameraNum = 0;
+        break;
+      default:
+        cameraNum = 1;
+        break;
+    }
+
+    ProfiledPIDController yController =
+        new ProfiledPIDController(
+            REEF_P.get(),
+            0.0,
+            0.0,
+            new TrapezoidProfile.Constraints(REEF_MAX_VELO.get(), REEF_MAX_ACCEL.get()));
+
+    return Commands.runOnce(
+            () -> {
+              AdvancedPPHolonomicDriveController.overrideYFeedbackRobotRelative(
+                  () -> {
+                    System.out.println("Overriding Y feedback");
+                    Logger.recordOutput(
+                        "Servo/DesiredTag",
+                        vision.getLatestTargetObservation()[cameraNum].tagId()
+                            == AllianceUtil.getTagIDFromReefAlliance(reefFace));
+
+                    if (vision.hasTarget()[cameraNum]
+                        && vision.getLatestTargetObservation()[cameraNum].tagId()
+                            == AllianceUtil.getTagIDFromReefAlliance(reefFace)) {
+
+                      double effort =
+                          yController.calculate(
+                              vision.getLatestTargetObservation()[cameraNum].tx().getRadians(),
+                              0.0);
+
+                      Logger.recordOutput("Servo/TargetEffort", effort);
+                      return effort;
+                    } else {
+                      return 0;
+                    }
+                  });
+            })
+        .beforeStarting(
+            () ->
+                yController.reset(
+                    vision.getLatestTargetObservation()[cameraNum].tx().getRadians()));
   }
 
   public static final Command pathfindToPose(Drive drive, Pose2d targetPose) {

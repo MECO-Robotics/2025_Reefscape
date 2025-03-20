@@ -19,6 +19,12 @@
         {
           "type": "named",
           "data": {
+            "name": "ClearOverrides"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Score"
           }
         },
@@ -32,6 +38,18 @@
           "type": "path",
           "data": {
             "pathName": "Left blue auto path 3"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ClearOverrides"
           }
         },
         {

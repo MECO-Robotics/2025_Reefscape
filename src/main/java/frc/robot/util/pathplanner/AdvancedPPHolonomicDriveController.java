@@ -33,6 +33,9 @@ public class AdvancedPPHolonomicDriveController implements PathFollowingControll
   private static DoubleSupplier yFeedbackOverride = null;
   private static DoubleSupplier rotFeedbackOverride = null;
 
+  private static DoubleSupplier xFeedbackOverrideRobotRelative = null;
+  private static DoubleSupplier yFeedbackOverrideRobotRelative = null;
+
   private static DoubleSupplier xSetpointIncrement = () -> 0.0;
   private static DoubleSupplier ySetpointIncrement = () -> 0.0;
   private static DoubleSupplier rotSetpointIncrement = () -> 0.0;
@@ -151,6 +154,20 @@ public class AdvancedPPHolonomicDriveController implements PathFollowingControll
       rotationFeedback = rotFeedbackOverride.getAsDouble();
     }
 
+    ChassisSpeeds speeds =
+        ChassisSpeeds.fromFieldRelativeSpeeds(
+            xFF + xFeedback,
+            yFF + yFeedback,
+            rotationFF + rotationFeedback,
+            currentPose.getRotation());
+
+    if (xFeedbackOverrideRobotRelative != null) {
+      speeds.vxMetersPerSecond = xFeedbackOverrideRobotRelative.getAsDouble();
+    }
+    if (yFeedbackOverrideRobotRelative != null) {
+      speeds.vyMetersPerSecond = yFeedbackOverrideRobotRelative.getAsDouble();
+    }
+
     LoggedTunableNumber.ifChanged(
         hashCode(),
         (values) -> {
@@ -166,8 +183,7 @@ public class AdvancedPPHolonomicDriveController implements PathFollowingControll
         rotationalI,
         rotationalD);
 
-    return ChassisSpeeds.fromFieldRelativeSpeeds(
-        xFF + xFeedback, yFF + yFeedback, rotationFF + rotationFeedback, currentPose.getRotation());
+    return speeds;
   }
 
   /**
@@ -229,6 +245,42 @@ public class AdvancedPPHolonomicDriveController implements PathFollowingControll
    */
   public static void clearYFeedbackOverride() {
     AdvancedPPHolonomicDriveController.yFeedbackOverride = null;
+  }
+
+  /**
+   * Begin overriding the X axis feedback.
+   *
+   * @param xFeedbackOverride Double supplier that returns the desired FIELD-RELATIVE X feedback in
+   *     meters/sec
+   */
+  public static void overrideXFeedbackRobotRelative(DoubleSupplier xFeedbackOverride) {
+    AdvancedPPHolonomicDriveController.xFeedbackOverrideRobotRelative = xFeedbackOverride;
+  }
+
+  /**
+   * Stop overriding the X axis feedback, and return to calculating it based on path following
+   * error.
+   */
+  public static void clearXFeedbackOverrideRobotRelative() {
+    AdvancedPPHolonomicDriveController.xFeedbackOverrideRobotRelative = null;
+  }
+
+  /**
+   * Begin overriding the Y axis feedback.
+   *
+   * @param yFeedbackOverride Double supplier that returns the desired FIELD-RELATIVE Y feedback in
+   *     meters/sec
+   */
+  public static void overrideYFeedbackRobotRelative(DoubleSupplier yFeedbackOverride) {
+    AdvancedPPHolonomicDriveController.yFeedbackOverrideRobotRelative = yFeedbackOverride;
+  }
+
+  /**
+   * Stop overriding the Y axis feedback, and return to calculating it based on path following
+   * error.
+   */
+  public static void clearYFeedbackOverrideRobotRelative() {
+    AdvancedPPHolonomicDriveController.yFeedbackOverrideRobotRelative = null;
   }
 
   /**
