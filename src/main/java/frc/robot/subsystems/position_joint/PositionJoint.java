@@ -75,6 +75,8 @@ public class PositionJoint extends SubsystemBase {
     goal = new TrapezoidProfile.State(gains.kDefaultSetpoint(), 0);
     setpoint = goal;
 
+    positionJoint.setGains(gains);
+
     SmartDashboard.putData(name, this);
   }
 
@@ -106,9 +108,8 @@ public class PositionJoint extends SubsystemBase {
                   values[11],
                   values[12]));
 
-          goal =
-              new TrapezoidProfile.State(
-                  MathUtil.clamp(values[12], kMinPosition.get(), kMaxPosition.get()), 0);
+          goal = new TrapezoidProfile.State(
+              MathUtil.clamp(values[12], kMinPosition.get(), kMaxPosition.get()), 0);
 
           constraints = new TrapezoidProfile.Constraints(values[7], values[8]);
           profile = new TrapezoidProfile(constraints);
@@ -131,9 +132,8 @@ public class PositionJoint extends SubsystemBase {
   }
 
   public void setPosition(double position) {
-    goal =
-        new TrapezoidProfile.State(
-            MathUtil.clamp(position, kMinPosition.get(), kMaxPosition.get()), 0);
+    goal = new TrapezoidProfile.State(
+        MathUtil.clamp(position, kMinPosition.get(), kMaxPosition.get()), 0);
   }
 
   public void incrementPosition(double deltaPosition) {
