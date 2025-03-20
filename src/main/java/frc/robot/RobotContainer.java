@@ -80,7 +80,7 @@ public class RobotContainer {
   // private PositionJoint climber;
   // private Flywheel climberRoller;
 
-  // private Flywheel endEffectorMotor;
+  private Flywheel endEffectorMotor;
 
   @SuppressWarnings("unused")
   private final Vision vision;
@@ -189,11 +189,12 @@ public class RobotContainer {
         // new FlywheelIOSparkMax("ClimberRoller",
         // FlywheelConstants.CLIMBER_ROLLER_CONFIG),
         // FlywheelConstants.CLIMBER_ROLLER_GAINS);
+
         // End Effector
-        // endEffectorMotor = new Flywheel(
-        // new FlywheelIOSparkMax("EndEffectorMotor",
-        // FlywheelConstants.END_EFFECTOR_CONFIG),
-        // FlywheelConstants.END_EFFECTOR_GAINS);
+        endEffectorMotor =
+            new Flywheel(
+                new FlywheelIOSparkMax("EndEffectorMotor", FlywheelConstants.END_EFFECTOR_CONFIG),
+                FlywheelConstants.END_EFFECTOR_GAINS);
 
         // vision
         vision =
@@ -282,9 +283,10 @@ public class RobotContainer {
                 new PositionJointIOSim("ElbowMotor", PositionJointConstants.ELBOW_CONFIG),
                 PositionJointConstants.PIVOT_GAINS_SIM);
 
-        // endEffectorMotor = new Flywheel(
-        // new FlywheelIOSim("EndEffectorMotor", FlywheelConstants.END_EFFECTOR_CONFIG),
-        // FlywheelConstants.END_EFFECTOR_GAINS);
+        endEffectorMotor =
+            new Flywheel(
+                new FlywheelIOSim("EndEffectorMotor", FlywheelConstants.END_EFFECTOR_CONFIG),
+                FlywheelConstants.END_EFFECTOR_GAINS);
 
         leftPieceDetection =
             new PieceDetection(
@@ -358,9 +360,9 @@ public class RobotContainer {
             new PositionJoint(
                 new PositionJointIOReplay("ElbowMotor"), PositionJointConstants.PIVOT_GAINS);
 
-        // endEffectorMotor = new Flywheel(
-        // new FlywheelIOReplay("EndEffectorMotor"),
-        // FlywheelConstants.END_EFFECTOR_GAINS);
+        endEffectorMotor =
+            new Flywheel(
+                new FlywheelIOReplay("EndEffectorMotor"), FlywheelConstants.END_EFFECTOR_GAINS);
 
         leftPieceDetection =
             new PieceDetection(

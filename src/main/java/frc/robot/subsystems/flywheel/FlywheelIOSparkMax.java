@@ -63,7 +63,8 @@ public class FlywheelIOSparkMax implements FlywheelIO {
                   new EncoderConfig()
                       .positionConversionFactor(1.0 / config.gearRatio())
                       .velocityConversionFactor(1.0 / (60.0 * config.gearRatio())))
-              .inverted(config.reversed()[0]);
+              .inverted(config.reversed()[0])
+              .smartCurrentLimit(config.currentLimit());
 
     } else {
       leaderConfig =
@@ -72,7 +73,8 @@ public class FlywheelIOSparkMax implements FlywheelIO {
                   new EncoderConfig()
                       .positionConversionFactor(1.0 / config.gearRatio())
                       .velocityConversionFactor(1.0 / (60.0 * config.gearRatio()))
-                      .inverted(config.reversed()[0]));
+                      .inverted(config.reversed()[0]))
+              .smartCurrentLimit(config.currentLimit());
     }
 
     motors[0].configure(
@@ -88,7 +90,9 @@ public class FlywheelIOSparkMax implements FlywheelIO {
       motors[i] =
           new SparkMax(config.canIds()[i], isBrushless ? MotorType.kBrushless : MotorType.kBrushed);
       motors[i].configure(
-          new SparkMaxConfig().follow(motors[0], config.reversed()[i]),
+          new SparkMaxConfig()
+              .follow(motors[0], config.reversed()[i])
+              .smartCurrentLimit(config.currentLimit()),
           ResetMode.kNoResetSafeParameters,
           PersistMode.kNoPersistParameters);
 

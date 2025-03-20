@@ -97,7 +97,7 @@
     },
     {
       "name": "AlignToRightCD",
-      "waypointRelativePos": 1.1365430149960483,
+      "waypointRelativePos": 1.0513022888713415,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
