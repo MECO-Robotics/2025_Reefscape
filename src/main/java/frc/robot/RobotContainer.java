@@ -640,7 +640,7 @@ public class RobotContainer {
     // Co-pilot controller stow and handoff values
     coPilotController
         .povDown()
-        .whileTrue(ElevatorCommands.handOff(elevatorMotor, elbowMotor, endEffectorMotor));
+        .onTrue(ElevatorCommands.handOff(elevatorMotor, elbowMotor, endEffectorMotor));
     coPilotController
         .povUp()
         .whileTrue(
