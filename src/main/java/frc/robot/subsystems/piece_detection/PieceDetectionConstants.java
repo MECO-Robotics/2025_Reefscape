@@ -13,7 +13,7 @@ public final class PieceDetectionConstants {
             new Transform3d(
                     new Translation3d(
                             Units.inchesToMeters(-0.5), Units.inchesToMeters(4), Units.inchesToMeters(60)),
-                    new Rotation3d(0, Units.degreesToRadians(0), Units.degreesToRadians(90))));
+                    new Rotation3d(0, Units.degreesToRadians(120), Units.degreesToRadians(90))));
 
     public static final PieceDetectionConfig RIGHT_CONFIG = new PieceDetectionConfig(
             new Transform3d(
