@@ -51,13 +51,15 @@ public class DriveCommands {
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
   public static final LoggedTunableNumber REEF_P = new LoggedTunableNumber("ReefP", 4.0);
-  public static final LoggedTunableNumber REEF_MAX_VELO = new LoggedTunableNumber("ReefMaxVelo", 0.5);
-  public static final LoggedTunableNumber REEF_MAX_ACCEL = new LoggedTunableNumber("ReefMaxAccel", 0.5);
+  public static final LoggedTunableNumber REEF_MAX_VELO =
+      new LoggedTunableNumber("ReefMaxVelo", 0.5);
+  public static final LoggedTunableNumber REEF_MAX_ACCEL =
+      new LoggedTunableNumber("ReefMaxAccel", 0.5);
 
-  public static final LoggedTunableNumber APPROACH_SPEED = new LoggedTunableNumber("Approach Speed", 1.0);
+  public static final LoggedTunableNumber APPROACH_SPEED =
+      new LoggedTunableNumber("Approach Speed", 1.0);
 
-  private DriveCommands() {
-  }
+  private DriveCommands() {}
 
   /**
    * Converts joystick input into linear velocity.
@@ -81,12 +83,11 @@ public class DriveCommands {
   }
 
   /**
-   * Field relative drive command using two joysticks (controlling linear and
-   * angular velocities).
+   * Field relative drive command using two joysticks (controlling linear and angular velocities).
    *
-   * @param drive         The drive subsystem.
-   * @param xSupplier     The supplier for the x-axis value of the joystick.
-   * @param ySupplier     The supplier for the y-axis value of the joystick.
+   * @param drive The drive subsystem.
+   * @param xSupplier The supplier for the x-axis value of the joystick.
+   * @param ySupplier The supplier for the y-axis value of the joystick.
    * @param omegaSupplier The supplier for the angular velocity.
    * @return The command.
    */
@@ -98,8 +99,8 @@ public class DriveCommands {
     return Commands.run(
         () -> {
           // Get linear velocity
-          Translation2d linearVelocity = getLinearVelocityFromJoysticks(xSupplier.getAsDouble(),
-              ySupplier.getAsDouble());
+          Translation2d linearVelocity =
+              getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
 
           // Apply rotation deadband
           double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
@@ -108,29 +109,31 @@ public class DriveCommands {
           omega = Math.copySign(omega * omega, omega);
 
           // Convert to field relative speeds & send command
-          ChassisSpeeds speeds = new ChassisSpeeds(
-              linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-              linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
-              omega * drive.getMaxAngularSpeedRadPerSec());
-          boolean isFlipped = DriverStation.getAlliance().isPresent()
-              && DriverStation.getAlliance().get() == Alliance.Red;
-          speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-              speeds,
-              isFlipped
-                  ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                  : drive.getRotation());
+          ChassisSpeeds speeds =
+              new ChassisSpeeds(
+                  linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+                  linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                  omega * drive.getMaxAngularSpeedRadPerSec());
+          boolean isFlipped =
+              DriverStation.getAlliance().isPresent()
+                  && DriverStation.getAlliance().get() == Alliance.Red;
+          speeds =
+              ChassisSpeeds.fromFieldRelativeSpeeds(
+                  speeds,
+                  isFlipped
+                      ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                      : drive.getRotation());
           drive.runVelocity(speeds);
         },
         drive);
   }
 
   /**
-   * Field relative drive command using two joysticks (controlling linear and
-   * angular velocities).
+   * Field relative drive command using two joysticks (controlling linear and angular velocities).
    *
-   * @param drive         The drive subsystem.
-   * @param xSupplier     The supplier for the x-axis value of the joystick.
-   * @param ySupplier     The supplier for the y-axis value of the joystick.
+   * @param drive The drive subsystem.
+   * @param xSupplier The supplier for the x-axis value of the joystick.
+   * @param ySupplier The supplier for the y-axis value of the joystick.
    * @param omegaSupplier The supplier for the angular velocity.
    * @return The command.
    */
@@ -142,8 +145,8 @@ public class DriveCommands {
     return Commands.run(
         () -> {
           // Get linear velocity
-          Translation2d linearVelocity = getLinearVelocityFromJoysticks(xSupplier.getAsDouble(),
-              ySupplier.getAsDouble());
+          Translation2d linearVelocity =
+              getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
 
           // Apply rotation deadband
           double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
@@ -152,27 +155,27 @@ public class DriveCommands {
           omega = Math.copySign(omega * omega, omega);
 
           // Convert to field relative speeds & send command
-          ChassisSpeeds speeds = new ChassisSpeeds(
-              linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-              linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
-              omega * drive.getMaxAngularSpeedRadPerSec());
-          boolean isFlipped = DriverStation.getAlliance().isPresent()
-              && DriverStation.getAlliance().get() == Alliance.Red;
+          ChassisSpeeds speeds =
+              new ChassisSpeeds(
+                  linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+                  linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                  omega * drive.getMaxAngularSpeedRadPerSec());
+          boolean isFlipped =
+              DriverStation.getAlliance().isPresent()
+                  && DriverStation.getAlliance().get() == Alliance.Red;
           drive.runVelocity(speeds);
         },
         drive);
   }
 
   /**
-   * Field relative drive command using joystick for linear control and PID for
-   * angular control.
-   * Possible use cases include snapping to an angle, aiming at a vision target,
-   * or controlling
+   * Field relative drive command using joystick for linear control and PID for angular control.
+   * Possible use cases include snapping to an angle, aiming at a vision target, or controlling
    * absolute rotation with a joystick.
    *
-   * @param drive            The drive subsystem.
-   * @param xSupplier        The supplier for the x-axis value of the joystick.
-   * @param ySupplier        The supplier for the y-axis value of the joystick.
+   * @param drive The drive subsystem.
+   * @param xSupplier The supplier for the x-axis value of the joystick.
+   * @param ySupplier The supplier for the y-axis value of the joystick.
    * @param rotationSupplier The supplier for the target rotation.
    * @return The command.
    */
@@ -183,39 +186,44 @@ public class DriveCommands {
       Supplier<Rotation2d> rotationSupplier) {
 
     // Create PID controller
-    ProfiledPIDController angleController = new ProfiledPIDController(
-        ANGLE_KP.get(),
-        0.0,
-        ANGLE_KD.get(),
-        new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
+    ProfiledPIDController angleController =
+        new ProfiledPIDController(
+            ANGLE_KP.get(),
+            0.0,
+            ANGLE_KD.get(),
+            new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
     angleController.enableContinuousInput(-Math.PI, Math.PI);
 
     // Construct command
     return Commands.run(
-        () -> {
-          // Get linear velocity
-          Translation2d linearVelocity = getLinearVelocityFromJoysticks(xSupplier.getAsDouble(),
-              ySupplier.getAsDouble());
+            () -> {
+              // Get linear velocity
+              Translation2d linearVelocity =
+                  getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
 
-          // Calculate angular speed
-          double omega = angleController.calculate(
-              drive.getRotation().getRadians(), rotationSupplier.get().getRadians());
+              // Calculate angular speed
+              double omega =
+                  angleController.calculate(
+                      drive.getRotation().getRadians(), rotationSupplier.get().getRadians());
 
-          // Convert to field relative speeds & send command
-          ChassisSpeeds speeds = new ChassisSpeeds(
-              linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-              linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
-              omega);
-          boolean isFlipped = DriverStation.getAlliance().isPresent()
-              && DriverStation.getAlliance().get() == Alliance.Red;
-          speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-              speeds,
-              isFlipped
-                  ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                  : drive.getRotation());
-          drive.runVelocity(speeds);
-        },
-        drive)
+              // Convert to field relative speeds & send command
+              ChassisSpeeds speeds =
+                  new ChassisSpeeds(
+                      linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+                      linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                      omega);
+              boolean isFlipped =
+                  DriverStation.getAlliance().isPresent()
+                      && DriverStation.getAlliance().get() == Alliance.Red;
+              speeds =
+                  ChassisSpeeds.fromFieldRelativeSpeeds(
+                      speeds,
+                      isFlipped
+                          ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                          : drive.getRotation());
+              drive.runVelocity(speeds);
+            },
+            drive)
 
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
@@ -237,109 +245,115 @@ public class DriveCommands {
       CommandXboxController driverController) {
 
     // Create PID controller
-    ProfiledPIDController angleController = new ProfiledPIDController(
-        ANGLE_KP.get(),
-        0.0,
-        ANGLE_KD.get(),
-        new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
+    ProfiledPIDController angleController =
+        new ProfiledPIDController(
+            ANGLE_KP.get(),
+            0.0,
+            ANGLE_KD.get(),
+            new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
     angleController.enableContinuousInput(-Math.PI, Math.PI);
 
-    ProfiledPIDController yController = new ProfiledPIDController(
-        REEF_P.get(),
-        0.0,
-        0.0,
-        new TrapezoidProfile.Constraints(REEF_MAX_VELO.get(), REEF_MAX_ACCEL.get()));
+    ProfiledPIDController yController =
+        new ProfiledPIDController(
+            REEF_P.get(),
+            0.0,
+            0.0,
+            new TrapezoidProfile.Constraints(REEF_MAX_VELO.get(), REEF_MAX_ACCEL.get()));
 
     // Construct command
     return Commands.run(
-        () -> {
-          // Get linear velocity
-          Translation2d linearVelocity = getLinearVelocityFromJoysticks(xSupplier.getAsDouble(),
-              ySupplier.getAsDouble());
+            () -> {
+              // Get linear velocity
+              Translation2d linearVelocity =
+                  getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
 
-          // Calculate angular speed
-          double omega;
-          int cameraNum;
+              // Calculate angular speed
+              double omega;
+              int cameraNum;
 
-          Logger.recordOutput("Servo/SideSupplier", sideSupplier.get());
+              Logger.recordOutput("Servo/SideSupplier", sideSupplier.get());
 
-          switch (sideSupplier.get()) {
-            case "Left":
-              cameraNum = 1;
-              break;
-            case "Right":
-              cameraNum = 0;
-              break;
-            default:
-              cameraNum = 0;
-              break;
-          }
+              switch (sideSupplier.get()) {
+                case "Left":
+                  cameraNum = 1;
+                  break;
+                case "Right":
+                  cameraNum = 0;
+                  break;
+                default:
+                  cameraNum = 0;
+                  break;
+              }
 
-          Logger.recordOutput("Servo/SelectedCamera", cameraNum);
-          Logger.recordOutput(
-              "Servo/DesiredTag", AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get()));
-          Logger.recordOutput(
-              "Servo/SelectedTargetData", vision.getLatestTargetObservation()[cameraNum]);
+              Logger.recordOutput("Servo/SelectedCamera", cameraNum);
+              Logger.recordOutput(
+                  "Servo/DesiredTag", AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get()));
+              Logger.recordOutput(
+                  "Servo/SelectedTargetData", vision.getLatestTargetObservation()[cameraNum]);
 
-          // Face towards the desired tag
-          omega = angleController.calculate(
-              drive.getRotation().getRadians(),
-              AllianceUtil.flipRotation2dAlliance(
-                  AllianceUtil.getRotationFromReefTagID(
-                      AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get())))
-                  .getRadians());
+              // Face towards the desired tag
+              omega =
+                  angleController.calculate(
+                      drive.getRotation().getRadians(),
+                      AllianceUtil.flipRotation2dAlliance(
+                              AllianceUtil.getRotationFromReefTagID(
+                                  AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get())))
+                          .getRadians());
 
-          // Convert to field relative speeds & send command
-          ChassisSpeeds speeds = new ChassisSpeeds(
-              linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-              linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
-              omega);
-          boolean isFlipped = DriverStation.getAlliance().isPresent()
-              && DriverStation.getAlliance().get() == Alliance.Red;
-          speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-              speeds,
-              isFlipped
-                  ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                  : drive.getRotation());
+              // Convert to field relative speeds & send command
+              ChassisSpeeds speeds =
+                  new ChassisSpeeds(
+                      linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+                      linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                      omega);
+              boolean isFlipped =
+                  DriverStation.getAlliance().isPresent()
+                      && DriverStation.getAlliance().get() == Alliance.Red;
+              speeds =
+                  ChassisSpeeds.fromFieldRelativeSpeeds(
+                      speeds,
+                      isFlipped
+                          ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                          : drive.getRotation());
 
-          if (vision.hasTarget()[cameraNum]
-              && vision.getLatestTargetObservation()[cameraNum].tagId() == AllianceUtil
-                  .getTagIDFromReefAlliance(reefSupplier.get())) {
+              if (vision.hasTarget()[cameraNum]
+                  && vision.getLatestTargetObservation()[cameraNum].tagId()
+                      == AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get())) {
 
-            double effort = yController.calculate(
-                vision.getLatestTargetObservation()[cameraNum].tx().getRadians(), 0.0);
+                double effort =
+                    yController.calculate(
+                        vision.getLatestTargetObservation()[cameraNum].tx().getRadians(), 0.0);
 
-            Logger.recordOutput("Servo/TargetEffort", effort);
+                Logger.recordOutput("Servo/TargetEffort", effort);
 
-            speeds.vyMetersPerSecond = effort;
+                speeds.vyMetersPerSecond = effort;
 
-            driverController.setRumble(RumbleType.kBothRumble, 1.0);
+                driverController.setRumble(RumbleType.kBothRumble, 1.0);
 
-            if (vision.getLatestTargetObservation()[cameraNum].ty().getDegrees() > 10) {
-              speeds.vxMetersPerSecond = APPROACH_SPEED.get();
-            } else if (vision.getLatestTargetObservation()[cameraNum].ty().getDegrees() > -13) {
-              speeds.vxMetersPerSecond = 0.5 * APPROACH_SPEED.get();
+                if (vision.getLatestTargetObservation()[cameraNum].ty().getDegrees() > 10) {
+                  speeds.vxMetersPerSecond = APPROACH_SPEED.get();
+                } else if (vision.getLatestTargetObservation()[cameraNum].ty().getDegrees() > -13) {
+                  speeds.vxMetersPerSecond = 0.5 * APPROACH_SPEED.get();
 
-            } else {
-              speeds.vxMetersPerSecond = 0;
-              driverController.setRumble(RumbleType.kBothRumble, 0.0);
+                } else {
+                  speeds.vxMetersPerSecond = 0;
+                  driverController.setRumble(RumbleType.kBothRumble, 0.0);
+                }
 
-            }
+                // if (angleController.atGoal()
+                // && Math.abs(vision.getLatestTargetObservation()[cameraNum].tx().getRadians())
+                // < 0.05) {
+                // speeds.vxMetersPerSecond = APPROACH_SPEED.get();
+                // } else {
+                // speeds.vxMetersPerSecond = 0;
+                // }
+              } else {
+                driverController.setRumble(RumbleType.kBothRumble, 0.0);
+              }
 
-            // if (angleController.atGoal()
-            // && Math.abs(vision.getLatestTargetObservation()[cameraNum].tx().getRadians())
-            // < 0.05) {
-            // speeds.vxMetersPerSecond = APPROACH_SPEED.get();
-            // } else {
-            // speeds.vxMetersPerSecond = 0;
-            // }
-          } else {
-            driverController.setRumble(RumbleType.kBothRumble, 0.0);
-          }
-
-          drive.runVelocity(speeds);
-        },
-        drive)
+              drive.runVelocity(speeds);
+            },
+            drive)
 
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()))
@@ -361,24 +375,24 @@ public class DriveCommands {
             })
         .alongWith(
             Commands.waitUntil(
-                () -> {
-                  int cameraNum;
-                  switch (sideSupplier.get()) {
-                    case "Left":
-                      cameraNum = 1;
-                      break;
-                    case "Right":
-                      cameraNum = 0;
-                      break;
-                    default:
-                      cameraNum = 1;
-                      break;
-                  }
+                    () -> {
+                      int cameraNum;
+                      switch (sideSupplier.get()) {
+                        case "Left":
+                          cameraNum = 1;
+                          break;
+                        case "Right":
+                          cameraNum = 0;
+                          break;
+                        default:
+                          cameraNum = 1;
+                          break;
+                      }
 
-                  return vision.hasTarget()[cameraNum]
-                      && vision.getLatestTargetObservation()[cameraNum].tagId() == AllianceUtil
-                          .getTagIDFromReefAlliance(reefSupplier.get());
-                })
+                      return vision.hasTarget()[cameraNum]
+                          && vision.getLatestTargetObservation()[cameraNum].tagId()
+                              == AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get());
+                    })
                 .andThen(
                     ElevatorCommands.moveSafe(
                         elevatorMotor,
@@ -399,24 +413,24 @@ public class DriveCommands {
                         })))
         .alongWith(
             Commands.waitUntil(
-                () -> {
-                  int cameraNum;
-                  switch (sideSupplier.get()) {
-                    case "Left":
-                      cameraNum = 1;
-                      break;
-                    case "Right":
-                      cameraNum = 0;
-                      break;
-                    default:
-                      cameraNum = 1;
-                      break;
-                  }
+                    () -> {
+                      int cameraNum;
+                      switch (sideSupplier.get()) {
+                        case "Left":
+                          cameraNum = 1;
+                          break;
+                        case "Right":
+                          cameraNum = 0;
+                          break;
+                        default:
+                          cameraNum = 1;
+                          break;
+                      }
 
-                  return vision.hasTarget()[cameraNum]
-                      && vision.getLatestTargetObservation()[cameraNum].tagId() == AllianceUtil
-                          .getTagIDFromReefAlliance(reefSupplier.get());
-                })
+                      return vision.hasTarget()[cameraNum]
+                          && vision.getLatestTargetObservation()[cameraNum].tagId()
+                              == AllianceUtil.getTagIDFromReefAlliance(reefSupplier.get());
+                    })
                 .andThen(
                     IntakeCommands.deployIntakeAlign(rightCoralRotationMotor)
                         .alongWith(IntakeCommands.deployIntakeAlign(leftCoralRotationMotor))));
@@ -436,53 +450,56 @@ public class DriveCommands {
         break;
     }
 
-    ProfiledPIDController yController = new ProfiledPIDController(
-        REEF_P.get(),
-        0.0,
-        0.0,
-        new TrapezoidProfile.Constraints(REEF_MAX_VELO.get(), REEF_MAX_ACCEL.get()));
+    ProfiledPIDController yController =
+        new ProfiledPIDController(
+            REEF_P.get(),
+            0.0,
+            0.0,
+            new TrapezoidProfile.Constraints(REEF_MAX_VELO.get(), REEF_MAX_ACCEL.get()));
 
     return Commands.runOnce(
-        () -> {
-          AdvancedPPHolonomicDriveController.overrideYFeedbackRobotRelative(
-              () -> {
-                System.out.println("Overriding Y feedback");
-                Logger.recordOutput(
-                    "Servo/DesiredTag",
-                    vision.getLatestTargetObservation()[cameraNum].tagId() == AllianceUtil
-                        .getTagIDFromReefAlliance(reefFace));
+            () -> {
+              AdvancedPPHolonomicDriveController.overrideYFeedbackRobotRelative(
+                  () -> {
+                    System.out.println("Overriding Y feedback");
+                    Logger.recordOutput(
+                        "Servo/DesiredTag",
+                        vision.getLatestTargetObservation()[cameraNum].tagId()
+                            == AllianceUtil.getTagIDFromReefAlliance(reefFace));
 
-                if (vision.hasTarget()[cameraNum]
-                    && vision.getLatestTargetObservation()[cameraNum].tagId() == AllianceUtil
-                        .getTagIDFromReefAlliance(reefFace)) {
+                    if (vision.hasTarget()[cameraNum]
+                        && vision.getLatestTargetObservation()[cameraNum].tagId()
+                            == AllianceUtil.getTagIDFromReefAlliance(reefFace)) {
 
-                  double effort = yController.calculate(
-                      vision.getLatestTargetObservation()[cameraNum].tx().getRadians(),
-                      0.0);
+                      double effort =
+                          yController.calculate(
+                              vision.getLatestTargetObservation()[cameraNum].tx().getRadians(),
+                              0.0);
 
-                  Logger.recordOutput("Servo/TargetEffort", effort);
-                  return effort;
-                } else {
-                  return 0;
-                }
-              });
-        })
+                      Logger.recordOutput("Servo/TargetEffort", effort);
+                      return effort;
+                    } else {
+                      return 0;
+                    }
+                  });
+            })
         .beforeStarting(
-            () -> yController.reset(
-                vision.getLatestTargetObservation()[cameraNum].tx().getRadians()));
+            () ->
+                yController.reset(
+                    vision.getLatestTargetObservation()[cameraNum].tx().getRadians()));
   }
 
   public static final Command pathfindToPose(Drive drive, Pose2d targetPose) {
 
-    PathConstraints constraints = new PathConstraints(4, 4, Math.toRadians(360), Math.toRadians(360), 12, false);
+    PathConstraints constraints =
+        new PathConstraints(4, 4, Math.toRadians(360), Math.toRadians(360), 12, false);
     return AutoBuilder.pathfindToPose(targetPose, constraints, 1.0);
   }
 
   /**
    * Measures the velocity feedforward constants for the drive motors.
    *
-   * <p>
-   * This command should only be used in voltage control mode.
+   * <p>This command should only be used in voltage control mode.
    *
    * @param drive The drive subsystem.
    * @return The command.
@@ -502,10 +519,10 @@ public class DriveCommands {
 
         // Allow modules to orient
         Commands.run(
-            () -> {
-              drive.runCharacterization(0.0);
-            },
-            drive)
+                () -> {
+                  drive.runCharacterization(0.0);
+                },
+                drive)
             .withTimeout(FF_START_DELAY),
 
         // Start timer
@@ -513,13 +530,13 @@ public class DriveCommands {
 
         // Accelerate and gather data
         Commands.run(
-            () -> {
-              double voltage = timer.get() * FF_RAMP_RATE;
-              drive.runCharacterization(voltage);
-              velocitySamples.add(drive.getFFCharacterizationVelocity());
-              voltageSamples.add(voltage);
-            },
-            drive)
+                () -> {
+                  double voltage = timer.get() * FF_RAMP_RATE;
+                  drive.runCharacterization(voltage);
+                  velocitySamples.add(drive.getFFCharacterizationVelocity());
+                  voltageSamples.add(voltage);
+                },
+                drive)
 
             // When cancelled, calculate and print results
             .finallyDo(
@@ -593,11 +610,11 @@ public class DriveCommands {
 
             // Update gyro delta
             Commands.run(
-                () -> {
-                  var rotation = drive.getRotation();
-                  state.gyroDelta += Math.abs(rotation.minus(state.lastAngle).getRadians());
-                  state.lastAngle = rotation;
-                })
+                    () -> {
+                      var rotation = drive.getRotation();
+                      state.gyroDelta += Math.abs(rotation.minus(state.lastAngle).getRadians());
+                      state.lastAngle = rotation;
+                    })
 
                 // When cancelled, calculate and print results
                 .finallyDo(
@@ -607,7 +624,8 @@ public class DriveCommands {
                       for (int i = 0; i < 4; i++) {
                         wheelDelta += Math.abs(positions[i] - state.positions[i]) / 4.0;
                       }
-                      double wheelRadius = (state.gyroDelta * DriveConstants.driveBaseRadius) / wheelDelta;
+                      double wheelRadius =
+                          (state.gyroDelta * DriveConstants.driveBaseRadius) / wheelDelta;
 
                       NumberFormat formatter = new DecimalFormat("#0.000");
                       System.out.println(
