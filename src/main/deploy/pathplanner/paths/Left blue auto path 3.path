@@ -63,17 +63,6 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Stow",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "LStow"
-        }
-      }
-    },
-    {
       "name": "Handoff",
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,

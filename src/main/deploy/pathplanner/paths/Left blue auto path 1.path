@@ -63,6 +63,17 @@
       }
     },
     {
+      "name": "Intake",
+      "waypointRelativePos": 0.03392226148409516,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "RIntake"
+        }
+      }
+    },
+    {
       "name": "Four",
       "waypointRelativePos": 0.03533568904593812,
       "endWaypointRelativePos": null,
@@ -70,6 +81,17 @@
         "type": "named",
         "data": {
           "name": "Four"
+        }
+      }
+    },
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.053710247349821744,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "LIntake"
         }
       }
     },
