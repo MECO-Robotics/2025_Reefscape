@@ -393,21 +393,21 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
         "One",
-        ElevatorCommands.moveSequential(
+        ElevatorCommands.moveSafe(
             elevatorMotor, elbowMotor, () -> ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_ONE_CORAL));
     NamedCommands.registerCommand(
         "Two",
-        ElevatorCommands.moveSequential(
+        ElevatorCommands.moveSafe(
             elevatorMotor, elbowMotor, () -> ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_TWO_CORAL));
     NamedCommands.registerCommand(
         "Three",
-        ElevatorCommands.moveSequential(
+        ElevatorCommands.moveSafe(
             elevatorMotor,
             elbowMotor,
             () -> ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_THREE_CORAL));
     NamedCommands.registerCommand(
         "Four",
-        ElevatorCommands.moveSequential(
+        ElevatorCommands.moveSafe(
             elevatorMotor,
             elbowMotor,
             () -> ElevatorCommands.ELEVATOR_HEIGHT_PRESETS.L_FOUR_CORAL));
