@@ -26,7 +26,7 @@ public class IntakeCommands {
   /** Intake roller preset voltages. */
   public final class ROLLER_VOLTS {
     public static final LoggedTunableNumber INTAKE =
-        new LoggedTunableNumber("CoralIntakeSpeed", -10);
+        new LoggedTunableNumber("CoralIntakeSpeed", -6);
     public static final LoggedTunableNumber STOW =
         new LoggedTunableNumber("CoralOuttakeSpeed", -1.5);
     public static final LoggedTunableNumber EMERGENCY =
