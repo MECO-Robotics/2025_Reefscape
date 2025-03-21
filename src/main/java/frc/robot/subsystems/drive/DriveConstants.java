@@ -98,7 +98,7 @@ public class DriveConstants {
               1),
           moduleTranslations);
 
-  public static final PIDConstants translationPID = new PIDConstants(1, 0, 0);
+  public static final PIDConstants translationPID = new PIDConstants(4, 0, 0);
   public static final PIDConstants rotationPID = new PIDConstants(6, 0, 0);
 
   public static final DriveTrainSimulationConfig mapleSimConfig =

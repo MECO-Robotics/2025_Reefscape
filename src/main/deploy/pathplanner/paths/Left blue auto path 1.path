@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.576548811879276,
-        "y": 4.78474736365671
+        "x": 3.7855873834958045,
+        "y": 5.03272414948266
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.085511363636364,
-        "y": 3.002911931818182
+        "x": 5.215604304635762,
+        "y": 3.116990894039735
       },
       "prevControl": {
-        "x": 6.036326282832052,
-        "y": 1.9363323739507188
+        "x": 6.124295492932886,
+        "y": 1.9212180434325967
       },
       "nextControl": null,
       "isLocked": false,
@@ -53,7 +53,7 @@
   "eventMarkers": [
     {
       "name": "ClearOverrides",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.0014134275618376162,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

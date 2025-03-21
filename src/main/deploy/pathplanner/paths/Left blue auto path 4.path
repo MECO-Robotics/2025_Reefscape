@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8988920454545455,
-        "y": 3.002911931818182
+        "x": 4.017032284768212,
+        "y": 2.913596854304635
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.71128112070259,
-        "y": 2.727612292478057
+        "x": 3.8294213600162568,
+        "y": 2.6382972149645103
       },
       "isLocked": false,
       "linkedName": "Left blue auto path 3 end"
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 270.0,
     "maxAngularAcceleration": 3600.0,
     "nominalVoltage": 12.0,

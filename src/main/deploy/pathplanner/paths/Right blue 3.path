@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7053303813521807,
-        "y": 6.425385061139704
+        "x": 0.8571605960264901,
+        "y": 5.7974337748344364
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.825815968506953,
-        "y": 6.944613172160705
+        "x": 1.9776461831812624,
+        "y": 6.316661885855437
       },
       "isLocked": false,
       "linkedName": "right blue 2 end"
     },
     {
       "anchor": {
-        "x": 3.990330319322604,
-        "y": 5.22965507932439
+        "x": 4.053352649006623,
+        "y": 5.107346854304635
       },
       "prevControl": {
-        "x": 3.730705507366241,
-        "y": 6.6393343482484495
+        "x": 3.79372783705026,
+        "y": 6.517026123228694
       },
       "nextControl": null,
       "isLocked": false,
@@ -53,11 +53,22 @@
           "name": "Four"
         }
       }
+    },
+    {
+      "name": "AlignToK",
+      "waypointRelativePos": 0.8042402826855132,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "AlignToK"
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 270.0,
     "maxAngularAcceleration": 3600.0,
     "nominalVoltage": 12.0,
@@ -71,7 +82,7 @@
   "folder": "Right Blue auto paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -50.41834874284777
+    "rotation": -79.91940201245765
   },
   "useDefaultConstraints": true
 }

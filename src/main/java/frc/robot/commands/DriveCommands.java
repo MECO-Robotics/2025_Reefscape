@@ -48,11 +48,11 @@ public class DriveCommands {
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
-  public static final LoggedTunableNumber REEF_P = new LoggedTunableNumber("ReefP", 3.0);
+  public static final LoggedTunableNumber REEF_P = new LoggedTunableNumber("ReefP", 6.0);
   public static final LoggedTunableNumber REEF_MAX_VELO =
       new LoggedTunableNumber("ReefMaxVelo", 2.0);
   public static final LoggedTunableNumber REEF_MAX_ACCEL =
-      new LoggedTunableNumber("ReefMaxAccel", 1.0);
+      new LoggedTunableNumber("ReefMaxAccel", 2.0);
 
   public static final LoggedTunableNumber APPROACH_SPEED =
       new LoggedTunableNumber("Approach Speed", 1.0);
