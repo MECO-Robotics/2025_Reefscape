@@ -34,7 +34,7 @@ public class FlywheelConstants {
   public static final FlywheelGains END_EFFECTOR_GAINS =
       new FlywheelGains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   public static final FlywheelHardwareConfig END_EFFECTOR_CONFIG =
-      new FlywheelHardwareConfig(new int[] {34}, new boolean[] {true}, 2.0, 30, "");
+      new FlywheelHardwareConfig(new int[] {34}, new boolean[] {true}, 2.0, 40, "");
 
   public static final FlywheelGains CLIMBER_ROLLER_GAINS =
       new FlywheelGains(0, 0, 0, 0, 0, 0, 0, 0);
